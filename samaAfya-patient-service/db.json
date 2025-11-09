@@ -1,0 +1,71 @@
+{
+  "patients": [
+    {
+      "id": "0009",
+      "firstName": "rama ",
+      "lastName": "gueye",
+      "email": "thiernosegnane316@gmail.com",
+      "password": "12345678",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 10,
+      "trackingCode": "",
+      "hasMonitoringMode": true,
+      "dateOfBirth": "2025-11-07",
+      "acceptDataHosting": false,
+      "allowResearchSharing": false,
+      "acceptNewsletter": false,
+      "monitoringMode": "strict",
+      "country": "Sénégal"
+    },
+    {
+      "id": "8bc0",
+      "firstName": "Moontaga",
+      "lastName": "segnane",
+      "email": "thiernosegnane316@gmail.com",
+      "password": "12345678",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 8,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "dateOfBirth": "2025-11-05",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true
+    },
+    {
+      "id": "7c1f",
+      "firstName": "Moontaga",
+      "lastName": "segnane",
+      "email": "moontagasegnane@gmail.com",
+      "password": "12345678",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 8,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "dateOfBirth": "2025-11-07",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true
+    },
+    {
+      "id": "74d7",
+      "firstName": "thierno",
+      "lastName": "segnane",
+      "email": "moontagasegnane@gmail.com",
+      "password": "12345678",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 8,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "dateOfBirth": "2025-11-05",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true
+    }
+  ],
+  "glycemiaReadings": [],
+  "dailyReadings": [],
+  "messages": [],
+  "documents": [],
+  "doctorIA": []
+}
