@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "VITE_API_BASE_URL": "https://samaafya-backend.onrender.com",
+    "VITE_PATIENT_SERVICE_URL": "https://samaafya-patient-service.onrender.com",
+    "VITE_DOCTOR_SERVICE_URL": "https://samaafya-doctor-service.onrender.com"
+  }
+}

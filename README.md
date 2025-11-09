@@ -94,14 +94,7 @@ npm run dev
 
 #### 💬 Communication
 - **Messagerie sécurisée** avec l'équipe médicale (avec code de suivi)
-- **Docteur IA** : assistant virtuel pour conseils généraux
 - **Accès aux documents** médicaux (ordonnances, résultats)
-
-#### 🤖 Docteur IA
-- **Chat bienveillant** disponible 24/7
-- **Conseils généraux** sur glycémie, alimentation, activité physique
-- **Réponses contextuelles** adaptées à la grossesse diabétique
-- **Historique conservé** pour suivi des échanges
 
 ### Pour les médecins 👨‍⚕️
 
