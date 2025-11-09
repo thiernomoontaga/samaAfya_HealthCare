@@ -1,0 +1,341 @@
+{
+  "patients": [
+    {
+      "id": "abd4",
+      "firstName": "",
+      "lastName": "",
+      "email": "manager@company1.com",
+      "password": "manager123",
+      "diabetesType": "",
+      "gestationalWeek": null,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true
+    },
+    {
+      "id": "5efc",
+      "firstName": "rama ",
+      "lastName": "gueye",
+      "email": "rama@gmail.com",
+      "password": "rama123",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 10,
+      "trackingCode": "",
+      "hasMonitoringMode": true,
+      "dateOfBirth": "2025-11-06",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true,
+      "monitoringMode": "lean",
+      "country": "Sénégal"
+    },
+    {
+      "id": "5dfe",
+      "firstName": "",
+      "lastName": "",
+      "email": "rama@gmail.com",
+      "password": "rama123",
+      "diabetesType": "",
+      "gestationalWeek": null,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "acceptDataHosting": false,
+      "allowResearchSharing": false,
+      "acceptNewsletter": false
+    },
+    {
+      "id": "4252",
+      "firstName": "",
+      "lastName": "",
+      "email": "rama@gmail.com",
+      "password": "rama123",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": null,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true
+    },
+    {
+      "id": "dd43",
+      "firstName": "",
+      "lastName": "",
+      "email": "rama@gmail.com",
+      "password": "rama123",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": null,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "acceptDataHosting": false,
+      "allowResearchSharing": false,
+      "acceptNewsletter": false
+    },
+    {
+      "id": "8381",
+      "firstName": "Moontaga",
+      "lastName": "segnane",
+      "email": "cashier@demo.com",
+      "password": " password",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 8,
+      "trackingCode": "",
+      "hasMonitoringMode": true,
+      "dateOfBirth": "2025-11-05",
+      "acceptDataHosting": false,
+      "allowResearchSharing": false,
+      "acceptNewsletter": false,
+      "monitoringMode": "classique",
+      "country": "Guinée-Bissau"
+    },
+    {
+      "id": "dcba",
+      "firstName": "Moontaga",
+      "lastName": "segnane",
+      "email": "cashier@demo.com",
+      "password": " password56",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 9,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "dateOfBirth": "2025-11-07",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true
+    }
+  ],
+  "glycemiaReadings": [
+    {
+      "id": "r1",
+      "moment": "jeun",
+      "value": 0.88,
+      "status": "normal",
+      "date": "2025-11-04",
+      "time": "07:30",
+      "patientId": "P001"
+    },
+    {
+      "id": "r2",
+      "moment": "apres_petit_dej",
+      "value": 1.15,
+      "status": "normal",
+      "date": "2025-11-04",
+      "time": "09:30",
+      "patientId": "P001"
+    },
+    {
+      "id": "r3",
+      "moment": "apres_dejeuner",
+      "value": 1.32,
+      "status": "warning",
+      "date": "2025-11-04",
+      "time": "14:30",
+      "patientId": "P001"
+    },
+    {
+      "id": "r4",
+      "moment": "apres_diner",
+      "value": 1.18,
+      "status": "normal",
+      "date": "2025-11-04",
+      "time": "21:00",
+      "patientId": "P001"
+    },
+    {
+      "id": "r5",
+      "moment": "jeun",
+      "value": 0.92,
+      "status": "normal",
+      "date": "2025-11-05",
+      "time": "07:15",
+      "patientId": "P001"
+    },
+    {
+      "id": "r6",
+      "moment": "apres_petit_dej",
+      "value": 1.08,
+      "status": "normal",
+      "date": "2025-11-05",
+      "time": "09:15",
+      "patientId": "P001"
+    },
+    {
+      "id": "r7",
+      "moment": "apres_dejeuner",
+      "value": 1.25,
+      "status": "warning",
+      "date": "2025-11-05",
+      "time": "14:20",
+      "patientId": "P001"
+    },
+    {
+      "id": "r8",
+      "moment": "apres_diner",
+      "value": 1.12,
+      "status": "normal",
+      "date": "2025-11-05",
+      "time": "20:45",
+      "patientId": "P001"
+    },
+    {
+      "id": "r9",
+      "moment": "jeun",
+      "value": 0.85,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "07:45",
+      "patientId": "P001"
+    },
+    {
+      "id": "r10",
+      "moment": "apres_petit_dej",
+      "value": 1.1,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "09:45",
+      "patientId": "P001"
+    },
+    {
+      "id": "r11",
+      "moment": "apres_dejeuner",
+      "value": 1.19,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "14:30",
+      "patientId": "P001"
+    },
+    {
+      "id": "r12",
+      "moment": "apres_diner",
+      "value": 1.15,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "21:00",
+      "patientId": "P001"
+    },
+    {
+      "id": "r13",
+      "moment": "jeun",
+      "value": 0.9,
+      "status": "normal",
+      "date": "2025-11-07",
+      "time": "07:30",
+      "patientId": "P001"
+    },
+    {
+      "id": "r14",
+      "moment": "apres_petit_dej",
+      "value": 1.12,
+      "status": "normal",
+      "date": "2025-11-07",
+      "time": "09:30",
+      "patientId": "P001"
+    },
+    {
+      "id": "r15",
+      "moment": "jeun",
+      "value": 1.45,
+      "status": "high",
+      "date": "2025-11-08",
+      "time": "07:30",
+      "patientId": "P002"
+    },
+    {
+      "id": "r16",
+      "moment": "apres_petit_dej",
+      "value": 1.62,
+      "status": "high",
+      "date": "2025-11-08",
+      "time": "09:30",
+      "patientId": "P002"
+    },
+    {
+      "id": "r17",
+      "moment": "jeun",
+      "value": 0.95,
+      "status": "normal",
+      "date": "2025-11-08",
+      "time": "07:15",
+      "patientId": "P003"
+    },
+    {
+      "id": "r18",
+      "moment": "apres_petit_dej",
+      "value": 1.08,
+      "status": "normal",
+      "date": "2025-11-08",
+      "time": "09:15",
+      "patientId": "P003"
+    },
+    {
+      "id": "r19",
+      "moment": "jeun",
+      "value": 0.82,
+      "status": "normal",
+      "date": "2025-11-08",
+      "time": "07:45",
+      "patientId": "P004"
+    },
+    {
+      "id": "r20",
+      "moment": "apres_petit_dej",
+      "value": 1.05,
+      "status": "normal",
+      "date": "2025-11-08",
+      "time": "09:45",
+      "patientId": "P004"
+    }
+  ],
+  "dailyReadings": [],
+  "messages": [
+    {
+      "id": "ae5b",
+      "content": "Bonjour",
+      "sender": "patient",
+      "timestamp": "2025-11-09T03:11:01.220Z",
+      "patientId": "5efc"
+    },
+    {
+      "id": "3240",
+      "content": "Bonjour ! Je suis l'Assistant IA de SamaAfya, ici pour vous accompagner pendant votre grossesse avec diabète gestationnel. Je peux vous donner des conseils généraux sur la glycémie, l'alimentation, l'activité physique et le bien-être. N'hésitez pas à me poser vos questions ! 💙",
+      "sender": "ia",
+      "timestamp": "2025-11-09T03:11:02.742Z",
+      "patientId": "5efc"
+    }
+  ],
+  "documents": [],
+  "doctors": [
+    {
+      "id": "D001",
+      "firstname": "Moussa",
+      "lastname": "Ba",
+      "email": "moussa.ba@hospital.com",
+      "password": "medecin123",
+      "mfaEnabled": true,
+      "mfaCode": null,
+      "mfaExpiry": null,
+      "role": "medecin",
+      "patientsFollowed": [
+        "P001",
+        "P002"
+      ]
+    },
+    {
+      "id": "D002",
+      "firstname": "Fatima",
+      "lastname": "Diallo",
+      "email": "fatima.diallo@clinique.sn",
+      "password": "docteur456",
+      "mfaEnabled": true,
+      "mfaCode": null,
+      "mfaExpiry": null,
+      "role": "medecin",
+      "patientsFollowed": [
+        "P003",
+        "P004"
+      ]
+    }
+  ]
+}
