@@ -14,7 +14,9 @@ const monitoringModes = [
     description: '4 mesures par jour (recommandé)',
     icon: Clock,
     color: 'bg-blue-50 border-blue-200 hover:bg-blue-100',
-    details: 'Matin, midi, après-midi, soir'
+    details: 'À jeun + après petit-déjeuner, déjeuner, dîner',
+    meals: ['fasting', 'breakfast', 'lunch', 'dinner'],
+    timing: 'after'
   },
   {
     id: 'lean',
@@ -22,7 +24,9 @@ const monitoringModes = [
     description: '5 mesures par jour',
     icon: Target,
     color: 'bg-green-50 border-green-200 hover:bg-green-100',
-    details: 'Avant chaque repas + coucher'
+    details: 'À jeun + après petit-déjeuner, déjeuner, goûter, dîner',
+    meals: ['fasting', 'breakfast', 'lunch', 'snack', 'dinner'],
+    timing: 'after'
   },
   {
     id: 'strict',
@@ -30,7 +34,19 @@ const monitoringModes = [
     description: '6 mesures par jour',
     icon: Zap,
     color: 'bg-amber-50 border-amber-200 hover:bg-amber-100',
-    details: 'Avant et après chaque repas'
+    details: 'Avant et après petit-déjeuner, déjeuner, dîner',
+    meals: ['breakfast', 'lunch', 'dinner'],
+    timing: 'both'
+  },
+  {
+    id: 'strict8',
+    title: 'Strict (8/j)',
+    description: '8 mesures par jour',
+    icon: Activity,
+    color: 'bg-red-50 border-red-200 hover:bg-red-100',
+    details: 'Avant et après petit-déjeuner, déjeuner, goûter, dîner',
+    meals: ['breakfast', 'lunch', 'snack', 'dinner'],
+    timing: 'both'
   },
 ];
 
@@ -44,6 +60,7 @@ const MonitoringSetup: React.FC = () => {
   const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
+  const [postMealTiming, setPostMealTiming] = useState('2h');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -65,13 +82,14 @@ const MonitoringSetup: React.FC = () => {
     try {
       const API_BASE_URL = 'http://localhost:3000';
 
-      // Update patient with monitoring mode and country
+      // Update patient with monitoring mode, country and post-meal timing
       const response = await fetch(`${API_BASE_URL}/patients/${currentPatientId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           monitoringMode: selectedMode,
           country: selectedCountry,
+          postMealTiming: postMealTiming,
           hasMonitoringMode: true,
         }),
       });
@@ -176,6 +194,41 @@ const MonitoringSetup: React.FC = () => {
               {errors.monitoringMode && <p className="text-red-600 text-sm">{errors.monitoringMode}</p>}
             </div>
 
+            {/* Post-Meal Timing Selection */}
+            {selectedMode && (
+              <div className="space-y-4">
+                <Label className="text-base font-semibold">Temps d'attente après repas *</Label>
+                <div className="grid grid-cols-2 gap-4">
+                  <Card
+                    className={cn(
+                      "cursor-pointer transition-all duration-200 border-2 p-4 text-center",
+                      postMealTiming === '1h'
+                        ? "bg-blue-50 border-blue-300 ring-2 ring-blue-200"
+                        : "bg-gray-50 border-gray-200 hover:bg-gray-100"
+                    )}
+                    onClick={() => setPostMealTiming('1h')}
+                  >
+                    <div className="text-2xl mb-2">⏰</div>
+                    <div className="font-semibold">1 heure</div>
+                    <div className="text-sm text-gray-600">Post 1h</div>
+                  </Card>
+                  <Card
+                    className={cn(
+                      "cursor-pointer transition-all duration-200 border-2 p-4 text-center",
+                      postMealTiming === '2h'
+                        ? "bg-blue-50 border-blue-300 ring-2 ring-blue-200"
+                        : "bg-gray-50 border-gray-200 hover:bg-gray-100"
+                    )}
+                    onClick={() => setPostMealTiming('2h')}
+                  >
+                    <div className="text-2xl mb-2">🕐</div>
+                    <div className="font-semibold">2 heures</div>
+                    <div className="text-sm text-gray-600">Post 2h</div>
+                  </Card>
+                </div>
+              </div>
+            )}
+
             {/* Country Selection */}
             <div className="space-y-4">
               <Label htmlFor="country" className="text-base font-semibold">Pays de suivi médical *</Label>
@@ -196,14 +249,20 @@ const MonitoringSetup: React.FC = () => {
 
             {/* Summary */}
             {selectedMode && selectedCountry && (
-              <Card className="bg-primary/5 border-primary/20">
-                <CardContent className="pt-4">
-                  <div className="text-center">
-                    <Activity className="h-8 w-8 text-primary mx-auto mb-2" />
-                    <h3 className="font-semibold text-primary mb-1">Configuration terminée</h3>
-                    <p className="text-sm text-gray-600">
-                      Mode: {monitoringModes.find(m => m.id === selectedMode)?.title} • Pays: {selectedCountry}
-                    </p>
+              <Card className="bg-gradient-to-r from-rose-50 to-pink-50 border-rose-200">
+                <CardContent className="pt-6">
+                  <div className="text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 flex items-center justify-center mx-auto">
+                      <Heart className="h-8 w-8 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">Configuration terminée 💕</h3>
+                      <div className="space-y-1 text-sm text-gray-600">
+                        <p><strong>Mode :</strong> {monitoringModes.find(m => m.id === selectedMode)?.title}</p>
+                        <p><strong>Temps d'attente :</strong> {postMealTiming === '1h' ? '1 heure' : '2 heures'} après repas</p>
+                        <p><strong>Pays :</strong> {selectedCountry}</p>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -214,10 +273,20 @@ const MonitoringSetup: React.FC = () => {
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting || !selectedMode || !selectedCountry}
-                className="w-full"
+                className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
                 size="lg"
               >
-                {isSubmitting ? 'Configuration en cours...' : 'Commencer ma surveillance'}
+                {isSubmitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-3"></div>
+                    Configuration en cours...
+                  </>
+                ) : (
+                  <>
+                    <Heart className="h-5 w-5 mr-2" />
+                    Valider pour commencer
+                  </>
+                )}
               </Button>
               {errors.submit && <p className="text-red-600 text-sm mt-2 text-center">{errors.submit}</p>}
             </div>

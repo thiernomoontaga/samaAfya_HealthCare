@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { PatientLayout } from "@/components/layout/PatientLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +13,9 @@ import {
   Download,
   History,
   BarChart3,
-  AlertTriangle
+  AlertTriangle,
+  Heart,
+  Sparkles
 } from "lucide-react";
 import { mockWeekReadings } from "@/data/mockData";
 import { useToast } from "@/hooks/use-toast";
@@ -255,17 +256,35 @@ const HistoryPage = () => {
 
   if (error) {
     return (
-      <PatientLayout title="Historique complet">
-        <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      </PatientLayout>
+      <Alert variant="destructive">
+        <AlertTriangle className="h-4 w-4" />
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
     );
   }
 
   return (
-    <PatientLayout title="Historique complet">
+    <div className="space-y-8">
+      {/* Hero Section */}
+      <div className="text-center space-y-4 mb-8">
+        <div className="relative">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 flex items-center justify-center mx-auto shadow-lg">
+            <Heart className="h-10 w-10 text-white animate-pulse" />
+          </div>
+          <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-spin">
+            <Sparkles className="h-3 w-3 text-white" />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
+            Historique complet 💕
+          </h1>
+          <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
+            Consultez toutes vos mesures de glycémie des 90 derniers jours
+          </p>
+        </div>
+      </div>
+
       <div className="space-y-6">
         {/* Header with Stats */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -466,7 +485,7 @@ const HistoryPage = () => {
           </Card>
         )}
       </div>
-    </PatientLayout>
+    </div>
   );
 };
 

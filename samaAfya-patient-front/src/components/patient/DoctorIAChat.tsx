@@ -74,7 +74,7 @@ const getAIResponse = (userMessage: string): string => {
 };
 
 const fetchChatMessages = async (patientId: string): Promise<Message[]> => {
-  const response = await fetch(`${API_BASE_URL}/messages?patientId=${patientId}&senderType=ia`);
+  const response = await fetch(`${API_BASE_URL}/messages?patientId=${patientId}&sender=ia`);
   if (!response.ok) throw new Error('Failed to fetch chat messages');
   return response.json();
 };

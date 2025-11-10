@@ -10,6 +10,7 @@ import MonitoringSetup from "./pages/auth/MonitoringSetup";
 import DoctorLogin from "./pages/auth/DoctorLogin";
 import DoctorMFA from "./pages/auth/DoctorMFA";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import PatientLayout from "./components/patient/layout/PatientLayout";
 import PatientHome from "./pages/patient/PatientHome";
 import PatientDashboard from "./pages/patient/PatientDashboard";
 import WeeklyDashboard from "./pages/patient/WeeklyDashboard";
@@ -36,16 +37,19 @@ const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<PatientSignup />} />
-          <Route path="/patient/home" element={<PatientHome />} />
-          <Route path="/patient/dashboard" element={<PatientDashboard />} />
-          <Route path="/patient/weekly" element={<WeeklyDashboard />} />
-          <Route path="/patient/glycemia" element={<HistoryPage />} />
-          <Route path="/patient/messages" element={<MessagesPage />} />
-          <Route path="/patient/documents" element={<DocumentsPage />} />
-          <Route path="/patient/profile" element={<ProfilePage />} />
+          <Route path="/patient/*" element={<PatientLayout />}>
+            <Route path="home" element={<PatientHome />} />
+            <Route path="dashboard" element={<PatientDashboard />} />
+            <Route path="weekly" element={<WeeklyDashboard />} />
+            <Route path="glycemia" element={<HistoryPage />} />
+            <Route path="messages" element={<MessagesPage />} />
+            <Route path="documents" element={<DocumentsPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="history" element={<HistoryPage />} />
+            <Route path="doctor-ia" element={<DoctorIAChatPage />} />
+          </Route>
           <Route path="/patient/monitoring-mode" element={<MonitoringSetup />} />
           <Route path="/auth/monitoring-setup" element={<MonitoringSetup />} />
-          <Route path="/patient/doctor-ia" element={<DoctorIAChatPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
