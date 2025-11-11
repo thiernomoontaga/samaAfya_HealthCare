@@ -104,6 +104,55 @@
       "acceptDataHosting": true,
       "allowResearchSharing": true,
       "acceptNewsletter": true
+    },
+    {
+      "id": "f35b",
+      "firstName": "amy",
+      "lastName": "ndiaye",
+      "email": "thiernosegnane316@gmail.com",
+      "password": "123456789",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 5,
+      "trackingCode": "",
+      "hasMonitoringMode": true,
+      "dateOfBirth": "2025-11-05",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true,
+      "monitoringMode": "classique",
+      "country": "Sénégal"
+    },
+    {
+      "id": "3be5",
+      "firstName": "anna ",
+      "lastName": "diop",
+      "email": "bakaytest@gmail.com",
+      "password": "bakary2025",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 6,
+      "trackingCode": "",
+      "hasMonitoringMode": true,
+      "dateOfBirth": "2025-11-04",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true,
+      "monitoringMode": "classique",
+      "country": "Sénégal"
+    },
+    {
+      "id": "fbf4",
+      "firstName": "thierno",
+      "lastName": "segnane",
+      "email": "bakaytest@gmail.com",
+      "password": "bakary2025",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 13,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "dateOfBirth": "2025-11-06",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true
     }
   ],
   "glycemiaReadings": [
@@ -303,6 +352,90 @@
       "sender": "ia",
       "timestamp": "2025-11-09T03:11:02.742Z",
       "patientId": "5efc"
+    },
+    {
+      "id": "7ff7",
+      "content": "gfjnm",
+      "sender": "patient",
+      "timestamp": "2025-11-10T15:53:15.019Z",
+      "patientId": "491e"
+    },
+    {
+      "id": "c5a6",
+      "content": "Je comprends votre question. Pour des conseils personnalisés sur votre diabète gestationnel, il est important de consulter votre équipe médicale. Je peux vous donner des informations générales sur la gestion du diabète pendant la grossesse, l'alimentation équilibrée, ou l'activité physique adaptée. Quelle est votre préoccupation principale ? 🤔",
+      "sender": "ia",
+      "timestamp": "2025-11-10T15:53:16.574Z",
+      "patientId": "491e"
+    },
+    {
+      "id": "f567",
+      "content": "je veux en savoir plus sur le diabete",
+      "sender": "patient",
+      "timestamp": "2025-11-10T15:56:01.720Z",
+      "patientId": "491e"
+    },
+    {
+      "id": "e746",
+      "content": "Je comprends votre question. Pour des conseils personnalisés sur votre diabète gestationnel, il est important de consulter votre équipe médicale. Je peux vous donner des informations générales sur la gestion du diabète pendant la grossesse, l'alimentation équilibrée, ou l'activité physique adaptée. Quelle est votre préoccupation principale ? 🤔",
+      "sender": "ia",
+      "timestamp": "2025-11-10T15:56:03.244Z",
+      "patientId": "491e"
+    },
+    {
+      "id": "76dc",
+      "content": "Bonjour",
+      "sender": "patient",
+      "timestamp": "2025-11-10T18:33:53.577Z",
+      "patientId": "0dbb"
+    },
+    {
+      "id": "269b",
+      "content": "Bonjour ! Je suis l'Assistant IA de SamaAfya, ici pour vous accompagner pendant votre grossesse avec diabète gestationnel. Je peux vous donner des conseils généraux sur la glycémie, l'alimentation, l'activité physique et le bien-être. N'hésitez pas à me poser vos questions ! 💙",
+      "sender": "ia",
+      "timestamp": "2025-11-10T18:33:55.173Z",
+      "patientId": "0dbb"
+    },
+    {
+      "id": "1f9a",
+      "content": "alors",
+      "sender": "patient",
+      "timestamp": "2025-11-10T18:34:03.798Z",
+      "patientId": "0dbb"
+    },
+    {
+      "id": "a823",
+      "content": "Je comprends votre question. Pour des conseils personnalisés sur votre diabète gestationnel, il est important de consulter votre équipe médicale. Je peux vous donner des informations générales sur la gestion du diabète pendant la grossesse, l'alimentation équilibrée, ou l'activité physique adaptée. Quelle est votre préoccupation principale ? 🤔",
+      "sender": "ia",
+      "timestamp": "2025-11-10T18:34:05.350Z",
+      "patientId": "0dbb"
+    },
+    {
+      "id": "9393",
+      "content": "gkm, gb b,",
+      "sender": "patient",
+      "timestamp": "2025-11-10T23:21:17.770Z",
+      "patientId": "0a56"
+    },
+    {
+      "id": "d67e",
+      "content": "Je comprends votre question. Pour des conseils personnalisés sur votre diabète gestationnel, il est important de consulter votre équipe médicale. Je peux vous donner des informations générales sur la gestion du diabète pendant la grossesse, l'alimentation équilibrée, ou l'activité physique adaptée. Quelle est votre préoccupation principale ? 🤔",
+      "sender": "ia",
+      "timestamp": "2025-11-10T23:21:19.313Z",
+      "patientId": "0a56"
+    },
+    {
+      "id": "4f13",
+      "content": "Bonjour",
+      "sender": "patient",
+      "timestamp": "2025-11-10T23:21:25.782Z",
+      "patientId": "0a56"
+    },
+    {
+      "id": "145d",
+      "content": "Bonjour ! Je suis l'Assistant IA de SamaAfya, ici pour vous accompagner pendant votre grossesse avec diabète gestationnel. Je peux vous donner des conseils généraux sur la glycémie, l'alimentation, l'activité physique et le bien-être. N'hésitez pas à me poser vos questions ! 💙",
+      "sender": "ia",
+      "timestamp": "2025-11-10T23:21:27.313Z",
+      "patientId": "0a56"
     }
   ],
   "documents": [],

@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Droplet, Save } from "lucide-react";
+import { CalendarIcon, Droplet, Save, Heart } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { cn } from "@/lib/utils";
@@ -128,191 +128,274 @@ export const GlycemiaInput = ({ onSubmit, className = "" }: GlycemiaInputProps) 
   };
 
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Droplet className="h-5 w-5 text-blue-600" />
-          Nouvelle mesure glycémique
+    <Card className={`${className} overflow-hidden`}>
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center">
+            <Droplet className="h-5 w-5 text-white" />
+          </div>
+          <span className="text-xl font-bold text-gray-800">Nouvelle mesure glycémique</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-8">
           {/* Date and Time */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="date">Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP", { locale: fr }) : "Sélectionner une date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={(newDate) => {
-                      if (newDate) {
-                        setDate(newDate);
-                        setValue("date", newDate);
-                      }
-                    }}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              {errors.date && (
-                <p className="text-sm text-red-600">{errors.date.message}</p>
-              )}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                <CalendarIcon className="h-4 w-4 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800">Date et heure de la mesure</h3>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="time">Heure</Label>
-              <Input
-                id="time"
-                type="time"
-                {...register("time")}
-                className={cn(errors.time && "border-red-500")}
-              />
-              {errors.time && (
-                <p className="text-sm text-red-600">{errors.time.message}</p>
-              )}
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <Label htmlFor="date" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  📅 Date
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal h-12 border-2 border-gray-200 hover:border-blue-300 transition-all duration-200",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4 text-blue-500" />
+                      {date ? format(date, "PPP", { locale: fr }) : "Sélectionner une date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={(newDate) => {
+                        if (newDate) {
+                          setDate(newDate);
+                          setValue("date", newDate);
+                        }
+                      }}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                {errors.date && (
+                  <p className="text-sm text-red-600 flex items-center gap-1">
+                    ⚠️ {errors.date.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <Label htmlFor="time" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  🕐 Heure
+                </Label>
+                <Input
+                  id="time"
+                  type="time"
+                  {...register("time")}
+                  className={cn(
+                    "h-12 border-2 border-gray-200 hover:border-blue-300 focus:border-blue-400 transition-all duration-200",
+                    errors.time && "border-red-500"
+                  )}
+                />
+                {errors.time && (
+                  <p className="text-sm text-red-600 flex items-center gap-1">
+                    ⚠️ {errors.time.message}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Value and Context */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="value">Taux glycémique (mmol/L)</Label>
-              <Input
-                id="value"
-                type="number"
-                step="0.1"
-                min="0"
-                max="20"
-                placeholder="5.2"
-                {...register("value", { valueAsNumber: true })}
-                className={cn(errors.value && "border-red-500")}
-              />
-              {errors.value && (
-                <p className="text-sm text-red-600">{errors.value.message}</p>
-              )}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                <Droplet className="h-4 w-4 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800">Taux glycémique et contexte</h3>
             </div>
 
-            {/* Meal Type */}
-            <div className="space-y-2">
-              <Label htmlFor="mealType">Type de repas</Label>
-              <Select
-                onValueChange={(value: string) => setValue("mealType", value as "fasting" | "breakfast" | "lunch" | "dinner")}
-                defaultValue="fasting"
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner le repas" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="fasting">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
-                        <span className="text-xs">🌅</span>
-                      </div>
-                      <span>À jeun</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="breakfast">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center">
-                        <span className="text-xs">☕</span>
-                      </div>
-                      <span>Petit-déjeuner</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="lunch">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="text-xs">🍽️</span>
-                      </div>
-                      <span>Déjeuner</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="dinner">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center">
-                        <span className="text-xs">🌙</span>
-                      </div>
-                      <span>Dîner</span>
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.mealType && (
-                <p className="text-sm text-red-600">{errors.mealType.message}</p>
-              )}
-            </div>
+            <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-3">
+                <Label htmlFor="value" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  💉 Taux glycémique (mmol/L)
+                </Label>
+                <Input
+                  id="value"
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="20"
+                  placeholder="Ex: 5.2"
+                  {...register("value", { valueAsNumber: true })}
+                  className={cn(
+                    "h-12 text-lg border-2 border-gray-200 hover:border-purple-300 focus:border-purple-400 transition-all duration-200",
+                    errors.value && "border-red-500"
+                  )}
+                />
+                {errors.value && (
+                  <p className="text-sm text-red-600 flex items-center gap-1">
+                    ⚠️ {errors.value.message}
+                  </p>
+                )}
+              </div>
 
-            {/* Meal Timing */}
-            <div className="space-y-2">
-              <Label htmlFor="mealTiming">Moment</Label>
-              <Select
-                onValueChange={(value: string) => setValue("mealTiming", value as "before" | "after")}
-                defaultValue="before"
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Avant ou après le repas" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="before">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center">
-                        <span className="text-xs">⏰</span>
-                      </div>
-                      <span>Avant le repas</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="after">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center">
-                        <span className="text-xs">✅</span>
-                      </div>
-                      <span>Après le repas</span>
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.mealTiming && (
-                <p className="text-sm text-red-600">{errors.mealTiming.message}</p>
-              )}
+              <div className="grid grid-cols-2 gap-6">
+                {/* Meal Type */}
+                <div className="space-y-3">
+                  <Label htmlFor="mealType" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    🍽️ Type de repas
+                  </Label>
+                  <Select
+                    onValueChange={(value: string) => setValue("mealType", value as "fasting" | "breakfast" | "lunch" | "dinner")}
+                    defaultValue="fasting"
+                  >
+                    <SelectTrigger className="h-12 border-2 border-gray-200 hover:border-green-300 focus:border-green-400 transition-all duration-200">
+                      <SelectValue placeholder="Sélectionner le repas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="fasting">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                            <span className="text-sm">🌅</span>
+                          </div>
+                          <span className="font-medium">À jeun</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="breakfast">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+                            <span className="text-sm">☕</span>
+                          </div>
+                          <span className="font-medium">Petit-déjeuner</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="lunch">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                            <span className="text-sm">🍽️</span>
+                          </div>
+                          <span className="font-medium">Déjeuner</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="dinner">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+                            <span className="text-sm">🌙</span>
+                          </div>
+                          <span className="font-medium">Dîner</span>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.mealType && (
+                    <p className="text-sm text-red-600 flex items-center gap-1">
+                      ⚠️ {errors.mealType.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Meal Timing */}
+                <div className="space-y-3">
+                  <Label htmlFor="mealTiming" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    ⏰ Moment
+                  </Label>
+                  <Select
+                    onValueChange={(value: string) => setValue("mealTiming", value as "before" | "after")}
+                    defaultValue="before"
+                  >
+                    <SelectTrigger className="h-12 border-2 border-gray-200 hover:border-orange-300 focus:border-orange-400 transition-all duration-200">
+                      <SelectValue placeholder="Avant ou après le repas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="before">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+                            <span className="text-sm">⏰</span>
+                          </div>
+                          <span className="font-medium">Avant le repas</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="after">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
+                            <span className="text-sm">✅</span>
+                          </div>
+                          <span className="font-medium">Après le repas</span>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.mealTiming && (
+                    <p className="text-sm text-red-600 flex items-center gap-1">
+                      ⚠️ {errors.mealTiming.message}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Status Display */}
           {status && (
-            <div className={cn("p-3 rounded-lg border", getStatusColor())}>
-              <div className="flex items-center justify-between">
-                <span className="font-medium">{getStatusLabel()}</span>
-                <span className="text-sm">
-                  {value} mmol/L
-                  {mealType === "fasting" ? " (à jeun)" : ` (${mealTiming === "before" ? "avant" : "après"} ${mealType === "breakfast" ? "petit-déj" : mealType === "lunch" ? "déjeuner" : "dîner"})`}
-                </span>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-blue-400 flex items-center justify-center">
+                  <Heart className="h-4 w-4 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800">Évaluation de votre mesure</h3>
+              </div>
+
+              <div className={cn("p-6 rounded-2xl border-2 shadow-lg", getStatusColor())}>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-white/50 flex items-center justify-center">
+                      <span className="text-2xl">
+                        {status === "normal" ? "✅" : status === "warning" ? "⚠️" : status === "hypo" ? "🚨" : "❓"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-xl font-bold">{getStatusLabel()}</span>
+                      <p className="text-sm opacity-90">
+                        {value} mmol/L
+                        {mealType === "fasting" ? " (à jeun)" : ` (${mealTiming === "before" ? "avant" : "après"} ${mealType === "breakfast" ? "petit-déj" : mealType === "lunch" ? "déjeuner" : "dîner"})`}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-sm opacity-80 leading-relaxed">
+                  {status === "normal" && "🎉 Excellent ! Votre glycémie est dans la cible recommandée."}
+                  {status === "warning" && "⚠️ Attention, surveillez votre glycémie et consultez votre médecin si nécessaire."}
+                  {status === "high" && "🚨 Valeur élevée détectée. Contactez votre équipe médicale."}
+                  {status === "hypo" && "🚨 Hypoglycémie détectée ! Prenez des mesures immédiates."}
+                </div>
               </div>
             </div>
           )}
 
           {/* Notes */}
-          <div className="space-y-2">
-            <Label htmlFor="notes">Notes (optionnel)</Label>
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
+                <span className="text-white text-sm">📝</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800">Notes complémentaires (optionnel)</h3>
+            </div>
+
             <Textarea
               id="notes"
-              placeholder="Ex: repas copieux, activité physique..."
+              placeholder="Ex: repas copieux, activité physique, stress, médicaments..."
               {...register("notes")}
-              rows={3}
+              rows={4}
+              className="border-2 border-gray-200 hover:border-gray-300 focus:border-gray-400 transition-all duration-200 resize-none"
             />
+            <p className="text-sm text-gray-500 flex items-center gap-2">
+              💡 Ces informations aideront votre équipe médicale à mieux comprendre votre mesure
+            </p>
           </div>
 
           {/* Insulin Tracking Section */}
@@ -403,21 +486,23 @@ export const GlycemiaInput = ({ onSubmit, className = "" }: GlycemiaInputProps) 
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full transition-all duration-200 hover:scale-105"
-            disabled={isSubmitting}
-          >
-            <Save className="h-4 w-4 mr-2" />
-            {isSubmitting ? (
-              <>
-                <div className="animate-pulse-custom mr-2 h-4 w-4 bg-white rounded-full"></div>
-                Enregistrement...
-              </>
-            ) : (
-              "Enregistrer la mesure"
-            )}
-          </Button>
+          <div className="pt-4">
+            <Button
+              type="submit"
+              className="w-full h-14 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group"
+              disabled={isSubmitting}
+            >
+              <Save className="h-5 w-5 mr-3 group-hover:scale-110 transition-transform" />
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-3"></div>
+                  Enregistrement en cours...
+                </>
+              ) : (
+                "💾 Enregistrer la mesure"
+              )}
+            </Button>
+          </div>
 
           {/* Future feature banner */}
           <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg">
