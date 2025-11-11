@@ -7,6 +7,7 @@ export interface GlycemieReading {
   status: GlycemieStatus;
   date: string;
   time: string;
+  patientId: string;
 }
 
 export interface DailyReadings {

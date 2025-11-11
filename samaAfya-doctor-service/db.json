@@ -2,9 +2,9 @@
   "doctors": [
     {
       "id": "D001",
-      "firstName": "Dr. Amadou",
-      "lastName": "Konaté",
-      "email": "dr.konate@samaafya.sn",
+      "firstName": "Dr. Moussa",
+      "lastName": "Ba",
+      "email": "moussa.ba@hospital.com",
       "password": "medecin123",
       "specialty": "Endocrinologie - Diabétologie",
       "licenseNumber": "SN-MED-2024-001",
@@ -21,10 +21,10 @@
     },
     {
       "id": "D002",
-      "firstName": "Dr. Fatou",
-      "lastName": "Diagne",
-      "email": "dr.diagne@samaafya.sn",
-      "password": "medecin123",
+      "firstName": "Dr. Fatima",
+      "lastName": "Diallo",
+      "email": "fatima.diallo@clinique.sn",
+      "password": "docteur456",
       "specialty": "Gynécologie-Obstétrique",
       "licenseNumber": "SN-MED-2024-002",
       "phone": "+221 76 234 56 78",
@@ -37,25 +37,6 @@
       "createdAt": "2024-03-20T09:15:00Z",
       "lastLogin": "2025-11-08T16:45:00Z",
       "mfaExpiry": null
-    },
-    {
-      "id": "D003",
-      "firstName": "Dr. Moussa",
-      "lastName": "Sarr",
-      "email": "dr.sarr@samaafya.sn",
-      "password": "medecin123",
-      "specialty": "Médecine Interne",
-      "licenseNumber": "SN-MED-2024-003",
-      "phone": "+221 78 345 67 89",
-      "hospital": "Hôpital Général de Dakar",
-      "department": "Médecine Interne",
-      "yearsOfExperience": 15,
-      "mfaEnabled": false,
-      "mfaCode": "193047",
-      "isActive": true,
-      "createdAt": "2024-02-10T10:30:00Z",
-      "lastLogin": "2025-11-07T14:20:00Z",
-      "mfaExpiry": "2025-11-09T05:19:43.195Z"
     }
   ],
   "patients": [
@@ -304,6 +285,154 @@
       "response": "Pour contrôler la glycémie gestationnelle, privilégiez : légumes verts, protéines maigres (poulet, poisson, œufs), légumineuses, avocats, noix. Évitez les sucres raffinés et les glucides simples. Fractionnez vos repas et consultez votre diététicien pour un plan personnalisé.",
       "timestamp": "2025-11-08T16:45:00Z",
       "category": "nutrition"
+    }
+  ],
+  "glycemiaReadings": [
+    {
+      "id": "r1",
+      "patientId": "P001",
+      "moment": "jeun",
+      "value": 0.88,
+      "status": "normal",
+      "date": "2025-11-04",
+      "time": "07:30"
+    },
+    {
+      "id": "r2",
+      "patientId": "P001",
+      "moment": "apres_petit_dej",
+      "value": 1.15,
+      "status": "normal",
+      "date": "2025-11-04",
+      "time": "09:30"
+    },
+    {
+      "id": "r3",
+      "patientId": "P001",
+      "moment": "apres_dejeuner",
+      "value": 1.32,
+      "status": "warning",
+      "date": "2025-11-04",
+      "time": "14:30"
+    },
+    {
+      "id": "r4",
+      "patientId": "P001",
+      "moment": "apres_diner",
+      "value": 1.18,
+      "status": "normal",
+      "date": "2025-11-04",
+      "time": "21:00"
+    },
+    {
+      "id": "r5",
+      "patientId": "P002",
+      "moment": "jeun",
+      "value": 0.92,
+      "status": "normal",
+      "date": "2025-11-05",
+      "time": "07:15"
+    },
+    {
+      "id": "r6",
+      "patientId": "P002",
+      "moment": "apres_petit_dej",
+      "value": 1.08,
+      "status": "normal",
+      "date": "2025-11-05",
+      "time": "09:15"
+    },
+    {
+      "id": "r7",
+      "patientId": "P003",
+      "moment": "jeun",
+      "value": 1.45,
+      "status": "high",
+      "date": "2025-11-05",
+      "time": "07:30"
+    },
+    {
+      "id": "r8",
+      "patientId": "P003",
+      "moment": "apres_petit_dej",
+      "value": 1.62,
+      "status": "high",
+      "date": "2025-11-05",
+      "time": "09:30"
+    },
+    {
+      "id": "r9",
+      "patientId": "P004",
+      "moment": "jeun",
+      "value": 0.95,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "07:15"
+    },
+    {
+      "id": "r10",
+      "patientId": "P004",
+      "moment": "apres_petit_dej",
+      "value": 1.08,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "09:15"
+    },
+    {
+      "id": "r11",
+      "patientId": "P005",
+      "moment": "jeun",
+      "value": 0.82,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "07:45"
+    },
+    {
+      "id": "r12",
+      "patientId": "P005",
+      "moment": "apres_petit_dej",
+      "value": 1.05,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "09:45"
+    },
+    {
+      "id": "r13",
+      "patientId": "P001",
+      "moment": "jeun",
+      "value": 0.85,
+      "status": "normal",
+      "date": "2025-11-07",
+      "time": "07:45"
+    },
+    {
+      "id": "r14",
+      "patientId": "P001",
+      "moment": "apres_petit_dej",
+      "value": 1.1,
+      "status": "normal",
+      "date": "2025-11-07",
+      "time": "09:45"
+    },
+    {
+      "id": "r15",
+      "patientId": "P002",
+      "moment": "jeun",
+      "value": 0.88,
+      "status": "normal",
+      "date": "2025-11-08",
+      "time": "07:30"
+    }
+  ],
+  "trackingCodes": [
+    {
+      "id": "453a5d67-fcf4-426f-a2b6-3c04b571be83",
+      "code": "AFYA-4VKOP",
+      "doctorId": "D001",
+      "createdAt": "2025-11-11T18:25:35.981Z",
+      "sentTo": "moontagasegnane@gmail.com",
+      "sentBy": "email",
+      "isActive": true
     }
   ]
 }

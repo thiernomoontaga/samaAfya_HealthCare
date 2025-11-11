@@ -67,15 +67,22 @@ npm install
 cd samaAfya-backend
 npm start
 
-# Terminal 2 : Démarrer le frontend (port 8080)
-cd samaAfya-front
+# Terminal 2 : Démarrer le frontend patient (port 8080)
+cd samaAfya-patient-front
+npm run dev
+
+# Terminal 3 : Démarrer le frontend médecin (port 8081)
+cd samaAfya-doctor-front
 npm run dev
 ```
 
 ### Accès à l'application
 
-- **Frontend patient/médecin** : http://localhost:8080
+- **Frontend patient** : http://localhost:8080
+- **Frontend médecin** : http://localhost:8081
 - **API Backend** : http://localhost:5000
+- **Service patient** : http://localhost:3000
+- **Service médecin** : http://localhost:3001
 
 ## 👩‍⚕️ Fonctionnalités
 

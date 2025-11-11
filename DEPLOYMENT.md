@@ -22,7 +22,7 @@ SamaAfya est une plateforme de télémédecine spécialisée dans le suivi du di
                     │    (Render)    │    │    (Render)    │
                     │                │    │                │
                     │ - JSON Server  │    │ - JSON Server  │
-                    │ - Port: 3000   │    │ - Port: 3002   │
+                    │ - Port: 3000   │    │ - Port: 3001   │
                     └─────────────────┘    └─────────────────┘
 ```
 
@@ -129,7 +129,7 @@ cd samaAfya-doctor-front
 // Dans les frontends, remplacer les URLs locales par:
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 const PATIENT_SERVICE_URL = import.meta.env.VITE_PATIENT_SERVICE_URL || 'http://localhost:3000';
-const DOCTOR_SERVICE_URL = import.meta.env.VITE_DOCTOR_SERVICE_URL || 'http://localhost:3002';
+const DOCTOR_SERVICE_URL = import.meta.env.VITE_DOCTOR_SERVICE_URL || 'http://localhost:3001';
 ```
 
 ### **Exemple d'utilisation dans le code**

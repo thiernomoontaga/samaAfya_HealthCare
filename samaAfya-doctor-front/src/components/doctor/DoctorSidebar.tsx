@@ -49,35 +49,37 @@ const DoctorSidebar: React.FC = () => {
   };
 
   return (
-    <Sidebar className="border-r border-gray-200">
-      <SidebarHeader className="p-6 border-b border-gray-200">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-            <Stethoscope className="h-6 w-6 text-primary" />
+    <Sidebar className="border-r border-border/50 bg-background">
+      <SidebarHeader className="p-6 border-b border-border/50">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+            <Stethoscope className="h-7 w-7 text-primary" />
           </div>
           <div>
-            <h2 className="font-semibold text-gray-900">SamaAfya</h2>
-            <p className="text-xs text-gray-500">Espace Médecin</p>
+            <h2 className="font-bold text-foreground text-lg">SamaAfya</h2>
+            <p className="text-sm text-muted-foreground">Espace Professionnel</p>
           </div>
         </div>
       </SidebarHeader>
 
       <SidebarContent className="p-4">
-        <SidebarMenu>
+        <SidebarMenu className="space-y-2">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.url;
             return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
-                  className={`w-full justify-start gap-3 h-12 ${
+                  className={`w-full justify-start gap-4 h-14 rounded-xl transition-all duration-200 ${
                     isActive
-                      ? 'bg-primary/10 text-primary border-r-2 border-primary'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'bg-primary/10 text-primary border-r-3 border-primary shadow-sm'
+                      : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
                   }`}
                 >
-                  <Link to={item.url} className="flex items-center gap-3">
-                    <item.icon className="h-5 w-5" />
+                  <Link to={item.url} className="flex items-center gap-4 px-3">
+                    <div className={`p-2 rounded-lg ${isActive ? 'bg-primary/20' : 'bg-muted/30'}`}>
+                      <item.icon className="h-5 w-5" />
+                    </div>
                     <span className="font-medium">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
@@ -87,14 +89,16 @@ const DoctorSidebar: React.FC = () => {
         </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t border-gray-200">
+      <SidebarFooter className="p-4 border-t border-border/50">
         <Button
           onClick={handleLogout}
           variant="ghost"
-          className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50"
+          className="w-full justify-start gap-4 text-red-600 hover:text-red-700 hover:bg-red-50/50 rounded-xl h-12 transition-colors"
         >
-          <LogOut className="h-5 w-5" />
-          <span>Déconnexion</span>
+          <div className="p-2 rounded-lg bg-red-50">
+            <LogOut className="h-5 w-5" />
+          </div>
+          <span className="font-medium">Déconnexion</span>
         </Button>
       </SidebarFooter>
     </Sidebar>
