@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Mail, Lock, Eye, EyeOff, User, Sparkles, Flower2, Moon, ArrowRight } from "lucide-react";
+import { Heart, Mail, Lock, Eye, EyeOff, User, Sparkles, Flower2, Moon, ArrowRight, Shield, CheckCircle, Users, Activity } from "lucide-react";
 import { toast } from "sonner";
 
 const Login = () => {
@@ -60,80 +60,99 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-screen flex flex-col lg:flex-row bg-gradient-to-br from-rose-50/80 via-pink-50/60 via-purple-50/40 to-blue-50/60 relative overflow-hidden">
-      {/* Decorative Elements */}
-      <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-rose-200/30 to-pink-200/30 rounded-full blur-xl animate-pulse"></div>
-      <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-purple-200/30 to-blue-200/30 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}}></div>
-      <div className="absolute bottom-40 left-1/4 w-20 h-20 bg-gradient-to-br from-pink-200/30 to-rose-200/30 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
-
-      {/* Left side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12 relative z-10">
-        <div className="w-full max-w-md space-y-8">
-          {/* Hero Section */}
-          <div className="text-center space-y-4">
-            <div className="relative mb-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-400 via-pink-400 to-purple-400 flex items-center justify-center mx-auto shadow-lg animate-bounce">
-                <Heart className="h-8 w-8 text-white animate-pulse" />
+    <div className="min-h-screen w-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/50 w-full">
+        <div className="w-full max-w-full px-4 sm:px-6 py-4 overflow-hidden">
+          <div className="flex items-center justify-between">
+            {/* Left side - Logo & Title */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-spin">
-                <Sparkles className="h-3 w-3 text-white" />
+              <div>
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">SamaAfya Care</h1>
+                <p className="text-xs text-muted-foreground hidden sm:block">Suivi maternel connecté</p>
               </div>
             </div>
-            <div className="space-y-2">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
-                Bienvenue 💕
-              </h1>
-              <div className="flex items-center justify-center gap-2">
-                <Flower2 className="h-4 w-4 text-purple-500" />
-                <p className="text-gray-600 text-sm font-medium">Reprenez votre suivi maternel</p>
-                <Flower2 className="h-4 w-4 text-purple-500" />
-              </div>
+
+            {/* Right side - Actions */}
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Button
+                variant="ghost"
+                onClick={() => navigate('/')}
+                className="rounded-xl text-sm sm:text-base px-3 sm:px-4"
+              >
+                <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                <span className="hidden sm:inline">Accueil</span>
+                <span className="sm:hidden">Retour</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex flex-col md:flex-row min-h-[calc(100vh-80px)] w-full overflow-hidden">
+        {/* Left side - Login Form */}
+        <div className="w-full md:w-1/2 flex items-center justify-center p-6 sm:p-8 md:p-12 overflow-hidden">
+        <div className="w-full max-w-md space-y-6 sm:space-y-8">
+          {/* Welcome Section */}
+          <div className="text-center space-y-3 sm:space-y-4">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+              <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            </div>
+            <div className="space-y-1 sm:space-y-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">Bienvenue</h1>
+              <p className="text-lg sm:text-xl text-muted-foreground">Reprenez votre suivi maternel</p>
+              <p className="text-sm text-muted-foreground hidden sm:block">Accès sécurisé à votre espace santé</p>
             </div>
           </div>
 
           {/* Login Form */}
-          <Card className="border-2 border-rose-200 bg-gradient-to-br from-white to-rose-50/30 shadow-xl">
-            <CardContent className="p-8">
-              <div className="space-y-6">
+          <Card className="shadow-lg border-border/50 bg-card/50 backdrop-blur-sm">
+            <CardHeader className="space-y-3">
+              <CardTitle className="text-2xl text-center">Connexion patiente</CardTitle>
+              <CardDescription className="text-center">
+                Entrez vos identifiants pour accéder à votre tableau de bord
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-3">
-                  <Label htmlFor="email" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <User className="h-4 w-4 text-rose-500" />
-                    Email ou identifiant
+                  <Label htmlFor="email" className="text-sm font-semibold text-foreground flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    Email
                   </Label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-rose-400" />
-                    <Input
-                      id="email"
-                      type="text"
-                      placeholder="votre.email@exemple.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="pl-12 h-12 border-2 border-rose-200 rounded-xl focus:border-rose-400 focus:ring-rose-100 bg-white/80 backdrop-blur-sm text-gray-900 placeholder:text-gray-500"
-                      required
-                    />
-                  </div>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="votre.email@exemple.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-12 border-input rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-base pl-4"
+                    required
+                  />
                 </div>
 
                 <div className="space-y-3">
-                  <Label htmlFor="password" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <Lock className="h-4 w-4 text-purple-500" />
+                  <Label htmlFor="password" className="text-sm font-semibold text-foreground flex items-center gap-2">
+                    <Lock className="h-4 w-4" />
                     Mot de passe
                   </Label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-purple-400" />
                     <Input
                       id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Votre mot de passe sécurisé"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Votre mot de passe"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="pl-12 pr-12 h-12 border-2 border-purple-200 rounded-xl focus:border-purple-400 focus:ring-purple-100 bg-white/80 backdrop-blur-sm text-gray-900 placeholder:text-gray-500"
+                      className="h-12 border-input rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-base pr-12"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-400 hover:text-purple-600 transition-colors"
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
                       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
@@ -142,151 +161,91 @@ const Login = () => {
 
                 <Button
                   type="submit"
-                  onClick={handleLogin}
-                  className="w-full h-12 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group"
+                  className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold text-base shadow-md hover:shadow-lg transition-all duration-200"
                   disabled={isLoading}
                 >
-                  {isLoading ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Connexion en cours...
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      Se connecter à mon espace
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  )}
+                  {isLoading ? 'Connexion en cours...' : 'Se connecter'}
                 </Button>
-
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-gray-300" />
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-gradient-to-r from-rose-50 to-pink-50 text-gray-600 font-medium">
-                      Première visite ?
-                    </span>
-                  </div>
-                </div>
-
-                <Button
-                  variant="outline"
-                  onClick={() => navigate("/auth/signup")}
-                  className="w-full h-12 border-2 border-purple-300 text-purple-700 hover:bg-purple-50 rounded-xl font-semibold transition-all duration-300 group"
-                >
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4" />
-                    Créer mon compte patient
-                    <Moon className="h-4 w-4 group-hover:rotate-12 transition-transform" />
-                  </div>
-                </Button>
-              </div>
+              </form>
             </CardContent>
           </Card>
 
-          {/* Trust Indicators */}
-          <div className="flex justify-center gap-6 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span>Sécurisé</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-              <span>Confidentiel</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-              <span>24/7</span>
-            </div>
+          {/* Footer */}
+          <div className="text-center mt-8 text-sm text-muted-foreground">
+            <p>Première visite ? <a href="/auth/signup" className="text-primary hover:underline font-medium">Créer mon compte patient</a></p>
           </div>
         </div>
       </div>
 
-      {/* Right side - Enhanced Welcome */}
-      <div className="hidden lg:block w-1/2 relative overflow-hidden bg-gradient-to-br from-purple-100 via-pink-100 to-rose-100">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-200/40 via-pink-200/40 to-rose-200/40"></div>
-
-        {/* Floating Elements */}
-        <div className="absolute top-20 right-20 w-16 h-16 bg-white/30 rounded-full flex items-center justify-center animate-bounce">
-          <Heart className="h-8 w-8 text-rose-500" />
-        </div>
-        <div className="absolute bottom-32 left-16 w-12 h-12 bg-white/30 rounded-full flex items-center justify-center animate-pulse" style={{animationDelay: '1s'}}>
-          <Sparkles className="h-6 w-6 text-purple-500" />
-        </div>
-        <div className="absolute top-1/2 left-8 w-8 h-8 bg-white/30 rounded-full flex items-center justify-center animate-pulse" style={{animationDelay: '2s'}}>
-          <Flower2 className="h-4 w-4 text-pink-500" />
+      {/* Right side - Image and Features */}
+      <div className="hidden md:flex w-full md:w-1/2 bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 items-center justify-center p-8 md:p-12 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-primary/20"></div>
+          <div className="absolute bottom-20 right-20 w-24 h-24 rounded-full bg-accent/20"></div>
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 rounded-full bg-secondary/20"></div>
         </div>
 
-        <div className="absolute inset-0 flex items-center justify-center p-12">
-          <div className="text-center space-y-8 max-w-lg">
-            {/* Main Message */}
-            <div className="space-y-6">
-              <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm flex items-center justify-center mx-auto shadow-2xl border border-white/50">
-                  <Heart className="h-12 w-12 text-rose-500 animate-pulse" />
-                </div>
-                <div className="absolute -top-3 -right-3 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center animate-spin shadow-lg">
-                  <Sparkles className="h-4 w-4 text-white" />
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <h2 className="text-4xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent leading-tight">
-                  Votre compagnon de grossesse
-                </h2>
-                <p className="text-xl text-gray-700 leading-relaxed font-medium">
-                  Un suivi bienveillant, personnalisé et sécurisé pour votre santé et celle de votre bébé
-                </p>
+        <div className="relative z-10 max-w-sm md:max-w-lg space-y-6 md:space-y-8">
+          {/* Doctor Image */}
+          <div className="text-center">
+            <div className="w-32 h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 mx-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 hover:scale-105 transition-transform duration-300">
+              <div className="w-full h-full bg-primary/10 flex items-center justify-center">
+                <Heart className="h-16 w-16 md:h-24 md:w-24 text-primary" />
               </div>
             </div>
+            <p className="text-sm text-muted-foreground mt-4 italic">
+              "Chaque maman mérite des soins attentionnés et personnalisés"
+            </p>
+          </div>
 
-            {/* Features Grid */}
-            <div className="grid grid-cols-2 gap-4 mt-8">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-lg">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mx-auto mb-3">
-                  <Heart className="h-4 w-4 text-white" />
-                </div>
-                <h3 className="font-semibold text-gray-800 mb-1">Suivi 24/7</h3>
-                <p className="text-sm text-gray-600">Votre Docteur IA toujours disponible</p>
+          {/* Features Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-2">
+                <Shield className="h-5 w-5 text-primary" />
               </div>
-
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-lg">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mx-auto mb-3">
-                  <Sparkles className="h-4 w-4 text-white" />
-                </div>
-                <h3 className="font-semibold text-gray-800 mb-1">Sécurisé</h3>
-                <p className="text-sm text-gray-600">Données chiffrées et confidentielles</p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-lg">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mx-auto mb-3">
-                  <User className="h-4 w-4 text-white" />
-                </div>
-                <h3 className="font-semibold text-gray-800 mb-1">Personnalisé</h3>
-                <p className="text-sm text-gray-600">Accompagnement sur mesure</p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-lg">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center mx-auto mb-3">
-                  <Moon className="h-4 w-4 text-white" />
-                </div>
-                <h3 className="font-semibold text-gray-800 mb-1">Bienveillant</h3>
-                <p className="text-sm text-gray-600">Avec douceur et empathie</p>
-              </div>
+              <h3 className="font-semibold text-foreground text-sm">Sécurité</h3>
+              <p className="text-xs text-muted-foreground">Données chiffrées</p>
             </div>
 
-            {/* Trust Badge */}
-            <div className="mt-8 inline-flex items-center gap-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full border border-white/50 shadow-lg">
-              <div className="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-2">
+                <Heart className="h-5 w-5 text-accent-foreground" />
               </div>
-              <span className="text-sm font-medium text-gray-700">
-                + de 1000 futures mamans nous font confiance 💕
-              </span>
+              <h3 className="font-semibold text-foreground text-sm">Bienveillance</h3>
+              <p className="text-xs text-muted-foreground">Accompagnement doux</p>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+              </div>
+              <h3 className="font-semibold text-foreground text-sm">Fiable</h3>
+              <p className="text-xs text-muted-foreground">24/7 disponible</p>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                <Users className="h-5 w-5 text-blue-600" />
+              </div>
+              <h3 className="font-semibold text-foreground text-sm">Communauté</h3>
+              <p className="text-xs text-muted-foreground">Soutien solidaire</p>
             </div>
           </div>
+
+          {/* Trust Indicators */}
+          <div className="bg-white/40 backdrop-blur-sm rounded-xl p-4 md:p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-3">
+              <Activity className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold text-foreground">Plateforme de confiance</h3>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Plus de 1000 futures mamans nous font confiance pour leur suivi médical pendant la grossesse avec diabète gestationnel.
+            </p>
+          </div>
         </div>
+      </div>
       </div>
     </div>
   );

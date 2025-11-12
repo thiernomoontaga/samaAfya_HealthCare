@@ -134,7 +134,7 @@ export const GlycemiaInput = ({ onSubmit, className = "" }: GlycemiaInputProps) 
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center">
             <Droplet className="h-5 w-5 text-white" />
           </div>
-          <span className="text-xl font-bold text-gray-800">Nouvelle mesure glycémique</span>
+          <span className="text-xl font-bold text-gray-800">Nouvelle mesure de glycémie</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -215,7 +215,7 @@ export const GlycemiaInput = ({ onSubmit, className = "" }: GlycemiaInputProps) 
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
                 <Droplet className="h-4 w-4 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-800">Taux glycémique et contexte</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Taux de glycémie et contexte</h3>
             </div>
 
             <div className="grid grid-cols-1 gap-6">
@@ -489,7 +489,7 @@ export const GlycemiaInput = ({ onSubmit, className = "" }: GlycemiaInputProps) 
           <div className="pt-4">
             <Button
               type="submit"
-              className="w-full h-14 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group"
+              className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 group"
               disabled={isSubmitting}
             >
               <Save className="h-5 w-5 mr-3 group-hover:scale-110 transition-transform" />

@@ -20,7 +20,7 @@ export const DoctorIAButton: React.FC = () => {
       <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-14 h-14 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 shadow-lg hover:shadow-xl transition-all duration-300 group"
+          className="w-14 h-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-300 group"
           size="icon"
         >
           {isExpanded ? (
@@ -94,7 +94,7 @@ export const DoctorIAButton: React.FC = () => {
                 {/* Action Button */}
                 <Button
                   onClick={handleChatClick}
-                  className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Démarrer une conversation

@@ -271,6 +271,20 @@
       "monitoringMode": "lean",
       "country": "Sénégal",
       "postMealTiming": "2h"
+    },
+    {
+      "id": "cdab",
+      "firstName": "",
+      "lastName": "",
+      "email": "mamendiaye@gmail.com",
+      "password": "12345678",
+      "diabetesType": "",
+      "gestationalWeek": null,
+      "trackingCode": "",
+      "hasMonitoringMode": false,
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true
     }
   ],
   "glycemiaReadings": [
@@ -335,6 +349,15 @@
       "status": "normal",
       "date": "2025-11-10",
       "time": "22:57:53",
+      "patientId": "P001"
+    },
+    {
+      "id": "0390",
+      "moment": "jeun",
+      "value": 0.9,
+      "status": "normal",
+      "date": "2025-11-12",
+      "time": "13:15:25",
       "patientId": "P001"
     }
   ],

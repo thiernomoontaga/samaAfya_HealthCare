@@ -17,20 +17,20 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 15%;
 
-    /* Soft, calming primary colors - gentle blue */
-    --primary: 200 40% 70%;
+    /* Medical pink - caring and feminine */
+    --primary: 320 70% 60%;
     --primary-foreground: 0 0% 100%;
 
-    /* Soft secondary - gentle rose */
-    --secondary: 320 30% 95%;
-    --secondary-foreground: 320 40% 30%;
+    /* Soft lavender - complementary and calming */
+    --secondary: 280 40% 85%;
+    --secondary-foreground: 280 50% 30%;
 
-    --muted: 40 15% 97%;
-    --muted-foreground: 240 5% 50%;
+    --muted: 320 20% 97%;
+    --muted-foreground: 320 10% 40%;
 
-    /* Calming accent - mint green */
-    --accent: 160 35% 85%;
-    --accent-foreground: 160 40% 25%;
+    /* Light peach - warm and nurturing */
+    --accent: 25 60% 85%;
+    --accent-foreground: 25 70% 35%;
 
     --destructive: 0 50% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -74,20 +74,20 @@ All colors MUST be HSL.
     --popover: 240 15% 12%;
     --popover-foreground: 40 20% 95%;
 
-    /* Soft primary for dark mode */
-    --primary: 200 35% 75%;
+    /* Medical pink for dark mode */
+    --primary: 320 60% 65%;
     --primary-foreground: 240 15% 8%;
 
-    /* Soft secondary for dark mode */
-    --secondary: 320 25% 20%;
-    --secondary-foreground: 320 30% 90%;
+    /* Soft lavender for dark mode */
+    --secondary: 280 35% 25%;
+    --secondary-foreground: 280 40% 90%;
 
-    --muted: 240 10% 15%;
-    --muted-foreground: 40 10% 70%;
+    --muted: 320 15% 15%;
+    --muted-foreground: 320 10% 75%;
 
-    /* Accent for dark mode */
-    --accent: 160 25% 20%;
-    --accent-foreground: 160 35% 85%;
+    /* Light peach for dark mode */
+    --accent: 25 50% 30%;
+    --accent-foreground: 25 60% 85%;
 
     --destructive: 0 45% 65%;
     --destructive-foreground: 40 20% 95%;
@@ -122,6 +122,106 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground font-['Inter',sans-serif] antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Prevent horizontal overflow on mobile devices */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Ensure all containers respect viewport width */
+  * {
+    box-sizing: border-box !important;
+  }
+
+  /* Fix for iPhone viewport issues */
+  @media screen and (max-width: 768px) {
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    /* Prevent text from overflowing */
+    p, span, div, h1, h2, h3, h4, h5, h6 {
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+      hyphens: auto !important;
+    }
+
+    /* Ensure images don't overflow */
+    img {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+
+    /* Fix for flex containers */
+    .flex {
+      min-width: 0 !important;
+    }
+
+    /* Specific fixes for iPhone Pro models (390px - 428px width) */
+    @media screen and (min-width: 390px) and (max-width: 428px) {
+      /* Force containers to stay within viewport */
+      .container, [class*="container"] {
+        max-width: 100% !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+
+      /* Fix for cards and dialogs */
+      [class*="card"], [class*="dialog"] {
+        max-width: calc(100% - 2rem) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      /* Fix for input fields */
+      input, textarea, select {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Fix for buttons */
+      button {
+        max-width: 100% !important;
+        white-space: nowrap !important;
+      }
+
+      /* Specific iPhone Pro dimensions */
+      @media screen and (device-width: 390px) and (device-height: 844px), /* iPhone 12/13/14 Pro */
+             (device-width: 393px) and (device-height: 852px), /* iPhone 14 Pro */
+             (device-width: 414px) and (device-height: 896px), /* iPhone 11 Pro Max */
+             (device-width: 428px) and (device-height: 926px) { /* iPhone 12/13/14 Pro Max */
+
+        /* Force all content to stay within safe area */
+        * {
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+        }
+
+        /* Ensure no horizontal scrolling */
+        body {
+          overflow-x: hidden !important;
+          -webkit-overflow-scrolling: touch !important;
+        }
+
+        /* Fix for any element that might overflow */
+        .overflow-hidden {
+          overflow-x: hidden !important;
+        }
+
+        /* Safe area adjustments for iPhone */
+        .safe-area-top {
+          padding-top: env(safe-area-inset-top) !important;
+        }
+
+        .safe-area-bottom {
+          padding-bottom: env(safe-area-inset-bottom) !important;
+        }
+      }
+    }
   }
 
   /* Hide scrollbars completely */

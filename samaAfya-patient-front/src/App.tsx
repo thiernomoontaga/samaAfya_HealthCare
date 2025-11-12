@@ -12,7 +12,6 @@ import DoctorMFA from "./pages/auth/DoctorMFA";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PatientLayout from "./components/patient/layout/PatientLayout";
 import PatientHome from "./pages/patient/PatientHome";
-import PatientDashboard from "./pages/patient/PatientDashboard";
 import WeeklyDashboard from "./pages/patient/WeeklyDashboard";
 import MessagesPage from "./pages/patient/MessagesPage";
 import DocumentsPage from "./pages/patient/DocumentsPage";
@@ -39,7 +38,6 @@ const App = () => (
           <Route path="/auth/signup" element={<PatientSignup />} />
           <Route path="/patient/*" element={<PatientLayout />}>
             <Route path="home" element={<PatientHome />} />
-            <Route path="dashboard" element={<PatientDashboard />} />
             <Route path="weekly" element={<WeeklyDashboard />} />
             <Route path="glycemia" element={<HistoryPage />} />
             <Route path="messages" element={<MessagesPage />} />

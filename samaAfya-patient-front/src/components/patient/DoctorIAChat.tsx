@@ -158,53 +158,53 @@ export const DoctorIAChat: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-rose-50/50 via-pink-50/30 to-purple-50/50 rounded-2xl border border-rose-100/50 shadow-lg overflow-hidden">
+    <div className="bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 rounded-2xl border border-primary/20 shadow-lg overflow-hidden w-full max-w-full">
       {/* Header */}
-      <div className="bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 p-6 text-white">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-            <Bot className="h-7 w-7" />
+      <div className="bg-gradient-to-r from-primary via-accent to-secondary p-4 sm:p-6 text-primary-foreground">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center">
+            <Bot className="h-5 w-5 sm:h-7 sm:w-7" />
           </div>
           <div className="flex-1">
-            <h2 className="text-xl font-bold">Docteur IA</h2>
-            <p className="text-rose-100 text-sm">Votre assistant médical bienveillant 💙</p>
+            <h2 className="text-lg sm:text-xl font-bold">Docteur IA</h2>
+            <p className="text-primary-foreground/80 text-xs sm:text-sm">Votre assistant médical bienveillant 💙</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-xs text-rose-100">En ligne</span>
+            <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-xs text-primary-foreground/80">En ligne</span>
           </div>
         </div>
       </div>
 
       {/* Chat Area */}
-      <div className="h-[500px] flex flex-col">
+      <div className="h-[400px] sm:h-[500px] lg:h-[600px] flex flex-col">
         <ScrollArea className="flex-1 p-6">
           <div className="space-y-6">
             {/* Welcome message */}
             {messages.length === 0 && !isLoading && (
               <div className="text-center py-12">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Heart className="h-10 w-10 text-rose-500" />
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Heart className="h-10 w-10 text-primary" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-foreground mb-3">
                   Bonjour ! Je suis là pour vous aider 🤗
                 </h3>
-                <p className="text-gray-600 text-base leading-relaxed max-w-lg mx-auto">
+                <p className="text-muted-foreground text-base leading-relaxed max-w-lg mx-auto">
                   Posez-moi vos questions sur la glycémie, l'alimentation, l'activité physique,
                   ou tout autre sujet concernant votre grossesse avec diabète gestationnel.
                 </p>
                 <div className="mt-6 grid grid-cols-2 gap-3 max-w-md mx-auto">
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-3 rounded-xl border border-blue-100">
-                    <p className="text-sm font-medium text-blue-800">📊 Glycémie normale</p>
+                  <div className="bg-gradient-to-br from-primary/5 to-primary/10 p-3 rounded-xl border border-primary/20">
+                    <p className="text-sm font-medium text-primary">📊 Glycémie normale</p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-3 rounded-xl border border-green-100">
-                    <p className="text-sm font-medium text-green-800">🥗 Alimentation</p>
+                  <div className="bg-gradient-to-br from-accent/5 to-accent/10 p-3 rounded-xl border border-accent/20">
+                    <p className="text-sm font-medium text-accent-foreground">🥗 Alimentation</p>
                   </div>
-                  <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-3 rounded-xl border border-purple-100">
-                    <p className="text-sm font-medium text-purple-800">🏃‍♀️ Activité physique</p>
+                  <div className="bg-gradient-to-br from-secondary/5 to-secondary/10 p-3 rounded-xl border border-secondary/20">
+                    <p className="text-sm font-medium text-secondary-foreground">🏃‍♀️ Activité physique</p>
                   </div>
-                  <div className="bg-gradient-to-br from-rose-50 to-pink-50 p-3 rounded-xl border border-rose-100">
-                    <p className="text-sm font-medium text-rose-800">🤰 Signes grossesse</p>
+                  <div className="bg-gradient-to-br from-primary/5 to-accent/5 p-3 rounded-xl border border-primary/20">
+                    <p className="text-sm font-medium text-primary">🤰 Signes grossesse</p>
                   </div>
                 </div>
               </div>
@@ -217,19 +217,19 @@ export const DoctorIAChat: React.FC = () => {
                 className={`flex gap-4 ${message.sender === 'patient' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.sender === 'ia' && (
-                  <Avatar className="w-10 h-10 bg-gradient-to-br from-rose-400 to-pink-400 shadow-lg">
-                    <AvatarFallback className="bg-transparent text-white font-bold text-sm">
+                  <Avatar className="w-10 h-10 bg-gradient-to-br from-primary to-accent shadow-lg">
+                    <AvatarFallback className="bg-transparent text-primary-foreground font-bold text-sm">
                       <Bot className="h-5 w-5" />
                     </AvatarFallback>
                   </Avatar>
                 )}
 
-                <div className="max-w-[75%]">
+                <div className="max-w-[80%] sm:max-w-[75%]">
                   <div
-                    className={`rounded-2xl px-5 py-4 shadow-md ${
+                    className={`rounded-2xl px-4 sm:px-5 py-3 sm:py-4 shadow-md ${
                       message.sender === 'patient'
-                        ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white ml-12'
-                        : 'bg-white border border-rose-100 text-gray-800 mr-12'
+                        ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground ml-8 sm:ml-12'
+                        : 'bg-card border border-primary/20 text-card-foreground mr-8 sm:mr-12'
                     }`}
                   >
                     <p className="text-sm leading-relaxed whitespace-pre-line">
@@ -237,7 +237,7 @@ export const DoctorIAChat: React.FC = () => {
                     </p>
                   </div>
                   <p className={`text-xs mt-2 px-2 ${
-                    message.sender === 'patient' ? 'text-right text-rose-400' : 'text-left text-gray-500'
+                    message.sender === 'patient' ? 'text-right text-primary' : 'text-left text-muted-foreground'
                   }`}>
                     {new Date(message.timestamp).toLocaleTimeString('fr-FR', {
                       hour: '2-digit',
@@ -247,8 +247,8 @@ export const DoctorIAChat: React.FC = () => {
                 </div>
 
                 {message.sender === 'patient' && (
-                  <Avatar className="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-400 shadow-lg">
-                    <AvatarFallback className="bg-transparent text-white font-bold text-sm">
+                  <Avatar className="w-10 h-10 bg-gradient-to-br from-secondary to-accent shadow-lg">
+                    <AvatarFallback className="bg-transparent text-secondary-foreground font-bold text-sm">
                       <User className="h-5 w-5" />
                     </AvatarFallback>
                   </Avatar>
@@ -259,16 +259,16 @@ export const DoctorIAChat: React.FC = () => {
             {/* Typing indicator */}
             {isTyping && (
               <div className="flex gap-4 justify-start">
-                <Avatar className="w-10 h-10 bg-gradient-to-br from-rose-400 to-pink-400 shadow-lg">
-                  <AvatarFallback className="bg-transparent text-white font-bold text-sm">
+                <Avatar className="w-10 h-10 bg-gradient-to-br from-primary to-accent shadow-lg">
+                  <AvatarFallback className="bg-transparent text-primary-foreground font-bold text-sm">
                     <Bot className="h-5 w-5" />
                   </AvatarFallback>
                 </Avatar>
-                <div className="bg-white border border-rose-100 rounded-2xl px-5 py-4 shadow-md mr-12">
+                <div className="bg-card border border-primary/20 rounded-2xl px-5 py-4 shadow-md mr-12">
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-rose-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-rose-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-rose-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                   </div>
                 </div>
               </div>
@@ -278,31 +278,31 @@ export const DoctorIAChat: React.FC = () => {
         </ScrollArea>
 
         {/* Input area */}
-        <div className="p-6 bg-white/80 backdrop-blur-sm border-t border-rose-100">
-          <div className="flex gap-3">
+        <div className="p-4 sm:p-6 bg-card/80 backdrop-blur-sm border-t border-primary/20">
+          <div className="flex gap-2 sm:gap-3">
             <div className="flex-1 relative">
               <Input
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Écrivez votre message ici..."
-                className="pr-12 py-3 text-base border-2 border-rose-200 focus:border-rose-400 focus:ring-rose-400/20 rounded-xl"
+                placeholder="Écrivez votre message..."
+                className="pr-10 sm:pr-12 py-3 text-sm sm:text-base border-2 border-primary/20 focus:border-primary focus:ring-primary/20 rounded-xl"
                 disabled={isTyping}
               />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-rose-400">
-                <Sparkles className="h-5 w-5" />
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary">
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
             </div>
             <Button
               onClick={handleSendMessage}
               disabled={!inputMessage.trim() || isTyping}
-              className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+              className="px-4 sm:px-6 py-3 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
             >
-              <Send className="h-5 w-5" />
+              <Send className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
           </div>
-          <div className="mt-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-            <p className="text-xs text-blue-700 text-center leading-relaxed">
+          <div className="mt-3 sm:mt-4 p-3 bg-gradient-to-r from-accent/5 to-secondary/5 rounded-xl border border-accent/20">
+            <p className="text-xs text-accent-foreground text-center leading-relaxed">
               💙 <strong>Important :</strong> Cet assistant fournit des conseils généraux et bienveillants.
               Il ne remplace pas les consultations médicales personnalisées avec votre équipe de santé.
             </p>

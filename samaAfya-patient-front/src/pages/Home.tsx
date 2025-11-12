@@ -1,237 +1,300 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Activity, Heart, TrendingUp, MessageCircle, FileText, Shield, Users, Calendar, Sparkles, Flower2, Moon, Baby, ArrowRight, Star } from "lucide-react";
+import { Activity, Heart, TrendingUp, MessageCircle, FileText, Shield, Users, Calendar, Sparkles, Flower2, Moon, Baby, ArrowRight, CheckCircle, BarChart3, Settings, Clock, AlertCircle } from "lucide-react";
 
 const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50/80 via-pink-50/60 via-purple-50/40 to-blue-50/60 relative overflow-hidden">
-      {/* Decorative Elements */}
-      <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-rose-200/30 to-pink-200/30 rounded-full blur-xl animate-pulse"></div>
-      <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-purple-200/30 to-blue-200/30 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}}></div>
-      <div className="absolute bottom-40 left-1/4 w-20 h-20 bg-gradient-to-br from-pink-200/30 to-rose-200/30 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
-
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        {/* Hero Section */}
-        <div className="text-center mb-20">
-          <div className="flex items-center justify-center mb-8">
-            <div className="relative">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-rose-400 via-pink-400 to-purple-400 flex items-center justify-center shadow-2xl animate-bounce">
-                <Heart className="h-12 w-12 text-white animate-pulse" />
+    <div className="min-h-screen bg-background">
+      {/* Header / Topbar */}
+      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/50">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Left side - Logo & Title */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center animate-spin">
-                <Sparkles className="h-4 w-4 text-white" />
+              <div>
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">SamaAfya Care</h1>
+                <p className="text-xs text-muted-foreground hidden sm:block">Suivi maternel connecté</p>
               </div>
             </div>
-          </div>
 
-          <div className="mb-6">
-            <Badge variant="secondary" className="mb-4 bg-rose-100 text-rose-700 border-rose-200 px-4 py-2 text-sm font-medium">
-              <Flower2 className="h-4 w-4 mr-2" />
-              Santé maternelle & bien-être 💕
-            </Badge>
-            <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent leading-tight">
-              SamaAfya Care
-            </h1>
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <Moon className="h-5 w-5 text-purple-500" />
-              <p className="text-2xl text-gray-700 font-medium">
-                Pour un suivi maternel connecté, continu et serein
-              </p>
-              <Moon className="h-5 w-5 text-purple-500" />
-            </div>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Découvrez une nouvelle façon de prendre soin de vous pendant votre grossesse.
-              Notre plateforme bienveillante vous accompagne dans votre suivi du diabète gestationnel
-              avec douceur et expertise médicale.
-            </p>
-          </div>
-        </div>
-
-        {/* Values Section */}
-        <div className="mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Pourquoi nous choisir ?</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Une approche bienveillante et moderne pour prendre soin de votre santé maternelle
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
-            <div className="text-center group">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <Shield className="h-8 w-8 text-rose-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Sécurité & Confiance</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Vos données médicales sont chiffrées et sécurisées selon les normes les plus strictes
-              </p>
-            </div>
-
-            <div className="text-center group">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <Heart className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Accompagnement Bienveillant</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Une équipe médicale à votre écoute avec notre Docteur IA disponible 24/7
-              </p>
-            </div>
-
-            <div className="text-center group">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <Users className="h-8 w-8 text-pink-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Communauté Solidaire</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Rejoignez une communauté de futures mamans partageant la même expérience
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Testimonials */}
-        <div className="mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Témoignages de nos patientes</h2>
-            <div className="flex items-center justify-center gap-1 mb-4">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-              ))}
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="border-2 border-rose-100 bg-gradient-to-br from-white to-rose-50/50 hover:shadow-xl transition-all duration-300">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic leading-relaxed">
-                  "Grâce à SamaAfya, je me sens accompagnée et en sécurité pendant ma grossesse.
-                  L'application est si douce et facile à utiliser ! 💕"
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 flex items-center justify-center">
-                    <span className="text-white font-semibold text-sm">A</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-800">Amina K.</p>
-                    <p className="text-sm text-gray-600">Mamane de 2 enfants</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 border-purple-100 bg-gradient-to-br from-white to-purple-50/50 hover:shadow-xl transition-all duration-300">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic leading-relaxed">
-                  "Le Docteur IA m'a rassurée quand j'avais des questions la nuit.
-                  C'est comme avoir une sage-femme dans ma poche ! 🌙"
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-blue-400 flex items-center justify-center">
-                    <span className="text-white font-semibold text-sm">F</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-800">Fatou D.</p>
-                    <p className="text-sm text-gray-600">Future maman pour la première fois</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Patient Access Card */}
-        <div className="max-w-2xl mx-auto mb-16">
-          <Card className="border-2 border-rose-200 hover:border-rose-300 transition-all duration-500 hover:shadow-2xl cursor-pointer group bg-gradient-to-br from-white to-rose-50/30">
-            <CardHeader className="text-center pb-4">
-              <div className="relative mb-6">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 flex items-center justify-center mx-auto shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <Activity className="h-12 w-12 text-white" />
-                </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-pink-400 rounded-full flex items-center justify-center animate-bounce">
-                  <Baby className="h-4 w-4 text-white" />
-                </div>
-              </div>
-              <CardTitle className="text-3xl text-gray-800 mb-2">Mon Espace Santé 💕</CardTitle>
-              <CardDescription className="text-lg text-gray-600">
-                Votre compagnon bienveillant pour un suivi maternel serein et personnalisé
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6">
+            {/* Right side - Actions */}
+            <div className="flex items-center gap-2 sm:gap-4">
               <Button
                 onClick={() => navigate("/auth/login")}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 group text-lg py-4"
-                size="lg"
+                className="rounded-xl bg-primary hover:bg-primary/90 text-sm sm:text-base px-3 sm:px-4 py-2"
               >
-                Commencer mon suivi maternel
-                <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                <span className="hidden sm:inline">Se connecter</span>
+                <span className="sm:hidden">Connexion</span>
               </Button>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div className="flex items-center gap-3 p-4 bg-rose-50 rounded-xl border border-rose-100">
-                  <div className="w-3 h-3 rounded-full bg-rose-400 animate-pulse"></div>
-                  <span className="text-gray-700 font-medium">Suivi glycémique quotidien</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-6 py-8 space-y-12">
+        {/* Hero / Welcome Section */}
+        <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-12 border border-primary/10">
+          <div className="flex items-center justify-between">
+            <div className="space-y-6 max-w-2xl">
+              <div className="space-y-3">
+                <h2 className="text-5xl font-bold text-foreground">
+                  Bienvenue sur SamaAfya Care
+                </h2>
+                <p className="text-xl text-muted-foreground">
+                  Plateforme de suivi maternel spécialisée dans le diabète gestationnel
+                </p>
+                <p className="text-lg text-muted-foreground">
+                  Prenez soin de votre santé et de celle de votre bébé avec nos outils de monitoring avancés et notre accompagnement personnalisé.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-primary"></div>
+                  <span className="text-foreground font-medium">Suivi 24/7</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-pink-50 rounded-xl border border-pink-100">
-                  <div className="w-3 h-3 rounded-full bg-pink-400 animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                  <span className="text-gray-700 font-medium">Graphiques de tendance</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-accent"></div>
+                  <span className="text-foreground font-medium">Données sécurisées</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-xl border border-purple-100">
-                  <div className="w-3 h-3 rounded-full bg-purple-400 animate-pulse" style={{animationDelay: '1s'}}></div>
-                  <span className="text-gray-700 font-medium">Docteur IA disponible 24/7</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-secondary"></div>
+                  <span className="text-foreground font-medium">Accompagnement bienveillant</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-100">
-                  <div className="w-3 h-3 rounded-full bg-blue-400 animate-pulse" style={{animationDelay: '1.5s'}}></div>
-                  <span className="text-gray-700 font-medium">Messagerie sécurisée</span>
+              </div>
+
+              <Button
+                onClick={() => navigate("/auth/login")}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-8 py-6 text-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+              >
+                Accéder à mon espace santé
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </Button>
+            </div>
+            <div className="hidden lg:block">
+              <div className="w-48 h-48 rounded-full bg-primary/10 flex items-center justify-center">
+                <Heart className="h-24 w-24 text-primary" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Features Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Suivi glycémique</p>
+                  <p className="text-2xl font-bold text-primary">Automatisé</p>
+                  <p className="text-xs text-muted-foreground mt-2">Mesures quotidiennes</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-primary/20">
+                  <Activity className="h-8 w-8 text-primary" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-accent/20 bg-gradient-to-br from-accent/10 to-accent/20">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Analyse données</p>
+                  <p className="text-2xl font-bold text-accent-foreground">Temps réel</p>
+                  <p className="text-xs text-muted-foreground mt-2">Graphiques avancés</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-accent/30">
+                  <TrendingUp className="h-8 w-8 text-accent-foreground" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-amber-200/50 bg-gradient-to-br from-amber-50 to-amber-100">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Docteur IA</p>
+                  <p className="text-2xl font-bold text-amber-600">24/7</p>
+                  <p className="text-xs text-muted-foreground mt-2">Support disponible</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-amber-200">
+                  <MessageCircle className="h-8 w-8 text-amber-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-green-200/50 bg-gradient-to-br from-green-50 to-green-100">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Sécurité</p>
+                  <p className="text-2xl font-bold text-green-600">RGPD</p>
+                  <p className="text-xs text-muted-foreground mt-2">Données protégées</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-green-200">
+                  <Shield className="h-8 w-8 text-green-600" />
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
+        {/* Detailed Features */}
+        <Card className="shadow-sm border-border/50">
+          <CardHeader className="pb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-primary/10">
+                <Activity className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <CardTitle className="text-2xl">Fonctionnalités principales</CardTitle>
+                <CardDescription className="text-base">Découvrez les outils conçus pour votre bien-être maternel</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="flex gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors">
+                <div className="p-3 rounded-lg bg-primary/10 flex-shrink-0">
+                  <Activity className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Suivi glycémique quotidien</h3>
+                  <p className="text-sm text-muted-foreground">Mesures automatisées avec rappels personnalisés et historique complet</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors">
+                <div className="p-3 rounded-lg bg-accent/20 flex-shrink-0">
+                  <TrendingUp className="h-6 w-6 text-accent-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Analyse des tendances</h3>
+                  <p className="text-sm text-muted-foreground">Graphiques interactifs et analyses prédictives de vos glycémies</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors">
+                <div className="p-3 rounded-lg bg-secondary/20 flex-shrink-0">
+                  <MessageCircle className="h-6 w-6 text-secondary-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Docteur IA disponible 24/7</h3>
+                  <p className="text-sm text-muted-foreground">Réponses instantanées à vos questions médicales et conseils personnalisés</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors">
+                <div className="p-3 rounded-lg bg-green-100 flex-shrink-0">
+                  <AlertCircle className="h-6 w-6 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Système d'alertes</h3>
+                  <p className="text-sm text-muted-foreground">Notifications instantanées pour les valeurs critiques et rappels importants</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors">
+                <div className="p-3 rounded-lg bg-blue-100 flex-shrink-0">
+                  <BarChart3 className="h-6 w-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Rapports statistiques</h3>
+                  <p className="text-sm text-muted-foreground">Tableaux de bord hebdomadaires et analyses de votre évolution</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors">
+                <div className="p-3 rounded-lg bg-purple-100 flex-shrink-0">
+                  <Settings className="h-6 w-6 text-purple-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Paramètres personnalisés</h3>
+                  <p className="text-sm text-muted-foreground">Configuration adaptée à vos besoins et préférences maternelles</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors">
+                <div className="p-3 rounded-lg bg-amber-100 flex-shrink-0">
+                  <FileText className="h-6 w-6 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Documents médicaux</h3>
+                  <p className="text-sm text-muted-foreground">Accès sécurisé à vos analyses, rapports et documents de suivi</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors">
+                <div className="p-3 rounded-lg bg-pink-100 flex-shrink-0">
+                  <Users className="h-6 w-6 text-pink-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Communauté solidaire</h3>
+                  <p className="text-sm text-muted-foreground">Échangez avec d'autres futures mamans partageant la même expérience</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors">
+                <div className="p-3 rounded-lg bg-indigo-100 flex-shrink-0">
+                  <Clock className="h-6 w-6 text-indigo-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Suivi continu 24/7</h3>
+                  <p className="text-sm text-muted-foreground">Monitoring automatique et interventions préventives pour votre sécurité</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Call to Action */}
-        <div className="text-center mt-20 mb-16">
-          <div className="bg-gradient-to-r from-rose-100 via-pink-100 to-purple-100 rounded-3xl p-8 border border-rose-200 shadow-lg">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Prête à commencer votre suivi ? 🌸
-            </h2>
-            <p className="text-gray-700 mb-6 max-w-2xl mx-auto leading-relaxed">
-              Rejoignez des milliers de futures mamans qui nous font confiance pour leur suivi médical.
-              Votre santé et celle de votre bébé sont notre priorité absolue.
-            </p>
-            <Button
-              onClick={() => navigate("/auth/login")}
-              className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 group"
-              size="lg"
-            >
-              Créer mon compte patient
-              <Heart className="h-5 w-5 ml-2 group-hover:scale-110 transition-transform" />
-            </Button>
-          </div>
-        </div>
+        <Card className="shadow-sm border-border/50 bg-gradient-to-r from-primary/5 to-accent/5">
+          <CardContent className="p-8 text-center">
+            <div className="max-w-2xl mx-auto space-y-6">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+                <CheckCircle className="h-8 w-8 text-primary" />
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold text-foreground">Prête à commencer votre suivi ?</h3>
+                <p className="text-muted-foreground text-lg">
+                  Rejoignez des centaines de futures mamans qui nous font confiance pour leur suivi médical personnalisé pendant la grossesse.
+                </p>
+              </div>
+              <Button
+                onClick={() => navigate("/auth/login")}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-8 py-6 text-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+              >
+                Accéder à mon espace santé
+                <ArrowRight className="h-5 w-5 ml-2" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Footer */}
-        <div className="text-center">
-          <div className="inline-flex items-center gap-4 px-8 py-4 rounded-full bg-white/80 border border-rose-200 shadow-lg backdrop-blur-sm">
-            <Shield className="h-5 w-5 text-rose-500" />
-            <p className="text-sm text-gray-700 font-medium">
-              Plateforme sécurisée et conforme aux normes médicales 💙
-            </p>
-            <Shield className="h-5 w-5 text-rose-500" />
+        <footer className="mt-12 pt-8 border-t border-border/50">
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <div className="flex items-center gap-6">
+              <span>© 2025 SamaAfya Care</span>
+              <a href="#" className="hover:text-foreground transition-colors">Politique de confidentialité</a>
+              <a href="#" className="hover:text-foreground transition-colors">Conditions d'utilisation</a>
+            </div>
+            <div className="flex items-center gap-4">
+              <span>Version 1.0.0</span>
+              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              <span>Système opérationnel</span>
+            </div>
           </div>
-        </div>
+        </footer>
       </div>
     </div>
   );

@@ -150,52 +150,39 @@ const DocumentsPage = () => {
     const Icon = config.icon;
 
     return (
-      <Card key={doc.id} className="hover:shadow-xl transition-all duration-300 border-2 border-gray-100 hover:border-purple-200 bg-gradient-to-br from-white to-gray-50/50 group cursor-pointer">
+      <Card key={doc.id} className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-primary/20 bg-card">
         <CardHeader className="pb-4">
-          <div className="flex items-start justify-between mb-3">
+          <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Icon className="h-5 w-5 text-purple-600" />
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Icon className="h-5 w-5 text-primary" />
               </div>
-              <Badge variant="outline" className={`${config.color} font-medium`}>
-                {config.label}
-              </Badge>
+              <div>
+                <CardTitle className="text-lg">{doc.title}</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  {format(new Date(doc.date), "d MMMM yyyy", { locale: fr })}
+                </p>
+              </div>
             </div>
-            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <Download className="h-4 w-4 text-gray-600" />
-            </div>
+            <Badge variant="secondary" className="bg-accent/20 text-accent-foreground">
+              {config.label}
+            </Badge>
           </div>
-          <CardTitle className="text-lg leading-tight text-gray-900 group-hover:text-purple-900 transition-colors">
-            {doc.title}
-          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 text-sm text-gray-600 bg-gray-50 rounded-lg p-3">
-              <Clock className="h-4 w-4 text-purple-500" />
-              <span className="font-medium">
-                {format(new Date(doc.date), "d MMMM yyyy", { locale: fr })}
-              </span>
-            </div>
-
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1 border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300"
-                onClick={() => handleDownload(doc)}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Télécharger
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="px-3 text-gray-500 hover:text-purple-600"
-              >
-                👁️
-              </Button>
-            </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={() => handleDownload(doc)}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Télécharger
+            </Button>
+            <Button variant="ghost" size="sm">
+              👁️
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -211,72 +198,115 @@ const DocumentsPage = () => {
 
   return (
     <div className="space-y-8 mt-8">
-        {/* Hero Section */}
-        <div className="text-center space-y-4">
-          <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 flex items-center justify-center mx-auto shadow-lg">
-              <Heart className="h-10 w-10 text-white animate-pulse" />
-            </div>
-            <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-spin">
-              <Sparkles className="h-3 w-3 text-white" />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
-              Mes documents médicaux 💕
-            </h1>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
-              Tous vos documents de santé en un seul endroit, sécurisés et accessibles à tout moment
+      {/* Hero / Welcome Section */}
+      <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-8 border border-primary/10">
+        <div className="flex items-center justify-between">
+          <div className="space-y-3">
+            <h2 className="text-4xl font-bold text-foreground">
+              Mes documents médicaux
+            </h2>
+            <p className="text-muted-foreground text-xl">
+              Accès sécurisé à tous vos documents de santé - {Object.values(mockDocuments).flat().length} document{Object.values(mockDocuments).flat().length !== 1 ? 's' : ''} stocké{Object.values(mockDocuments).flat().length !== 1 ? 's' : ''}
             </p>
+            <div className="flex items-center gap-6 mt-6">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-primary"></div>
+                <span className="text-foreground font-medium">Chiffrés</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-accent"></div>
+                <span className="text-foreground font-medium">RGPD compliant</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-secondary"></div>
+                <span className="text-foreground font-medium">24/7 accessible</span>
+              </div>
+            </div>
+          </div>
+          <div className="hidden lg:block">
+            <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center">
+              <FileText className="h-16 w-16 text-primary" />
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100/50 hover:shadow-lg transition-all duration-300 cursor-pointer group">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <FolderOpen className="h-6 w-6 text-white" />
+      {/* Features Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-2">Ordonnances</p>
+                <p className="text-2xl font-bold text-primary">{mockDocuments.ordonnances.length}</p>
+                <p className="text-xs text-muted-foreground mt-2">Documents actifs</p>
               </div>
-              <h3 className="font-semibold text-blue-800 mb-2">Consulter</h3>
-              <p className="text-sm text-blue-600">Accédez à vos documents médicaux</p>
-            </CardContent>
-          </Card>
+              <div className="p-4 rounded-2xl bg-primary/20">
+                <Pill className="h-8 w-8 text-primary" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100/50 hover:shadow-lg transition-all duration-300 cursor-pointer group">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <Download className="h-6 w-6 text-white" />
+        <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-accent/20 bg-gradient-to-br from-accent/10 to-accent/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-2">Résultats</p>
+                <p className="text-2xl font-bold text-accent-foreground">{mockDocuments.resultats.length}</p>
+                <p className="text-xs text-muted-foreground mt-2">Examens médicaux</p>
               </div>
-              <h3 className="font-semibold text-green-800 mb-2">Télécharger</h3>
-              <p className="text-sm text-green-600">Sauvegardez vos documents</p>
-            </CardContent>
-          </Card>
+              <div className="p-4 rounded-2xl bg-accent/30">
+                <Stethoscope className="h-8 w-8 text-accent-foreground" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100/50 hover:shadow-lg transition-all duration-300 cursor-pointer group">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <Upload className="h-6 w-6 text-white" />
+        <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-secondary/20 bg-gradient-to-br from-secondary/10 to-secondary/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-2">Conseils</p>
+                <p className="text-2xl font-bold text-secondary-foreground">{mockDocuments.conseils.length}</p>
+                <p className="text-xs text-muted-foreground mt-2">Recommandations</p>
               </div>
-              <h3 className="font-semibold text-purple-800 mb-2">Uploader</h3>
-              <p className="text-sm text-purple-600">Ajoutez vos propres documents</p>
-            </CardContent>
-          </Card>
+              <div className="p-4 rounded-2xl bg-secondary/30">
+                <MessageSquare className="h-8 w-8 text-secondary-foreground" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-green-200/50 bg-gradient-to-br from-green-50 to-green-100">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-2">Sécurité</p>
+                <p className="text-2xl font-bold text-green-600">RGPD</p>
+                <p className="text-xs text-muted-foreground mt-2">Données protégées</p>
+              </div>
+              <div className="p-4 rounded-2xl bg-green-200">
+                <Shield className="h-8 w-8 text-green-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Header with Actions */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-foreground">Gestion de mes documents</h2>
+          <p className="text-muted-foreground">Organisez et sécurisez vos documents de santé</p>
         </div>
-
-        {/* Header with Upload Button */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Gestion de mes documents</h2>
-            <p className="text-muted-foreground">Organisez et sécurisez vos documents de santé</p>
-          </div>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                <Upload className="h-4 w-4 mr-2" />
-                Ajouter un document
-              </Button>
-            </DialogTrigger>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <Upload className="h-4 w-4 mr-2" />
+              Ajouter un document
+            </Button>
+          </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-3">
@@ -346,61 +376,37 @@ const DocumentsPage = () => {
           </Dialog>
         </div>
 
-        {/* Search */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                placeholder="Rechercher un document..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </CardContent>
-        </Card>
+      {/* Search */}
+      <Card className="shadow-sm border-border/50">
+        <CardContent className="pt-6">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Input
+              placeholder="Rechercher un document..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Enhanced Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-blue-50 to-purple-50 p-1 rounded-xl">
-            <TabsTrigger
-              value="ordonnances"
-              className="flex items-center gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md transition-all duration-300"
-            >
-              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
-                <Pill className="h-3 w-3 text-blue-600" />
-              </div>
-              <span className="font-medium">Ordonnances</span>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs ml-1">
-                {mockDocuments.ordonnances.length}
-              </Badge>
-            </TabsTrigger>
-            <TabsTrigger
-              value="resultats"
-              className="flex items-center gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md transition-all duration-300"
-            >
-              <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
-                <Stethoscope className="h-3 w-3 text-green-600" />
-              </div>
-              <span className="font-medium">Résultats</span>
-              <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs ml-1">
-                {mockDocuments.resultats.length}
-              </Badge>
-            </TabsTrigger>
-            <TabsTrigger
-              value="conseils"
-              className="flex items-center gap-2 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md transition-all duration-300"
-            >
-              <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center">
-                <MessageSquare className="h-3 w-3 text-amber-600" />
-              </div>
-              <span className="font-medium">Conseils</span>
-              <Badge variant="secondary" className="bg-amber-100 text-amber-700 text-xs ml-1">
-                {mockDocuments.conseils.length}
-              </Badge>
-            </TabsTrigger>
-          </TabsList>
+      {/* Document Categories */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="ordonnances" className="flex items-center gap-2">
+            <Pill className="h-4 w-4" />
+            Ordonnances ({mockDocuments.ordonnances.length})
+          </TabsTrigger>
+          <TabsTrigger value="resultats" className="flex items-center gap-2">
+            <Stethoscope className="h-4 w-4" />
+            Résultats ({mockDocuments.resultats.length})
+          </TabsTrigger>
+          <TabsTrigger value="conseils" className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" />
+            Conseils ({mockDocuments.conseils.length})
+          </TabsTrigger>
+        </TabsList>
 
           {/* Ordonnances Tab */}
           <TabsContent value="ordonnances" className="mt-6">
@@ -469,68 +475,36 @@ const DocumentsPage = () => {
           </TabsContent>
         </Tabs>
 
-        {/* Enhanced Statistics */}
-        <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
-                <FileText className="h-4 w-4 text-white" />
-              </div>
-              Aperçu de votre dossier médical
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200 hover:shadow-lg transition-all duration-300">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mx-auto mb-3">
-                  <Pill className="h-6 w-6 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-blue-700 mb-1">
-                  {mockDocuments.ordonnances.length}
-                </div>
-                <div className="text-sm text-blue-600 font-medium">Ordonnances</div>
-              </div>
-              <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-green-200 hover:shadow-lg transition-all duration-300">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mx-auto mb-3">
-                  <Stethoscope className="h-6 w-6 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-green-700 mb-1">
-                  {mockDocuments.resultats.length}
-                </div>
-                <div className="text-sm text-green-600 font-medium">Résultats</div>
-              </div>
-              <div className="text-center p-6 bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl border border-amber-200 hover:shadow-lg transition-all duration-300">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mx-auto mb-3">
-                  <MessageSquare className="h-6 w-6 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-amber-700 mb-1">
-                  {mockDocuments.conseils.length}
-                </div>
-                <div className="text-sm text-amber-600 font-medium">Conseils</div>
-              </div>
-              <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl border border-purple-200 hover:shadow-lg transition-all duration-300">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mx-auto mb-3">
-                  <Heart className="h-6 w-6 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-purple-700 mb-1">
-                  {mockDocuments.ordonnances.length + mockDocuments.resultats.length + mockDocuments.conseils.length}
-                </div>
-                <div className="text-sm text-purple-600 font-medium">Total sécurisé</div>
-              </div>
+      {/* Summary */}
+      <Card className="shadow-sm border-border/50 bg-gradient-to-r from-primary/5 to-accent/5">
+        <CardContent className="p-8 text-center">
+          <div className="max-w-2xl mx-auto space-y-6">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+              <Shield className="h-8 w-8 text-primary" />
             </div>
-
-            {/* Security Notice */}
-            <div className="mt-6 p-4 bg-white/80 rounded-xl border border-purple-200">
+            <div className="space-y-3">
+              <h3 className="text-2xl font-bold text-foreground">Dossier médical sécurisé</h3>
+              <p className="text-muted-foreground text-lg">
+                {mockDocuments.ordonnances.length + mockDocuments.resultats.length + mockDocuments.conseils.length} documents stockés en toute sécurité
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-6 mt-6">
               <div className="flex items-center gap-3">
-                <Shield className="h-5 w-5 text-purple-500" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800">Sécurité garantie</p>
-                  <p className="text-xs text-gray-600">Tous vos documents sont chiffrés et stockés en toute confidentialité</p>
-                </div>
+                <div className="w-3 h-3 rounded-full bg-primary"></div>
+                <span className="text-foreground font-medium">Chiffrés</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-accent"></div>
+                <span className="text-foreground font-medium">RGPD compliant</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-secondary"></div>
+                <span className="text-foreground font-medium">24/7 accessible</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

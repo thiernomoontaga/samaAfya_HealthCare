@@ -273,7 +273,7 @@ const MonitoringSetup: React.FC = () => {
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting || !selectedMode || !selectedCountry}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300"
                 size="lg"
               >
                 {isSubmitting ? (

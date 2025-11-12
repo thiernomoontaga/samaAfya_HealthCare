@@ -264,41 +264,52 @@ const HistoryPage = () => {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Hero Section */}
-      <div className="text-center space-y-4 mb-8">
-        <div className="relative">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 flex items-center justify-center mx-auto shadow-lg">
-            <Heart className="h-10 w-10 text-white animate-pulse" />
+    <div className="space-y-8 mt-8">
+      {/* Hero / Welcome Section */}
+      <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-8 border border-primary/10">
+        <div className="flex items-center justify-between">
+          <div className="space-y-3">
+            <h2 className="text-4xl font-bold text-foreground">
+              Historique glycémique complet
+            </h2>
+            <p className="text-muted-foreground text-xl">
+              Suivi détaillé de vos mesures des 90 derniers jours - {filteredData.length} jour{filteredData.length !== 1 ? 's' : ''} analysé{filteredData.length !== 1 ? 's' : ''}
+            </p>
+            <div className="flex items-center gap-6 mt-6">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-primary"></div>
+                <span className="text-foreground font-medium">Données complètes</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-accent"></div>
+                <span className="text-foreground font-medium">Analyse automatique</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-secondary"></div>
+                <span className="text-foreground font-medium">Export disponible</span>
+              </div>
+            </div>
           </div>
-          <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-spin">
-            <Sparkles className="h-3 w-3 text-white" />
+          <div className="hidden lg:block">
+            <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center">
+              <BarChart3 className="h-16 w-16 text-primary" />
+            </div>
           </div>
-        </div>
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
-            Historique complet 💕
-          </h1>
-          <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
-            Consultez toutes vos mesures de glycémie des 90 derniers jours
-          </p>
         </div>
       </div>
 
       <div className="space-y-6">
-        {/* Header with Stats */}
+        {/* Header with Actions */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Historique complet des glycémies</h1>
+            <h2 className="text-2xl font-bold text-foreground">Historique complet des glycémies</h2>
             <p className="text-muted-foreground">
               Consultez toutes vos mesures des 90 derniers jours
             </p>
           </div>
 
           <div className="flex items-center gap-4">
-            {isLoading ? (
-              <Skeleton className="h-8 w-20" />
-            ) : (
+            {!isLoading && (
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">{filteredData.length}</div>
                 <div className="text-sm text-muted-foreground">Jours affichés</div>
@@ -312,7 +323,7 @@ const HistoryPage = () => {
         </div>
 
         {/* Controls */}
-        <Card>
+        <Card className="shadow-sm border-border/50">
           <CardContent className="pt-6">
             <div className="flex flex-col lg:flex-row gap-4">
               {/* Date Picker */}
@@ -343,9 +354,9 @@ const HistoryPage = () => {
 
               {/* Search */}
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                 <Input
-                  placeholder="Rechercher par date (JJ/MM/AAAA)..."
+                  placeholder="Rechercher par date..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -417,68 +428,45 @@ const HistoryPage = () => {
           )}
         </div>
 
-        {/* Comprehensive Stats */}
+        {/* Summary Stats */}
         {filteredData.length > 0 && !isLoading && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-primary" />
-                Statistiques complètes (90 jours)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div className="text-center p-3 bg-blue-50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
-                    {filteredData.reduce((sum, day) => sum + day.readings.length, 0)}
-                  </div>
-                  <div className="text-sm text-blue-700">Mesures totales</div>
+          <Card className="shadow-sm border-border/50 bg-gradient-to-r from-primary/5 to-accent/5">
+            <CardContent className="p-8 text-center">
+              <div className="max-w-2xl mx-auto space-y-6">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+                  <BarChart3 className="h-8 w-8 text-primary" />
                 </div>
-                <div className="text-center p-3 bg-green-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
-                    {filteredData.filter(day => day.status === "good").length}
-                  </div>
-                  <div className="text-sm text-green-700">Jours normaux</div>
+                <div className="space-y-3">
+                  <h3 className="text-2xl font-bold text-foreground">Analyse complète (90 jours)</h3>
+                  <p className="text-muted-foreground text-lg">
+                    {filteredData.reduce((sum, day) => sum + day.readings.length, 0)} mesures analysées avec {Math.round((filteredData.filter(day => day.status === "good").length / filteredData.length) * 100)}% de jours dans les normes
+                  </p>
                 </div>
-                <div className="text-center p-3 bg-amber-50 rounded-lg">
-                  <div className="text-2xl font-bold text-amber-600">
-                    {filteredData.filter(day => day.status === "warning").length}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-primary">
+                      {filteredData.filter(day => day.status === "good").length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Jours normaux</div>
                   </div>
-                  <div className="text-sm text-amber-700">Jours attention</div>
-                </div>
-                <div className="text-center p-3 bg-red-50 rounded-lg">
-                  <div className="text-2xl font-bold text-red-600">
-                    {filteredData.filter(day => day.status === "critical").length}
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-accent-foreground">
+                      {filteredData.filter(day => day.status === "warning").length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Jours attention</div>
                   </div>
-                  <div className="text-sm text-red-700">Jours critiques</div>
-                </div>
-                <div className="text-center p-3 bg-purple-50 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600">
-                    {Math.round(filteredData.reduce((sum, day) => sum + day.average, 0) / filteredData.length * 10) / 10}
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-destructive">
+                      {filteredData.filter(day => day.status === "critical").length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Jours critiques</div>
                   </div>
-                  <div className="text-sm text-purple-700">Moyenne globale</div>
-                </div>
-              </div>
-
-              {/* Additional metrics */}
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="text-lg font-bold text-gray-700">
-                    {filteredData.filter(day => day.completed).length}/{filteredData.length}
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-secondary-foreground">
+                      {Math.round(filteredData.reduce((sum, day) => sum + day.average, 0) / filteredData.length * 10) / 10}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Moyenne globale</div>
                   </div>
-                  <div className="text-sm text-gray-600">Jours complets</div>
-                </div>
-                <div className="text-center p-3 bg-cyan-50 rounded-lg">
-                  <div className="text-lg font-bold text-cyan-700">
-                    {Math.min(...filteredData.filter(d => d.min > 0).map(d => d.min)).toFixed(1)} - {Math.max(...filteredData.map(d => d.max)).toFixed(1)}
-                  </div>
-                  <div className="text-sm text-cyan-600">Étendue globale</div>
-                </div>
-                <div className="text-center p-3 bg-indigo-50 rounded-lg">
-                  <div className="text-lg font-bold text-indigo-700">
-                    {Math.round((filteredData.filter(day => day.status === "good").length / filteredData.length) * 100)}%
-                  </div>
-                  <div className="text-sm text-indigo-600">Taux de succès</div>
                 </div>
               </div>
             </CardContent>
