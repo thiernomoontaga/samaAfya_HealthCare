@@ -161,8 +161,8 @@ const DoctorLogin: React.FC = () => {
       {/* Right side - Image */}
       <div className="w-full lg:w-1/2 relative overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&h=800&fit=crop&crop=center"
-          alt="Médecin utilisant une tablette"
+          src="/images/medecin_africaine.png"
+          alt="Médecin africaine"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 flex items-center justify-center p-8">

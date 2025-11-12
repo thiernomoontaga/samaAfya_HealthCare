@@ -212,7 +212,7 @@ const DoctorLogin: React.FC = () => {
             <div className="text-center">
               <div className="w-48 h-48 md:w-64 md:h-64 mx-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 hover:scale-105 transition-transform duration-300">
                 <img
-                  src="/images/doctor-image.jpg"
+                  src="/images/medecin_africaine.png"
                   alt="Femme médecin africaine souriante posant avec un stéthoscope"
                   className="w-full h-full object-cover object-center"
                 />
