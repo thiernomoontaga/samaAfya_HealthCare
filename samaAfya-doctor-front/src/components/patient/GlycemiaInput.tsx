@@ -1,0 +1,440 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon, Droplet, Save } from "lucide-react";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { cn } from "@/lib/utils";
+
+const glycemiaSchema = z.object({
+  date: z.date({
+    required_error: "La date est requise",
+  }),
+  time: z.string().min(1, "L'heure est requise"),
+  value: z.number().min(0.1, "La valeur doit être supérieure à 0").max(20, "Valeur trop élevée"),
+  mealType: z.enum(["fasting", "breakfast", "lunch", "dinner"], {
+    required_error: "Le type de repas est requis",
+  }),
+  mealTiming: z.enum(["before", "after"], {
+    required_error: "Le moment par rapport au repas est requis",
+  }),
+  notes: z.string().optional(),
+});
+
+type GlycemiaFormData = z.infer<typeof glycemiaSchema>;
+
+interface GlycemiaInputProps {
+  onSubmit?: (data: GlycemiaFormData) => void;
+  className?: string;
+}
+
+export const GlycemiaInput = ({ onSubmit, className = "" }: GlycemiaInputProps) => {
+  const [date, setDate] = useState<Date>(new Date());
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<GlycemiaFormData>({
+    resolver: zodResolver(glycemiaSchema),
+    defaultValues: {
+      date: new Date(),
+      time: format(new Date(), "HH:mm"),
+      mealType: "fasting",
+      mealTiming: "before",
+    },
+  });
+
+  const value = watch("value");
+  const mealType = watch("mealType");
+  const mealTiming = watch("mealTiming");
+
+  // Determine status based on value and context
+  const getStatus = () => {
+    if (!value) return null;
+
+    if (mealType === "fasting") {
+      if (value < 0.6) return "hypo";
+      if (value <= 0.95) return "normal";
+      if (value <= 1.05) return "warning";
+      return "high";
+    } else {
+      if (value < 0.6) return "hypo";
+      if (value <= 1.2) return "normal";
+      if (value <= 1.4) return "warning";
+      return "high";
+    }
+  };
+
+  const status = getStatus();
+
+  const getStatusColor = () => {
+    switch (status) {
+      case "normal":
+        return "text-medical-success bg-medical-success/10 border-medical-success/20";
+      case "warning":
+        return "text-medical-caution bg-medical-caution/10 border-medical-caution/20";
+      case "high":
+        return "text-medical-danger bg-medical-danger/10 border-medical-danger/20";
+      case "hypo":
+        return "text-medical-hypo bg-medical-hypo/10 border-medical-hypo/20";
+      default:
+        return "text-gray-600 bg-gray-50 border-gray-200";
+    }
+  };
+
+  const getStatusLabel = () => {
+    switch (status) {
+      case "normal":
+        return "Dans la cible";
+      case "warning":
+        return "Attention";
+      case "high":
+        return "Élevé";
+      case "hypo":
+        return "Hypoglycémie";
+      default:
+        return "À vérifier";
+    }
+  };
+
+  const onFormSubmit = async (data: GlycemiaFormData) => {
+    try {
+      if (onSubmit) {
+        await onSubmit(data);
+      }
+      reset({
+        date: new Date(),
+        time: format(new Date(), "HH:mm"),
+        mealType: "fasting",
+        mealTiming: "before",
+      });
+      setDate(new Date());
+    } catch (error) {
+      console.error("Erreur lors de la soumission:", error);
+    }
+  };
+
+  return (
+    <Card className={className}>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Droplet className="h-5 w-5 text-blue-600" />
+          Nouvelle mesure glycémique
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+          {/* Date and Time */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="date">Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP", { locale: fr }) : "Sélectionner une date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(newDate) => {
+                      if (newDate) {
+                        setDate(newDate);
+                        setValue("date", newDate);
+                      }
+                    }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              {errors.date && (
+                <p className="text-sm text-red-600">{errors.date.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="time">Heure</Label>
+              <Input
+                id="time"
+                type="time"
+                {...register("time")}
+                className={cn(errors.time && "border-red-500")}
+              />
+              {errors.time && (
+                <p className="text-sm text-red-600">{errors.time.message}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Value and Context */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="value">Taux glycémique (mmol/L)</Label>
+              <Input
+                id="value"
+                type="number"
+                step="0.1"
+                min="0"
+                max="20"
+                placeholder="5.2"
+                {...register("value", { valueAsNumber: true })}
+                className={cn(errors.value && "border-red-500")}
+              />
+              {errors.value && (
+                <p className="text-sm text-red-600">{errors.value.message}</p>
+              )}
+            </div>
+
+            {/* Meal Type */}
+            <div className="space-y-2">
+              <Label htmlFor="mealType">Type de repas</Label>
+              <Select
+                onValueChange={(value: string) => setValue("mealType", value as "fasting" | "breakfast" | "lunch" | "dinner")}
+                defaultValue="fasting"
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionner le repas" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="fasting">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
+                        <span className="text-xs">🌅</span>
+                      </div>
+                      <span>À jeun</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="breakfast">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center">
+                        <span className="text-xs">☕</span>
+                      </div>
+                      <span>Petit-déjeuner</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="lunch">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                        <span className="text-xs">🍽️</span>
+                      </div>
+                      <span>Déjeuner</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="dinner">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center">
+                        <span className="text-xs">🌙</span>
+                      </div>
+                      <span>Dîner</span>
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.mealType && (
+                <p className="text-sm text-red-600">{errors.mealType.message}</p>
+              )}
+            </div>
+
+            {/* Meal Timing */}
+            <div className="space-y-2">
+              <Label htmlFor="mealTiming">Moment</Label>
+              <Select
+                onValueChange={(value: string) => setValue("mealTiming", value as "before" | "after")}
+                defaultValue="before"
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Avant ou après le repas" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="before">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center">
+                        <span className="text-xs">⏰</span>
+                      </div>
+                      <span>Avant le repas</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="after">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center">
+                        <span className="text-xs">✅</span>
+                      </div>
+                      <span>Après le repas</span>
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.mealTiming && (
+                <p className="text-sm text-red-600">{errors.mealTiming.message}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Status Display */}
+          {status && (
+            <div className={cn("p-3 rounded-lg border", getStatusColor())}>
+              <div className="flex items-center justify-between">
+                <span className="font-medium">{getStatusLabel()}</span>
+                <span className="text-sm">
+                  {value} mmol/L
+                  {mealType === "fasting" ? " (à jeun)" : ` (${mealTiming === "before" ? "avant" : "après"} ${mealType === "breakfast" ? "petit-déj" : mealType === "lunch" ? "déjeuner" : "dîner"})`}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Notes */}
+          <div className="space-y-2">
+            <Label htmlFor="notes">Notes (optionnel)</Label>
+            <Textarea
+              id="notes"
+              placeholder="Ex: repas copieux, activité physique..."
+              {...register("notes")}
+              rows={3}
+            />
+          </div>
+
+          {/* Insulin Tracking Section */}
+          <div className="border-t border-gray-200 pt-6 mt-6">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                <span className="text-sm">💉</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Suivi Insuline</h3>
+              <div className="ml-auto flex items-center gap-1 text-sm text-muted-foreground">
+                <span>🔒</span>
+                <span>Bientôt disponible</span>
+              </div>
+            </div>
+
+            {/* Basale (Long-acting insulin) */}
+            <div className="bg-gray-50/50 rounded-lg p-4 mb-4">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
+                  <span className="text-xs">🌙</span>
+                </div>
+                <h4 className="font-medium text-gray-700">Basale (insuline lente)</h4>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm text-gray-600">Dose (unités)</Label>
+                  <Input
+                    type="number"
+                    placeholder="Ex: 10"
+                    disabled
+                    className="bg-gray-100 cursor-not-allowed opacity-60"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm text-gray-600">Heure d'injection</Label>
+                  <Input
+                    type="time"
+                    disabled
+                    className="bg-gray-100 cursor-not-allowed opacity-60"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Bolus (Fast-acting insulin) */}
+            <div className="bg-gray-50/50 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                  <span className="text-xs">⚡</span>
+                </div>
+                <h4 className="font-medium text-gray-700">Bolus (insuline rapide)</h4>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm text-gray-600">Dose (unités)</Label>
+                  <Input
+                    type="number"
+                    placeholder="Ex: 4"
+                    disabled
+                    className="bg-gray-100 cursor-not-allowed opacity-60"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm text-gray-600">Heure d'injection</Label>
+                  <Input
+                    type="time"
+                    disabled
+                    className="bg-gray-100 cursor-not-allowed opacity-60"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Info message */}
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-start gap-2">
+                <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-xs">ℹ️</span>
+                </div>
+                <div className="text-sm text-blue-800">
+                  <p className="font-medium mb-1">Cette fonctionnalité sera disponible lors du suivi par un médecin.</p>
+                  <p>Le suivi de l'insulinothérapie (Basale & Bolus) sera activé automatiquement lorsque votre traitement évoluera vers l'insuline.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            className="w-full transition-all duration-200 hover:scale-105"
+            disabled={isSubmitting}
+          >
+            <Save className="h-4 w-4 mr-2" />
+            {isSubmitting ? (
+              <>
+                <div className="animate-pulse-custom mr-2 h-4 w-4 bg-white rounded-full"></div>
+                Enregistrement...
+              </>
+            ) : (
+              "Enregistrer la mesure"
+            )}
+          </Button>
+
+          {/* Future feature banner */}
+          <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-green-500 flex items-center justify-center">
+                <span className="text-white text-lg">💡</span>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900">Fonctionnalité à venir</h4>
+                <p className="text-sm text-gray-600">
+                  Suivi de l'insulinothérapie (Basale & Bolus) pour les patientes sous traitement insulinique.
+                </p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};

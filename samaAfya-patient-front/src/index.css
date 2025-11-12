@@ -1,0 +1,297 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 40 20% 99%;
+    --foreground: 240 10% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 15%;
+
+    /* Medical pink - caring and feminine */
+    --primary: 320 70% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Soft lavender - complementary and calming */
+    --secondary: 280 40% 85%;
+    --secondary-foreground: 280 50% 30%;
+
+    --muted: 320 20% 97%;
+    --muted-foreground: 320 10% 40%;
+
+    /* Light peach - warm and nurturing */
+    --accent: 25 60% 85%;
+    --accent-foreground: 25 70% 35%;
+
+    --destructive: 0 50% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 15% 92%;
+    --input: 40 15% 92%;
+    --ring: 200 40% 70%;
+
+    --radius: 1rem;
+
+    /* Medical status colors - healthcare focused palette */
+    --hypo: 240 50% 70%;    /* Purple for hypoglycemia */
+    --normal: 142 50% 55%;  /* Green for normal */
+    --warning: 38 85% 65%;  /* Amber for warning */
+    --high: 0 70% 60%;      /* Red for high */
+
+    /* Additional healthcare colors */
+    --success: 142 50% 55%;
+    --info: 200 70% 60%;
+    --caution: 38 85% 65%;
+    --danger: 0 70% 60%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 10% 15%;
+    --sidebar-primary: 200 40% 70%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 15% 97%;
+    --sidebar-accent-foreground: 240 10% 15%;
+    --sidebar-border: 40 15% 92%;
+    --sidebar-ring: 200 40% 70%;
+  }
+
+  .dark {
+    --background: 240 15% 8%;
+    --foreground: 40 20% 95%;
+
+    --card: 240 15% 12%;
+    --card-foreground: 40 20% 95%;
+
+    --popover: 240 15% 12%;
+    --popover-foreground: 40 20% 95%;
+
+    /* Medical pink for dark mode */
+    --primary: 320 60% 65%;
+    --primary-foreground: 240 15% 8%;
+
+    /* Soft lavender for dark mode */
+    --secondary: 280 35% 25%;
+    --secondary-foreground: 280 40% 90%;
+
+    --muted: 320 15% 15%;
+    --muted-foreground: 320 10% 75%;
+
+    /* Light peach for dark mode */
+    --accent: 25 50% 30%;
+    --accent-foreground: 25 60% 85%;
+
+    --destructive: 0 45% 65%;
+    --destructive-foreground: 40 20% 95%;
+
+    --border: 240 10% 15%;
+    --input: 240 10% 15%;
+    --ring: 200 35% 75%;
+
+    /* Medical status colors - dark mode */
+    --hypo: 200 30% 75%;
+    --normal: 140 40% 65%;
+    --warning: 35 60% 70%;
+    --high: 0 50% 70%;
+
+    /* Sidebar dark */
+    --sidebar-background: 240 15% 8%;
+    --sidebar-foreground: 40 20% 95%;
+    --sidebar-primary: 200 35% 75%;
+    --sidebar-primary-foreground: 240 15% 8%;
+    --sidebar-accent: 240 10% 15%;
+    --sidebar-accent-foreground: 40 20% 95%;
+    --sidebar-border: 240 10% 15%;
+    --sidebar-ring: 200 35% 75%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-['Inter',sans-serif] antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Prevent horizontal overflow on mobile devices */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Ensure all containers respect viewport width */
+  * {
+    box-sizing: border-box !important;
+  }
+
+  /* Fix for iPhone viewport issues */
+  @media screen and (max-width: 768px) {
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    /* Prevent text from overflowing */
+    p, span, div, h1, h2, h3, h4, h5, h6 {
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+      hyphens: auto !important;
+    }
+
+    /* Ensure images don't overflow */
+    img {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+
+    /* Fix for flex containers */
+    .flex {
+      min-width: 0 !important;
+    }
+
+    /* Specific fixes for iPhone Pro models (390px - 428px width) */
+    @media screen and (min-width: 390px) and (max-width: 428px) {
+      /* Force containers to stay within viewport */
+      .container, [class*="container"] {
+        max-width: 100% !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+
+      /* Fix for cards and dialogs */
+      [class*="card"], [class*="dialog"] {
+        max-width: calc(100% - 2rem) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      /* Fix for input fields */
+      input, textarea, select {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Fix for buttons */
+      button {
+        max-width: 100% !important;
+        white-space: nowrap !important;
+      }
+
+      /* Specific iPhone Pro dimensions */
+      @media screen and (device-width: 390px) and (device-height: 844px), /* iPhone 12/13/14 Pro */
+             (device-width: 393px) and (device-height: 852px), /* iPhone 14 Pro */
+             (device-width: 414px) and (device-height: 896px), /* iPhone 11 Pro Max */
+             (device-width: 428px) and (device-height: 926px) { /* iPhone 12/13/14 Pro Max */
+
+        /* Force all content to stay within safe area */
+        * {
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+        }
+
+        /* Ensure no horizontal scrolling */
+        body {
+          overflow-x: hidden !important;
+          -webkit-overflow-scrolling: touch !important;
+        }
+
+        /* Fix for any element that might overflow */
+        .overflow-hidden {
+          overflow-x: hidden !important;
+        }
+
+        /* Safe area adjustments for iPhone */
+        .safe-area-top {
+          padding-top: env(safe-area-inset-top) !important;
+        }
+
+        .safe-area-bottom {
+          padding-bottom: env(safe-area-inset-bottom) !important;
+        }
+      }
+    }
+  }
+
+  /* Hide scrollbars completely */
+  ::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: none !important;
+  }
+
+  /* Hide scrollbars for all elements */
+  html, body {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  /* Smooth animations */
+  * {
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Custom animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .animate-pulse-custom {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}

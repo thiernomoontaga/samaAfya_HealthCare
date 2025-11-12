@@ -1,0 +1,438 @@
+{
+  "doctors": [
+    {
+      "id": "D001",
+      "firstName": "Dr. Moussa",
+      "lastName": "Ba",
+      "email": "moussa.ba@hospital.com",
+      "password": "medecin123",
+      "specialty": "Endocrinologie - Diabétologie",
+      "licenseNumber": "SN-MED-2024-001",
+      "phone": "+221 77 123 45 67",
+      "hospital": "Centre Hospitalier de Dakar",
+      "department": "Diabétologie",
+      "yearsOfExperience": 12,
+      "mfaEnabled": true,
+      "mfaCode": null,
+      "isActive": true,
+      "createdAt": "2024-01-15T08:00:00Z",
+      "lastLogin": "2025-11-09T08:30:00Z",
+      "mfaExpiry": null
+    },
+    {
+      "id": "D002",
+      "firstName": "Dr. Fatima",
+      "lastName": "Diallo",
+      "email": "fatima.diallo@clinique.sn",
+      "password": "docteur456",
+      "specialty": "Gynécologie-Obstétrique",
+      "licenseNumber": "SN-MED-2024-002",
+      "phone": "+221 76 234 56 78",
+      "hospital": "Clinique Sainte Jeanne",
+      "department": "Maternité",
+      "yearsOfExperience": 8,
+      "mfaEnabled": true,
+      "mfaCode": null,
+      "isActive": true,
+      "createdAt": "2024-03-20T09:15:00Z",
+      "lastLogin": "2025-11-08T16:45:00Z",
+      "mfaExpiry": null
+    }
+  ],
+  "patients": [
+    {
+      "id": "P001",
+      "firstName": "Amina",
+      "lastName": "Ndiaye",
+      "email": "amina.ndiaye@email.com",
+      "dateOfBirth": "1990-05-15",
+      "gestationalAge": 28,
+      "diabetesType": "gestationnel",
+      "monitoringMode": "classique",
+      "weeklyAverage": 1.05,
+      "alertCount": 2,
+      "complianceRate": 85,
+      "lastReading": {
+        "id": "r1",
+        "moment": "apres_diner",
+        "value": 1.18,
+        "status": "normal",
+        "date": "2025-01-16",
+        "time": "21:00"
+      },
+      "doctorId": "D001",
+      "trackingCode": "MED001-AMA",
+      "hasMonitoringMode": true
+    },
+    {
+      "id": "P002",
+      "firstName": "Fatou",
+      "lastName": "Diop",
+      "email": "fatou.diop@email.com",
+      "dateOfBirth": "1992-08-22",
+      "gestationalAge": 32,
+      "diabetesType": "gestationnel",
+      "monitoringMode": "lean",
+      "weeklyAverage": 0.98,
+      "alertCount": 0,
+      "complianceRate": 95,
+      "lastReading": {
+        "id": "r2",
+        "moment": "jeun",
+        "value": 0.88,
+        "status": "normal",
+        "date": "2025-01-17",
+        "time": "07:30"
+      },
+      "doctorId": "D002",
+      "trackingCode": "MED002-FAT",
+      "hasMonitoringMode": true
+    },
+    {
+      "id": "P003",
+      "firstName": "Mariam",
+      "lastName": "Sow",
+      "email": "mariam.sow@email.com",
+      "dateOfBirth": "1988-11-10",
+      "gestationalAge": 26,
+      "diabetesType": "type2",
+      "monitoringMode": "strict",
+      "weeklyAverage": 1.28,
+      "alertCount": 5,
+      "complianceRate": 72,
+      "lastReading": {
+        "id": "r3",
+        "moment": "apres_dejeuner",
+        "value": 1.45,
+        "status": "high",
+        "date": "2025-01-17",
+        "time": "14:30"
+      },
+      "doctorId": "D001",
+      "trackingCode": "MED001-MAR",
+      "hasMonitoringMode": true
+    },
+    {
+      "id": "P004",
+      "firstName": "Aissatou",
+      "lastName": "Ba",
+      "email": "aissatou.ba@email.com",
+      "dateOfBirth": "1995-03-18",
+      "gestationalAge": 30,
+      "diabetesType": "gestationnel",
+      "monitoringMode": "classique",
+      "weeklyAverage": 1.01,
+      "alertCount": 1,
+      "complianceRate": 90,
+      "lastReading": {
+        "id": "r4",
+        "moment": "apres_petit_dej",
+        "value": 1.08,
+        "status": "normal",
+        "date": "2025-01-17",
+        "time": "09:30"
+      },
+      "doctorId": "D002",
+      "trackingCode": "MED002-AIS",
+      "hasMonitoringMode": true
+    },
+    {
+      "id": "P005",
+      "firstName": "Khadija",
+      "lastName": "Fall",
+      "email": "khadija.fall@email.com",
+      "dateOfBirth": "1993-12-05",
+      "gestationalAge": 24,
+      "diabetesType": "gestationnel",
+      "monitoringMode": "lean",
+      "weeklyAverage": 1.12,
+      "alertCount": 3,
+      "complianceRate": 78,
+      "lastReading": {
+        "id": "r5",
+        "moment": "apres_dejeuner",
+        "value": 1.35,
+        "status": "warning",
+        "date": "2025-01-17",
+        "time": "13:45"
+      },
+      "doctorId": "D003",
+      "trackingCode": "MED003-KHA",
+      "hasMonitoringMode": true
+    }
+  ],
+  "alerts": [
+    {
+      "id": "A001",
+      "patientId": "P003",
+      "doctorId": "D001",
+      "type": "high_glycemia",
+      "severity": "high",
+      "message": "Glycémie élevée détectée : 1.45 g/L après déjeuner",
+      "value": 1.45,
+      "threshold": 1.2,
+      "timestamp": "2025-01-17T14:30:00Z",
+      "status": "active",
+      "acknowledged": false
+    },
+    {
+      "id": "A002",
+      "patientId": "P005",
+      "doctorId": "D003",
+      "type": "high_glycemia",
+      "severity": "medium",
+      "message": "Glycémie légèrement élevée : 1.35 g/L après déjeuner",
+      "value": 1.35,
+      "threshold": 1.2,
+      "timestamp": "2025-01-17T13:45:00Z",
+      "status": "active",
+      "acknowledged": false
+    }
+  ],
+  "statistics": [
+    {
+      "id": "S001",
+      "doctorId": "D001",
+      "totalPatients": 2,
+      "activeAlerts": 1,
+      "complianceRate": 78.5,
+      "averageGlycemia": 1.165,
+      "period": "weekly",
+      "generatedAt": "2025-11-09T09:00:00Z"
+    },
+    {
+      "id": "S002",
+      "doctorId": "D002",
+      "totalPatients": 2,
+      "activeAlerts": 0,
+      "complianceRate": 92.5,
+      "averageGlycemia": 0.995,
+      "period": "weekly",
+      "generatedAt": "2025-11-09T09:00:00Z"
+    },
+    {
+      "id": "S003",
+      "doctorId": "D003",
+      "totalPatients": 1,
+      "activeAlerts": 1,
+      "complianceRate": 78,
+      "averageGlycemia": 1.12,
+      "period": "weekly",
+      "generatedAt": "2025-11-09T09:00:00Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "M001",
+      "senderId": "D001",
+      "senderName": "Dr. Amadou Konaté",
+      "senderType": "doctor",
+      "recipientId": "P001",
+      "content": "Bonjour Amina, vos résultats de cette semaine sont encourageants. Continuez à surveiller vos glycémies après le déjeuner.",
+      "timestamp": "2025-01-16T10:30:00Z",
+      "read": true,
+      "priority": "normal"
+    },
+    {
+      "id": "M002",
+      "senderId": "P001",
+      "senderName": "Amina Ndiaye",
+      "senderType": "patient",
+      "recipientId": "D001",
+      "content": "Merci Docteur. J'ai une question concernant mon alimentation le soir.",
+      "timestamp": "2025-01-16T14:15:00Z",
+      "read": true,
+      "priority": "normal"
+    },
+    {
+      "id": "M003",
+      "senderId": "D001",
+      "senderName": "Dr. Amadou Konaté",
+      "senderType": "doctor",
+      "recipientId": "P001",
+      "content": "Bien sûr, je vous écoute. Qu'aimeriez-vous savoir ?",
+      "timestamp": "2025-01-16T15:00:00Z",
+      "read": false,
+      "priority": "normal"
+    },
+    {
+      "id": "M004",
+      "senderId": "D002",
+      "senderName": "Dr. Fatou Diagne",
+      "senderType": "doctor",
+      "recipientId": "P002",
+      "content": "Excellente compliance cette semaine ! Vos glycémies sont parfaitement contrôlées.",
+      "timestamp": "2025-01-17T09:00:00Z",
+      "read": false,
+      "priority": "normal"
+    }
+  ],
+  "doctorIA": [
+    {
+      "id": "IA001",
+      "doctorId": "D001",
+      "patientId": "P001",
+      "question": "Quels sont les signes d'hypoglycémie chez une femme enceinte ?",
+      "response": "Les signes d'hypoglycémie chez la femme enceinte incluent : tremblements, sueurs, faim intense, confusion mentale, palpitations. Il est important de réagir rapidement en consommant des glucides rapides (jus de fruit, sucre) et de contacter son médecin si les symptômes persistent.",
+      "timestamp": "2025-11-08T14:30:00Z",
+      "category": "symptoms"
+    },
+    {
+      "id": "IA002",
+      "doctorId": "D002",
+      "patientId": "P002",
+      "question": "Aliments recommandés pour contrôler la glycémie gestationnelle",
+      "response": "Pour contrôler la glycémie gestationnelle, privilégiez : légumes verts, protéines maigres (poulet, poisson, œufs), légumineuses, avocats, noix. Évitez les sucres raffinés et les glucides simples. Fractionnez vos repas et consultez votre diététicien pour un plan personnalisé.",
+      "timestamp": "2025-11-08T16:45:00Z",
+      "category": "nutrition"
+    }
+  ],
+  "glycemiaReadings": [
+    {
+      "id": "r1",
+      "patientId": "P001",
+      "moment": "jeun",
+      "value": 0.88,
+      "status": "normal",
+      "date": "2025-11-04",
+      "time": "07:30"
+    },
+    {
+      "id": "r2",
+      "patientId": "P001",
+      "moment": "apres_petit_dej",
+      "value": 1.15,
+      "status": "normal",
+      "date": "2025-11-04",
+      "time": "09:30"
+    },
+    {
+      "id": "r3",
+      "patientId": "P001",
+      "moment": "apres_dejeuner",
+      "value": 1.32,
+      "status": "warning",
+      "date": "2025-11-04",
+      "time": "14:30"
+    },
+    {
+      "id": "r4",
+      "patientId": "P001",
+      "moment": "apres_diner",
+      "value": 1.18,
+      "status": "normal",
+      "date": "2025-11-04",
+      "time": "21:00"
+    },
+    {
+      "id": "r5",
+      "patientId": "P002",
+      "moment": "jeun",
+      "value": 0.92,
+      "status": "normal",
+      "date": "2025-11-05",
+      "time": "07:15"
+    },
+    {
+      "id": "r6",
+      "patientId": "P002",
+      "moment": "apres_petit_dej",
+      "value": 1.08,
+      "status": "normal",
+      "date": "2025-11-05",
+      "time": "09:15"
+    },
+    {
+      "id": "r7",
+      "patientId": "P003",
+      "moment": "jeun",
+      "value": 1.45,
+      "status": "high",
+      "date": "2025-11-05",
+      "time": "07:30"
+    },
+    {
+      "id": "r8",
+      "patientId": "P003",
+      "moment": "apres_petit_dej",
+      "value": 1.62,
+      "status": "high",
+      "date": "2025-11-05",
+      "time": "09:30"
+    },
+    {
+      "id": "r9",
+      "patientId": "P004",
+      "moment": "jeun",
+      "value": 0.95,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "07:15"
+    },
+    {
+      "id": "r10",
+      "patientId": "P004",
+      "moment": "apres_petit_dej",
+      "value": 1.08,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "09:15"
+    },
+    {
+      "id": "r11",
+      "patientId": "P005",
+      "moment": "jeun",
+      "value": 0.82,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "07:45"
+    },
+    {
+      "id": "r12",
+      "patientId": "P005",
+      "moment": "apres_petit_dej",
+      "value": 1.05,
+      "status": "normal",
+      "date": "2025-11-06",
+      "time": "09:45"
+    },
+    {
+      "id": "r13",
+      "patientId": "P001",
+      "moment": "jeun",
+      "value": 0.85,
+      "status": "normal",
+      "date": "2025-11-07",
+      "time": "07:45"
+    },
+    {
+      "id": "r14",
+      "patientId": "P001",
+      "moment": "apres_petit_dej",
+      "value": 1.1,
+      "status": "normal",
+      "date": "2025-11-07",
+      "time": "09:45"
+    },
+    {
+      "id": "r15",
+      "patientId": "P002",
+      "moment": "jeun",
+      "value": 0.88,
+      "status": "normal",
+      "date": "2025-11-08",
+      "time": "07:30"
+    }
+  ],
+  "trackingCodes": [
+    {
+      "id": "453a5d67-fcf4-426f-a2b6-3c04b571be83",
+      "code": "AFYA-4VKOP",
+      "doctorId": "D001",
+      "createdAt": "2025-11-11T18:25:35.981Z",
+      "sentTo": "moontagasegnane@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    }
+  ]
+}
