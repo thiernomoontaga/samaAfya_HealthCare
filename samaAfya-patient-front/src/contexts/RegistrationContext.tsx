@@ -16,6 +16,7 @@ export interface RegistrationData {
   // Step 3: Medical Code
   medicalCode: string;
   hasValidCode: boolean;
+  linkedDoctorId: string;
 
   // Step 4: Consent
   acceptDataHosting: boolean;
@@ -49,6 +50,7 @@ const initialData: RegistrationData = {
   gestationalWeek: null,
   medicalCode: '',
   hasValidCode: false,
+  linkedDoctorId: '',
   acceptDataHosting: false,
   allowResearchSharing: false,
   acceptNewsletter: false,
@@ -132,6 +134,7 @@ export const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ childr
         diabetesType: state.data.diabetesType,
         gestationalWeek: state.data.gestationalWeek,
         trackingCode: state.data.medicalCode || '',
+        linkedDoctorId: state.data.linkedDoctorId || '',
         hasMonitoringMode: false,
         dateOfBirth: state.data.dateOfBirth?.toISOString().split('T')[0],
         acceptDataHosting: state.data.acceptDataHosting,

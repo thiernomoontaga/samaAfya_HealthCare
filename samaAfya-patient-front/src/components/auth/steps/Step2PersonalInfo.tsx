@@ -50,8 +50,8 @@ export const Step2PersonalInfo: React.FC = () => {
     else if (data.password !== data.confirmPassword) newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
     if (!data.dateOfBirth) newErrors.dateOfBirth = 'La date de naissance est requise';
 
-    if (data.diabetesType === 'gestationnel' && !data.gestationalWeek) {
-      newErrors.gestationalWeek = 'La semaine de grossesse est requise';
+    if (!data.gestationalWeek) {
+      newErrors.gestationalWeek = 'La semaine actuelle de grossesse est requise';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -165,7 +165,7 @@ export const Step2PersonalInfo: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Date of Birth */}
         <div className="space-y-2">
-          <Label>Date de naissance *</Label>
+          <Label>Date de naissance prévue pour le bébé *</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -193,10 +193,9 @@ export const Step2PersonalInfo: React.FC = () => {
           {errors.dateOfBirth && <p className="text-red-600 text-sm">{errors.dateOfBirth}</p>}
         </div>
 
-        {/* Gestational Week (only for gestational diabetes) */}
-        {data.diabetesType === 'gestationnel' && (
-          <div className="space-y-2">
-            <Label htmlFor="gestationalWeek">Semaine de grossesse *</Label>
+        {/* Current Pregnancy Week */}
+        <div className="space-y-2">
+          <Label htmlFor="gestationalWeek">Semaine actuelle de grossesse *</Label>
             <Select
               value={data.gestationalWeek?.toString() || ""}
               onValueChange={(value) => handleInputChange('gestationalWeek', parseInt(value))}
@@ -214,7 +213,6 @@ export const Step2PersonalInfo: React.FC = () => {
             </Select>
             {errors.gestationalWeek && <p className="text-red-600 text-sm">{errors.gestationalWeek}</p>}
           </div>
-        )}
       </div>
     </div>
   );

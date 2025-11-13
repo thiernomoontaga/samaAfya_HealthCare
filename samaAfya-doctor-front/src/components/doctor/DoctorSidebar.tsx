@@ -36,6 +36,11 @@ const DoctorSidebar: React.FC = () => {
       icon: Users,
     },
     {
+      title: 'Codes de suivi',
+      url: '/medecin/tracking-codes',
+      icon: UserCheck,
+    },
+    {
       title: 'Paramètres',
       url: '/medecin/settings',
       icon: Settings,

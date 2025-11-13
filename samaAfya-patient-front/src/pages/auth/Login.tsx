@@ -71,7 +71,7 @@ const Login = () => {
                 <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div>
-                <h1 className="text-lg sm:text-xl font-bold text-foreground">SamaAfya Care</h1>
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">samaAfya Healthcare</h1>
                 <p className="text-xs text-muted-foreground hidden sm:block">Suivi maternel connecté</p>
               </div>
             </div>

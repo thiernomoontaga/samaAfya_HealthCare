@@ -433,6 +433,69 @@
       "sentTo": "moontagasegnane@gmail.com",
       "sentBy": "email",
       "isActive": true
+    },
+    {
+      "id": "6ee21696-5a3e-4e3c-a52e-a065517e439f",
+      "code": "AFYA-ZQJLH",
+      "doctorId": "D001",
+      "createdAt": "2025-11-12T17:51:05.171Z",
+      "sentTo": "fatoudiop@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "92634edd-a5cb-4442-85f3-9b38ecbfce6f",
+      "code": "AFYA-BYYWJ",
+      "doctorId": "D001",
+      "createdAt": "2025-11-12T18:00:32.254Z",
+      "sentTo": "fatoudiop@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "def3c0c9-5a00-4c20-8041-9277aafe04b3",
+      "code": "AFYA-RI0SE",
+      "doctorId": "D001",
+      "createdAt": "2025-11-12T18:03:48.264Z",
+      "sentTo": "fatoudiop@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "172e87e7-4f15-4338-95cd-9f5b4adbdf40",
+      "code": "AFYA-BX2HX",
+      "doctorId": "D001",
+      "createdAt": "2025-11-12T18:09:42.209Z",
+      "sentTo": "fatoudiop@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "25b41810-bfc6-4e05-9afb-9a4871aabfcd",
+      "code": "AFYA-8VNUK",
+      "doctorId": "D001",
+      "createdAt": "2025-11-12T18:13:47.367Z",
+      "sentTo": "annandiaye@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "25e2e2f0-315d-49ae-960b-d724cec1be3e",
+      "code": "AFYA-LRYLC",
+      "doctorId": "D001",
+      "createdAt": "2025-11-12T18:29:05.236Z",
+      "sentTo": "khadidiatoufall@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "1bb0253b-a87f-469e-ab9e-6348ae582e34",
+      "code": "AFYA-PVXER",
+      "doctorId": "D001",
+      "createdAt": "2025-11-12T22:38:06.100Z",
+      "sentTo": "fatoufall@gmail.com",
+      "sentBy": "email",
+      "isActive": true
     }
   ]
 }

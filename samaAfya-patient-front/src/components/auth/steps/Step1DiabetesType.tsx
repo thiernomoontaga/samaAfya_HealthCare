@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRegistration } from '@/contexts/RegistrationContext';
@@ -12,20 +12,23 @@ const diabetesTypes = [
     description: 'Diabète qui apparaît pendant la grossesse',
     icon: Heart,
     color: 'bg-pink-50 border-pink-200 hover:bg-pink-100',
+    disabled: false,
   },
   {
     id: 'type1',
     title: 'Diabète de type 1',
-    description: 'Diabète insulinodépendant',
+    description: 'Diabète insulinodépendant (non disponible)',
     icon: Activity,
-    color: 'bg-blue-50 border-blue-200 hover:bg-blue-100',
+    color: 'bg-gray-50 border-gray-200',
+    disabled: true,
   },
   {
     id: 'type2',
     title: 'Diabète de type 2',
-    description: 'Diabète non insulinodépendant',
+    description: 'Diabète non insulinodépendant (non disponible)',
     icon: Target,
-    color: 'bg-green-50 border-green-200 hover:bg-green-100',
+    color: 'bg-gray-50 border-gray-200',
+    disabled: true,
   },
 ];
 
@@ -33,7 +36,15 @@ export const Step1DiabetesType: React.FC = () => {
   const { state, updateData, nextStep, setErrors, clearErrors } = useRegistration();
   const { data } = state;
 
+  useEffect(() => {
+    if (!data.diabetesType) {
+      updateData({ diabetesType: 'gestationnel' });
+    }
+  }, [data.diabetesType, updateData]);
+
   const handleSelect = (diabetesType: string) => {
+    const type = diabetesTypes.find(t => t.id === diabetesType);
+    if (type?.disabled) return;
     updateData({ diabetesType: diabetesType as 'gestationnel' | 'type1' | 'type2' | '' });
     clearErrors();
   };
@@ -63,7 +74,8 @@ export const Step1DiabetesType: React.FC = () => {
             <Card
               key={type.id}
               className={cn(
-                "cursor-pointer transition-all duration-200 border-2",
+                "transition-all duration-200 border-2",
+                type.disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
                 type.color,
                 isSelected && "ring-2 ring-primary ring-offset-2"
               )}

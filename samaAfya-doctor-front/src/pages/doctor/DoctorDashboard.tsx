@@ -1,5 +1,3 @@
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { DoctorSidebar } from "@/components/doctor/DoctorSidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,8 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Patient, GlycemieReading } from "@/types/patient";
-import GenerateTrackingCode from "@/components/doctor/GenerateTrackingCode";
-import TrackingCodeList from "@/components/doctor/TrackingCodeList";
 
 
 const API_BASE_URL = 'http://localhost:3001';
@@ -28,11 +24,6 @@ const fetchGlycemiaReadings = async () => {
   return response.json();
 };
 
-const fetchTrackingCodes = async (doctorId: string) => {
-  const response = await fetch(`${API_BASE_URL}/trackingCodes?doctorId=${doctorId}`);
-  if (!response.ok) throw new Error('Failed to fetch tracking codes');
-  return response.json();
-};
 
 const DoctorDashboard = () => {
   const navigate = useNavigate();
@@ -49,11 +40,6 @@ const DoctorDashboard = () => {
     queryFn: fetchGlycemiaReadings,
   });
 
-  const { data: trackingCodes = [], refetch: refetchTrackingCodes } = useQuery({
-    queryKey: ['trackingCodes', doctorInfo?.id],
-    queryFn: () => fetchTrackingCodes(doctorInfo?.id || ''),
-    enabled: !!doctorInfo?.id,
-  });
 
   useEffect(() => {
     // Get doctor info from session
@@ -113,82 +99,7 @@ const DoctorDashboard = () => {
   const isLoading = patientsLoading || readingsLoading;
 
   return (
-    <SidebarProvider>
-      <DoctorSidebar />
-      <SidebarInset>
-          {/* Header / Topbar */}
-          <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/50">
-            <div className="flex items-center justify-between px-6 py-4">
-              {/* Left side - Logo & Title */}
-              <div className="flex items-center gap-4">
-                <SidebarTrigger className="hover:bg-muted rounded-lg p-2" />
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Stethoscope className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h1 className="text-xl font-bold text-foreground">samaAfya HealthCare</h1>
-                    <p className="text-xs text-muted-foreground">Espace Professionnel</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Center - Search */}
-              <div className="flex-1 max-w-md mx-8">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Rechercher une patiente..."
-                    className="pl-10 bg-muted/50 border-border/50 rounded-xl"
-                  />
-                </div>
-              </div>
-
-              {/* Right side - Profile & Actions */}
-              <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="h-5 w-5" />
-                  {patientsWithAlerts > 0 && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                      {patientsWithAlerts}
-                    </span>
-                  )}
-                </Button>
-
-                {doctorInfo && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-sm font-semibold text-primary">
-                        {doctorInfo.firstname[0]}{doctorInfo.lastname[0]}
-                      </span>
-                    </div>
-                    <div className="hidden md:block">
-                      <p className="text-sm font-medium text-foreground">
-                        Dr. {doctorInfo.firstname} {doctorInfo.lastname}
-                      </p>
-                      <p className="text-xs text-muted-foreground">Connecté</p>
-                    </div>
-                  </div>
-                )}
-
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    localStorage.removeItem('doctorSession');
-                    localStorage.removeItem('doctorAuth');
-                    navigate('/auth/doctor-login');
-                  }}
-                  className="text-muted-foreground hover:text-red-600"
-                >
-                  <LogOut className="h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-          </header>
-
-          {/* Content */}
-          <div className="p-8 space-y-8">
+    <div className="space-y-8 mt-8">
             {/* Hero / Welcome Section */}
             {doctorInfo && (
               <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-8 border border-primary/10">
@@ -401,6 +312,7 @@ const DoctorDashboard = () => {
                       </div>
                     ))}
                   </div>
+  
                 </CardContent>
               </Card>
 
@@ -489,115 +401,7 @@ const DoctorDashboard = () => {
               </Card>
             </div>
 
-            {/* Quick Patient Preview */}
-            <Card className="shadow-sm border-border/50">
-              <CardHeader className="pb-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 rounded-xl bg-primary/10">
-                      <Users className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-2xl">Aperçu des patientes</CardTitle>
-                      <CardDescription className="text-base">Dernières mesures et statuts</CardDescription>
-                    </div>
-                  </div>
-                  <Button
-                    onClick={() => navigate('/medecin/patients')}
-                    className="rounded-xl bg-primary hover:bg-primary/90"
-                  >
-                    Voir toutes les patientes
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-border/50">
-                        <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Patiente</th>
-                        <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Dernière mesure</th>
-                        <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Statut</th>
-                        <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Dernière connexion</th>
-                        <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {patients.slice(0, 5).map((patient) => {
-                        const { status, label, color } = getPatientStatus(patient);
-                        const lastReading = readings
-                          .filter((r: GlycemieReading) => r.patientId === patient.id)
-                          .sort((a: GlycemieReading, b: GlycemieReading) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
 
-                        return (
-                          <tr key={patient.id} className="border-b border-border/30 hover:bg-muted/20 transition-colors">
-                            <td className="py-4 px-4">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                                  <span className="text-sm font-semibold text-primary">
-                                    {patient.firstName[0]}{patient.lastName[0]}
-                                  </span>
-                                </div>
-                                <div>
-                                  <p className="font-semibold text-foreground">{patient.firstName} {patient.lastName}</p>
-                                  <p className="text-sm text-muted-foreground">{patient.gestationalAge} SA</p>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="py-4 px-4">
-                              {lastReading ? (
-                                <div className="flex items-center gap-2">
-                                  <div className={`w-3 h-3 rounded-full ${
-                                    lastReading.status === 'high' ? 'bg-red-500' :
-                                    lastReading.status === 'warning' ? 'bg-amber-500' : 'bg-green-500'
-                                  }`} />
-                                  <span className="font-medium">{lastReading.value} g/L</span>
-                                </div>
-                              ) : (
-                                <span className="text-muted-foreground">Aucune mesure</span>
-                              )}
-                            </td>
-                            <td className="py-4 px-4">
-                              <Badge className={`${color} px-3 py-1 text-xs font-medium`}>
-                                {label}
-                              </Badge>
-                            </td>
-                            <td className="py-4 px-4">
-                              <span className="text-sm text-muted-foreground">
-                                {lastReading ? lastReading.date : 'Jamais'}
-                              </span>
-                            </td>
-                            <td className="py-4 px-4">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => navigate(`/medecin/patient/${patient.id}`)}
-                                className="rounded-lg hover:bg-primary/10"
-                              >
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Tracking Codes Section */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div></div>
-                <GenerateTrackingCode
-                  doctorId={doctorInfo?.id || ''}
-                  onCodeGenerated={() => refetchTrackingCodes()}
-                />
-              </div>
-              <TrackingCodeList codes={trackingCodes} />
-            </div>
 
             {/* Footer */}
             <footer className="mt-12 pt-8 border-t border-border/50">
@@ -614,9 +418,7 @@ const DoctorDashboard = () => {
                 </div>
               </div>
             </footer>
-          </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </div>
   );
 };
 

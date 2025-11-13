@@ -11,16 +11,25 @@ export const Step3MedicalCode: React.FC = () => {
   const { state, updateData, setErrors, clearErrors } = useRegistration();
   const { data, errors } = state;
   const [isValidating, setIsValidating] = useState(false);
+  const [formatError, setFormatError] = useState(false);
 
   const validateMedicalCode = async (code: string) => {
     if (!code.trim()) return false;
 
-    // Simulate API call to validate medical code
+    // Check format first
+    const afyaRegex = /^AFYA-[A-Z0-9]{5}$/;
+    if (!afyaRegex.test(code.toUpperCase())) {
+      return false;
+    }
+
     setIsValidating(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // For demo purposes, consider codes starting with "MED" as valid
-      return code.toUpperCase().startsWith("MED");
+      const response = await fetch(`http://localhost:3001/trackingCodes?code=${encodeURIComponent(code)}`);
+      const trackingCodes = await response.json();
+      return trackingCodes.length > 0 && trackingCodes[0].isActive;
+    } catch (error) {
+      console.error('Error validating code:', error);
+      return false;
     } finally {
       setIsValidating(false);
     }
@@ -28,12 +37,36 @@ export const Step3MedicalCode: React.FC = () => {
 
   const handleCodeChange = async (value: string) => {
     updateData({ medicalCode: value });
+    setFormatError(false);
 
     if (value.trim()) {
-      const isValid = await validateMedicalCode(value);
-      updateData({ hasValidCode: isValid });
+      const afyaRegex = /^AFYA-[A-Z0-9]{5}$/;
+      const isFormatValid = afyaRegex.test(value.toUpperCase());
+      setFormatError(!isFormatValid);
+
+      if (isFormatValid) {
+        const isValid = await validateMedicalCode(value);
+        updateData({ hasValidCode: isValid });
+
+        if (isValid) {
+          try {
+            const response = await fetch(`http://localhost:3001/trackingCodes?code=${encodeURIComponent(value)}`);
+            const trackingCodes = await response.json();
+            if (trackingCodes.length > 0) {
+              updateData({ linkedDoctorId: trackingCodes[0].doctorId });
+            }
+          } catch (error) {
+            console.error('Error fetching doctor ID:', error);
+          }
+        } else {
+          updateData({ linkedDoctorId: '' });
+        }
+      } else {
+        updateData({ hasValidCode: false, linkedDoctorId: '' });
+      }
     } else {
-      updateData({ hasValidCode: false });
+      updateData({ hasValidCode: false, linkedDoctorId: '' });
+      setFormatError(false);
     }
 
     // Clear errors
@@ -66,7 +99,7 @@ export const Step3MedicalCode: React.FC = () => {
             id="medicalCode"
             value={data.medicalCode}
             onChange={(e) => handleCodeChange(e.target.value)}
-            placeholder="Ex: MED-123456"
+            placeholder="Ex: AFYA-ABC12"
             className={cn(
               "pr-10",
               data.medicalCode && data.hasValidCode && "border-green-500 bg-green-50",
@@ -95,12 +128,17 @@ export const Step3MedicalCode: React.FC = () => {
                 <CheckCircle className="h-4 w-4" />
                 Code valide ! Toutes les fonctionnalités seront disponibles.
               </p>
-            ) : data.medicalCode.length > 0 ? (
+            ) : formatError ? (
               <p className="text-red-600 flex items-center gap-1">
                 <XCircle className="h-4 w-4" />
-                Code invalide. Vérifiez le format ou contactez votre médecin.
+                Format de code invalide. Le code doit être au format AFYA-XXXXX.
               </p>
-            ) : null}
+            ) : (
+              <p className="text-red-600 flex items-center gap-1">
+                <XCircle className="h-4 w-4" />
+                Code non trouvé ou expiré. Vérifiez le code ou contactez votre médecin.
+              </p>
+            )}
           </div>
         )}
 

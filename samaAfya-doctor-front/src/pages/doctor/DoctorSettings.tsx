@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { DoctorSidebar } from "@/components/doctor/DoctorSidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,41 +84,7 @@ const DoctorSettings: React.FC = () => {
   };
 
   return (
-    <SidebarProvider>
-      <DoctorSidebar />
-      <SidebarInset>
-        {/* Header / Topbar */}
-        <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/50">
-          <div className="flex items-center justify-between px-6 py-4">
-            {/* Left side - Logo & Title */}
-            <div className="flex items-center gap-4">
-              <SidebarTrigger className="hover:bg-muted rounded-lg p-2" />
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Settings className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-foreground">Paramètres</h1>
-                  <p className="text-xs text-muted-foreground">Configuration et sécurité</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right side - Actions */}
-            <div className="flex items-center gap-4">
-              <Button
-                onClick={() => window.location.reload()}
-                variant="outline"
-                className="rounded-xl"
-              >
-                Actualiser
-              </Button>
-            </div>
-          </div>
-        </header>
-
-        {/* Content */}
-        <div className="p-8 space-y-8">
+    <div className="space-y-8 mt-8">
           {/* Hero / Welcome Section */}
           <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-8 border border-primary/10">
             <div className="flex items-center justify-between">
@@ -482,25 +446,7 @@ const DoctorSettings: React.FC = () => {
               </Tabs>
             </CardHeader>
           </Card>
-
-          {/* Footer */}
-          <footer className="mt-12 pt-8 border-t border-border/50">
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <div className="flex items-center gap-6">
-                <span>© 2025 samaAfya HealthCare</span>
-                <a href="#" className="hover:text-foreground transition-colors">Politique de confidentialité</a>
-                <a href="#" className="hover:text-foreground transition-colors">Conditions d'utilisation</a>
-              </div>
-              <div className="flex items-center gap-4">
-                <span>Version 1.0.0</span>
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                <span>Système opérationnel</span>
-              </div>
-            </div>
-          </footer>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </div>
   );
 };
 
