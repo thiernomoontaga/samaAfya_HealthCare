@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Users, Search, Filter, Eye, AlertTriangle, CheckCircle, Clock, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -26,11 +27,14 @@ const fetchGlycemiaReadings = async () => {
   return response.json();
 };
 
+const ITEMS_PER_PAGE = 10;
+
 const DoctorPatients: React.FC = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [diabetesFilter, setDiabetesFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data: patients = [], isLoading: patientsLoading } = useQuery({
     queryKey: ['patients'],
@@ -77,6 +81,14 @@ const DoctorPatients: React.FC = () => {
   const sortedPatients = filteredPatients.sort((a: Patient, b: Patient) => {
     return getPatientStatus(b).priority - getPatientStatus(a).priority;
   });
+
+  const totalPages = Math.ceil(sortedPatients.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedPatients = sortedPatients.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const isLoading = patientsLoading || readingsLoading;
 
@@ -245,7 +257,7 @@ const DoctorPatients: React.FC = () => {
                   Liste des patientes ({sortedPatients.length})
                 </CardTitle>
                 <CardDescription>
-                  Cliquez sur "Voir détails" pour accéder au profil complet d'une patiente
+                  Page {currentPage} sur {totalPages} • Cliquez sur "Voir détails" pour accéder au profil complet d'une patiente
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -263,7 +275,7 @@ const DoctorPatients: React.FC = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {sortedPatients.map((patient: Patient) => {
+                      {paginatedPatients.map((patient: Patient) => {
                         const { status, label, color } = getPatientStatus(patient);
                         const { compliance, lastReading } = getPatientStats(patient);
 
@@ -329,10 +341,44 @@ const DoctorPatients: React.FC = () => {
                   </Table>
                 </div>
 
-                {sortedPatients.length === 0 && (
+                {paginatedPatients.length === 0 && sortedPatients.length > 0 && (
                   <div className="text-center py-8">
                     <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-500">Aucune patiente trouvée avec ces critères</p>
+                  </div>
+                )}
+
+                {totalPages > 1 && (
+                  <div className="mt-6">
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
+                            onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                            className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                          />
+                        </PaginationItem>
+
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                          <PaginationItem key={page}>
+                            <PaginationLink
+                              onClick={() => handlePageChange(page)}
+                              isActive={currentPage === page}
+                              className="cursor-pointer"
+                            >
+                              {page}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+
+                        <PaginationItem>
+                          <PaginationNext
+                            onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                            className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
                   </div>
                 )}
               </CardContent>

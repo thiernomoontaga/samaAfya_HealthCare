@@ -62,8 +62,8 @@ const Login = () => {
   return (
     <div className="min-h-screen w-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/50 w-full">
-        <div className="w-full max-w-full px-4 sm:px-6 py-4 overflow-hidden">
+      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/50">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Left side - Logo & Title */}
             <div className="flex items-center gap-2 sm:gap-3">
@@ -71,7 +71,7 @@ const Login = () => {
                 <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div>
-                <h1 className="text-lg sm:text-xl font-bold text-foreground">SamaAfya Care</h1>
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">samaAfya Healthcare</h1>
                 <p className="text-xs text-muted-foreground hidden sm:block">Suivi maternel connecté</p>
               </div>
             </div>
@@ -190,9 +190,11 @@ const Login = () => {
           {/* Doctor Image */}
           <div className="text-center">
             <div className="w-32 h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 mx-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 hover:scale-105 transition-transform duration-300">
-              <div className="w-full h-full bg-primary/10 flex items-center justify-center">
-                <Heart className="h-16 w-16 md:h-24 md:w-24 text-primary" />
-              </div>
+              <img
+                src="/images/femme_enceinte.png"
+                alt="Femme africaine enceinte souriante"
+                className="w-full h-full object-cover"
+              />
             </div>
             <p className="text-sm text-muted-foreground mt-4 italic">
               "Chaque maman mérite des soins attentionnés et personnalisés"

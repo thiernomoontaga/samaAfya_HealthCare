@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { DoctorSidebar } from "@/components/doctor/DoctorSidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Users, Search, Filter, Eye, AlertTriangle, CheckCircle, Clock, User, Stethoscope, Heart, Activity, TrendingUp, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -25,11 +24,14 @@ const fetchGlycemiaReadings = async () => {
   return response.json();
 };
 
+const ITEMS_PER_PAGE = 10;
+
 const DoctorPatients: React.FC = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [diabetesFilter, setDiabetesFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { data: patients = [], isLoading: patientsLoading } = useQuery({
     queryKey: ['patients'],
@@ -77,78 +79,29 @@ const DoctorPatients: React.FC = () => {
     return getPatientStatus(b).priority - getPatientStatus(a).priority;
   });
 
+  const totalPages = Math.ceil(sortedPatients.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedPatients = sortedPatients.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   const isLoading = patientsLoading || readingsLoading;
 
   if (isLoading) {
     return (
-      <SidebarProvider>
-        <DoctorSidebar />
-        <SidebarInset>
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="text-center space-y-4">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-              <p className="text-muted-foreground">Chargement des patientes...</p>
-            </div>
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="text-muted-foreground">Chargement des patientes...</p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <SidebarProvider>
-      <DoctorSidebar />
-      <SidebarInset>
-        {/* Header / Topbar */}
-        <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/50">
-          <div className="flex items-center justify-between px-6 py-4">
-            {/* Left side - Logo & Title */}
-            <div className="flex items-center gap-4">
-              <SidebarTrigger className="hover:bg-muted rounded-lg p-2" />
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Users className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-foreground">Mes patientes</h1>
-                  <p className="text-xs text-muted-foreground">Gestion et suivi médical</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Center - Search */}
-            <div className="flex-1 max-w-md mx-8">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Rechercher une patiente..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-muted/50 border-border/50 rounded-xl"
-                />
-              </div>
-            </div>
-
-            {/* Right side - Actions */}
-            <div className="flex items-center gap-4">
-              <Button
-                onClick={() => {
-                  setSearchTerm('');
-                  setStatusFilter('all');
-                  setDiabetesFilter('all');
-                }}
-                variant="outline"
-                className="rounded-xl"
-              >
-                <Filter className="h-4 w-4 mr-2" />
-                Réinitialiser
-              </Button>
-            </div>
-          </div>
-        </header>
-
-        {/* Content */}
-        <div className="p-8 space-y-8">
+    <div className="space-y-8 mt-8">
           {/* Hero / Welcome Section */}
           <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-8 border border-primary/10">
             <div className="flex items-center justify-between">
@@ -331,7 +284,9 @@ const DoctorPatients: React.FC = () => {
                   </div>
                   <div>
                     <CardTitle className="text-2xl">Liste des patientes</CardTitle>
-                    <CardDescription className="text-base">{sortedPatients.length} patiente{sortedPatients.length > 1 ? 's' : ''} trouvée{sortedPatients.length > 1 ? 's' : ''}</CardDescription>
+                    <CardDescription className="text-base">
+                      {sortedPatients.length} patiente{sortedPatients.length > 1 ? 's' : ''} trouvée{sortedPatients.length > 1 ? 's' : ''} • Page {currentPage} sur {totalPages}
+                    </CardDescription>
                   </div>
                 </div>
                 <Button
@@ -359,7 +314,7 @@ const DoctorPatients: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {sortedPatients.map((patient: any) => {
+                    {paginatedPatients.map((patient: any) => {
                       const { status, label, color } = getPatientStatus(patient);
                       const { compliance, lastReading } = getPatientStats(patient);
 
@@ -436,7 +391,7 @@ const DoctorPatients: React.FC = () => {
                 </Table>
               </div>
 
-              {sortedPatients.length === 0 && (
+              {paginatedPatients.length === 0 && sortedPatients.length > 0 && (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-muted-foreground" />
@@ -445,27 +400,43 @@ const DoctorPatients: React.FC = () => {
                   <p className="text-muted-foreground">Essayez de modifier vos critères de recherche</p>
                 </div>
               )}
+
+              {totalPages > 1 && (
+                <div className="mt-6">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                          className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                        />
+                      </PaginationItem>
+
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            onClick={() => handlePageChange(page)}
+                            isActive={currentPage === page}
+                            className="cursor-pointer"
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+
+                      <PaginationItem>
+                        <PaginationNext
+                          onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                          className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
             </CardContent>
           </Card>
-
-          {/* Footer */}
-          <footer className="mt-12 pt-8 border-t border-border/50">
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <div className="flex items-center gap-6">
-                <span>© 2025 samaAfya HealthCare</span>
-                <a href="#" className="hover:text-foreground transition-colors">Politique de confidentialité</a>
-                <a href="#" className="hover:text-foreground transition-colors">Conditions d'utilisation</a>
-              </div>
-              <div className="flex items-center gap-4">
-                <span>Version 1.0.0</span>
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                <span>Système opérationnel</span>
-              </div>
-            </div>
-          </footer>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </div>
   );
 };
 

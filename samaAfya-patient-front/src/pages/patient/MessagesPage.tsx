@@ -21,6 +21,7 @@ const MessagesPage = () => {
   const { messages, isLoading, error, sendMessage, getConversations, getUnreadCount } = useMessages();
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState("");
+  const [linkedDoctor, setLinkedDoctor] = useState<{ id: string; firstname: string; lastname: string } | null>(null);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
@@ -42,7 +43,39 @@ const MessagesPage = () => {
     }
   };
 
-  const selectedMessages = selectedConversation ? getConversations[selectedConversation] || [] : [];
+  useEffect(() => {
+    const fetchLinkedDoctor = async () => {
+      const patientId = localStorage.getItem('currentPatientId');
+      if (patientId) {
+        try {
+          const patientResponse = await fetch(`http://localhost:3000/patients/${patientId}`);
+          if (!patientResponse.ok) return;
+          const patient = await patientResponse.json();
+          if (patient.linkedDoctorId) {
+            const doctorResponse = await fetch(`http://localhost:3001/doctors/${patient.linkedDoctorId}`);
+            if (!doctorResponse.ok) return;
+            const doctor = await doctorResponse.json();
+            setLinkedDoctor(doctor);
+          }
+        } catch (error) {
+          console.error('Error fetching linked doctor:', error);
+          // Don't set linkedDoctor if error
+        }
+      }
+    };
+
+    fetchLinkedDoctor();
+  }, []);
+
+  const conversations = { ...getConversations };
+  if (linkedDoctor) {
+    const doctorName = `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}`;
+    if (!conversations[doctorName]) {
+      conversations[doctorName] = [];
+    }
+  }
+
+  const selectedMessages = selectedConversation ? conversations[selectedConversation] || [] : [];
 
   if (error) {
     return (
@@ -113,7 +146,7 @@ const MessagesPage = () => {
               ) : (
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-2 p-4">
-                    {Object.entries(getConversations).map(([contact, conversationMessages]: [string, unknown[]]) => {
+                    {Object.entries(conversations).map(([contact, conversationMessages]: [string, unknown[]]) => {
                       const lastMessage = conversationMessages[conversationMessages.length - 1] as { content?: string; timestamp?: string };
                       const unreadCount = conversationMessages.filter((m: unknown) => {
                         const msg = m as { read?: boolean; senderType?: string };
@@ -136,11 +169,11 @@ const MessagesPage = () => {
                                 <Avatar className="h-12 w-12 border-2 border-background">
                                   <AvatarImage src="" />
                                   <AvatarFallback className={`text-white font-semibold ${
-                                    contact === "Dr. Konaté"
+                                    contact === "Dr. Konaté" || (linkedDoctor && contact === `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}`)
                                       ? "bg-primary"
                                       : "bg-secondary"
                                   }`}>
-                                    {contact === "Dr. Konaté" ? "DK" : contact === "Docteur IA" ? "🤖" : currentPatient.firstName[0]}
+                                    {contact === "Dr. Konaté" ? "DK" : contact === "Docteur IA" ? "🤖" : linkedDoctor && contact === `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}` ? `${linkedDoctor.firstname?.[0] || 'D'}${linkedDoctor.lastname?.[0] || 'D'}` : currentPatient.firstName?.[0] || 'P'}
                                   </AvatarFallback>
                                 </Avatar>
                                 {unreadCount > 0 && (
@@ -167,7 +200,7 @@ const MessagesPage = () => {
                                       IA disponible
                                     </Badge>
                                   )}
-                                  {contact === "Dr. Konaté" && (
+                                  {(contact === "Dr. Konaté" || (linkedDoctor && contact === `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}`)) && (
                                     <Badge variant="secondary" className="bg-primary/20 text-primary text-xs">
                                       Médecin
                                     </Badge>
@@ -198,7 +231,7 @@ const MessagesPage = () => {
                   </CardTitle>
                   <CardDescription className="text-base">
                     {selectedConversation === "Docteur IA" && "Assistant IA disponible 24/7 pour vos questions médicales"}
-                    {selectedConversation === "Dr. Konaté" && "Communication sécurisée avec votre médecin"}
+                    {(selectedConversation === "Dr. Konaté" || (linkedDoctor && selectedConversation === `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}`)) && "Communication sécurisée avec votre médecin"}
                     {!selectedConversation && "Choisissez une conversation pour commencer"}
                   </CardDescription>
                 </div>

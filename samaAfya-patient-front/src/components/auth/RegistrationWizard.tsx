@@ -50,7 +50,7 @@ export const RegistrationWizard: React.FC = () => {
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
               <Heart className="h-7 w-7 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold text-foreground">SamaAfya Care</h1>
+            <h1 className="text-3xl font-bold text-foreground">samaAfya Healthcare</h1>
           </div>
           <p className="text-muted-foreground">Création de votre compte patient</p>
         </div>

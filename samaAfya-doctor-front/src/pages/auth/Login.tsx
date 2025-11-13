@@ -140,23 +140,72 @@ const Login = () => {
       </div>
 
       {/* Right side - Image */}
-      <div className="hidden lg:block w-1/2 relative overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop&crop=face"
-          alt="Femme enceinte souriante"
-          className="w-full h-full object-cover"
-          style={{ objectPosition: 'center top' }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center p-8">
-          <div className="text-center space-y-4 max-w-md bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center mx-auto mb-4">
-              <Heart className="h-8 w-8 text-rose-500" />
+      <div className="hidden md:flex w-full md:w-1/2 bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 items-center justify-center p-8 md:p-12 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-primary/20"></div>
+          <div className="absolute bottom-20 right-20 w-24 h-24 rounded-full bg-accent/20"></div>
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 rounded-full bg-secondary/20"></div>
+        </div>
+
+        <div className="relative z-10 max-w-sm md:max-w-lg space-y-6 md:space-y-8">
+          {/* Doctor Image */}
+          <div className="text-center">
+            <div className="w-32 h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 mx-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 hover:scale-105 transition-transform duration-300">
+              <img
+                src="/images/medecin_africaine.png"
+                alt="Médecin africaine"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-              Votre santé, notre priorité
-            </h2>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Un suivi personnalisé et bienveillant pour votre grossesse et celle de votre bébé
+            <p className="text-sm text-muted-foreground mt-4 italic">
+              "Chaque médecin mérite des soins attentionnés et personnalisés"
+            </p>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-2">
+                <Heart className="h-5 w-5 text-primary" />
+              </div>
+              <h3 className="font-semibold text-foreground text-sm">Sécurité</h3>
+              <p className="text-xs text-muted-foreground">Données chiffrées</p>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-2">
+                <User className="h-5 w-5 text-accent-foreground" />
+              </div>
+              <h3 className="font-semibold text-foreground text-sm">Bienveillance</h3>
+              <p className="text-xs text-muted-foreground">Accompagnement doux</p>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                <Lock className="h-5 w-5 text-green-600" />
+              </div>
+              <h3 className="font-semibold text-foreground text-sm">Fiable</h3>
+              <p className="text-xs text-muted-foreground">24/7 disponible</p>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                <Mail className="h-5 w-5 text-blue-600" />
+              </div>
+              <h3 className="font-semibold text-foreground text-sm">Communauté</h3>
+              <p className="text-xs text-muted-foreground">Soutien solidaire</p>
+            </div>
+          </div>
+
+          {/* Trust Indicators */}
+          <div className="bg-white/40 backdrop-blur-sm rounded-xl p-4 md:p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-3">
+              <Heart className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold text-foreground">Plateforme de confiance</h3>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Plus de 1000 médecins nous font confiance pour le suivi médical des patientes.
             </p>
           </div>
         </div>

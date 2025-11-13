@@ -17,10 +17,12 @@ import MessagesPage from "./pages/patient/MessagesPage";
 import DocumentsPage from "./pages/patient/DocumentsPage";
 import ProfilePage from "./pages/patient/ProfilePage";
 import HistoryPage from "./pages/patient/HistoryPage";
+import DoctorLayout from "./components/doctor/DoctorLayout";
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
 import DoctorPatients from "./pages/doctor/DoctorPatients";
 import PatientDetails from "./pages/doctor/PatientDetails";
 import DoctorSettings from "./pages/doctor/DoctorSettings";
+import TrackingCodesPage from "./pages/doctor/TrackingCodesPage";
 import DoctorIAChatPage from "./pages/patient/DoctorIAChatPage";
 import NotFound from "./pages/NotFound";
 
@@ -36,10 +38,13 @@ const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/auth/doctor-login" element={<DoctorLogin />} />
           <Route path="/auth/doctor-mfa" element={<DoctorMFA />} />
-          <Route path="/medecin/dashboard" element={<DoctorDashboard />} />
-          <Route path="/medecin/patients" element={<DoctorPatients />} />
-          <Route path="/medecin/patient/:id" element={<PatientDetails />} />
-          <Route path="/medecin/settings" element={<DoctorSettings />} />
+          <Route path="/medecin/*" element={<DoctorLayout />}>
+            <Route path="dashboard" element={<DoctorDashboard />} />
+            <Route path="patients" element={<DoctorPatients />} />
+            <Route path="patient/:id" element={<PatientDetails />} />
+            <Route path="tracking-codes" element={<TrackingCodesPage />} />
+            <Route path="settings" element={<DoctorSettings />} />
+          </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

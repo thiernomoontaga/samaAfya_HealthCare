@@ -18,7 +18,7 @@ const Home = () => {
                 <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div>
-                <h1 className="text-lg sm:text-xl font-bold text-foreground">SamaAfya Care</h1>
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">samaAfya Healthcare</h1>
                 <p className="text-xs text-muted-foreground hidden sm:block">Suivi maternel connecté</p>
               </div>
             </div>
@@ -44,7 +44,7 @@ const Home = () => {
             <div className="space-y-6 max-w-2xl">
               <div className="space-y-3">
                 <h2 className="text-5xl font-bold text-foreground">
-                  Bienvenue sur SamaAfya Care
+                  Bienvenue sur samaAfya Healthcare
                 </h2>
                 <p className="text-xl text-muted-foreground">
                   Plateforme de suivi maternel spécialisée dans le diabète gestationnel
@@ -284,7 +284,7 @@ const Home = () => {
         <footer className="mt-12 pt-8 border-t border-border/50">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-6">
-              <span>© 2025 SamaAfya Care</span>
+              <span>© 2025 samaAfya Healthcare</span>
               <a href="#" className="hover:text-foreground transition-colors">Politique de confidentialité</a>
               <a href="#" className="hover:text-foreground transition-colors">Conditions d'utilisation</a>
             </div>
