@@ -16,7 +16,8 @@ import {
   Settings,
   LogOut,
   Stethoscope,
-  Heart
+  Heart,
+  MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -34,6 +35,11 @@ const DoctorSidebar: React.FC = () => {
       title: 'Mes patientes',
       url: '/medecin/patients',
       icon: Users,
+    },
+    {
+      title: 'Messages',
+      url: '/medecin/messages',
+      icon: MessageSquare,
     },
     {
       title: 'Codes de suivi',

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -27,7 +27,7 @@ const TrackingCodesPage = () => {
 
   const API_BASE_URL = 'http://localhost:3001';
 
-  const fetchCodes = async () => {
+  const fetchCodes = useCallback(async () => {
     try {
       const doctorAuth = localStorage.getItem('doctorAuth');
       if (!doctorAuth) return;
@@ -46,11 +46,11 @@ const TrackingCodesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     fetchCodes();
-  }, []);
+  }, [fetchCodes]);
 
   const copyToClipboard = (code: string) => {
     navigator.clipboard.writeText(code);

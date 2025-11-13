@@ -12,10 +12,54 @@ const API_BASE_URL = 'http://localhost:5000';
 interface Message {
   id: string;
   content: string;
-  sender: 'patient' | 'ia';
+  sender: 'patient' | 'ia' | 'doctor';
   timestamp: string;
   patientId: string;
 }
+
+// Simulated doctor responses
+const getDoctorResponse = (userMessage: string, doctorInfo?: { firstname: string; lastname: string }): string => {
+  const message = userMessage.toLowerCase();
+  const doctorName = doctorInfo ? `Dr. ${doctorInfo.firstname}` : 'Docteur';
+
+  // Glycémie related questions
+  if (message.includes('glycémie') || message.includes('glucose') || message.includes('sucre')) {
+    if (message.includes('élevée') || message.includes('haute') || message.includes('anormale')) {
+      return `Bonjour, je vois que vos glycémies sont un peu élevées. Pourriez-vous me transmettre vos dernières mesures détaillées ? Je vais analyser cela et ajuster votre traitement si nécessaire. En attendant, continuez votre régime alimentaire et votre activité physique. Nous en rediscuterons lors de notre prochain rendez-vous. Prenez soin de vous ! 👨‍⚕️`;
+    }
+    if (message.includes('normale') || message.includes('stable')) {
+      return `Excellente nouvelle ! Vos glycémies sont dans les normes. Continuez ainsi avec votre suivi rigoureux. N'hésitez pas si vous avez des questions sur votre alimentation ou votre traitement. Je reste disponible pour vous accompagner. 💙`;
+    }
+    return `Vos mesures de glycémie sont importantes pour votre suivi. Partagez-moi vos dernières valeurs et je pourrai vous donner des conseils personnalisés. Comment vous sentez-vous par rapport à vos résultats actuels ? 🤔`;
+  }
+
+  // Symptômes inquiétants
+  if (message.includes('symptôme') || message.includes('inquiète') || message.includes('problème') || message.includes('douleur')) {
+    return `Je comprends votre inquiétude. Pourriez-vous me décrire précisément vos symptômes ? Depuis quand les ressentez-vous ? Avez-vous noté d'autres signes associés ? Il est important que je puisse évaluer la situation. En cas d'urgence, contactez immédiatement les services d'urgence. Je suis là pour vous aider. ⚕️`;
+  }
+
+  // Rendez-vous
+  if (message.includes('rendez-vous') || message.includes('rdv') || message.includes('consultation')) {
+    return `Pour votre prochain rendez-vous, préparez vos mesures de glycémie des 2 dernières semaines et notez toutes vos questions. Nous ferons le point sur votre grossesse et ajusterons votre suivi si nécessaire. Avez-vous des préoccupations particulières à aborder ? 📅`;
+  }
+
+  // Grossesse et bébé
+  if (message.includes('bébé') || message.includes('grossesse') || message.includes('mouvement') || message.includes('enceinte')) {
+    return `Comment se déroule votre grossesse ? Ressentez-vous bien les mouvements de votre bébé ? Vos glycémies sont-elles stables ? N'hésitez pas à partager vos impressions et vos mesures. Je suis là pour vous rassurer et vous accompagner tout au long de ce parcours. 🤰`;
+  }
+
+  // Questions générales
+  if (message.includes('bonjour') || message.includes('salut') || message.includes('bonsoir')) {
+    return `Bonjour ! Comment allez-vous aujourd'hui ? Je suis ${doctorName}, votre médecin référent. Je suis là pour répondre à vos questions et vous accompagner dans votre suivi médical. N'hésitez pas à partager vos préoccupations. 💙`;
+  }
+
+  if (message.includes('merci') || message.includes('thank')) {
+    return `Avec plaisir ! Prenez bien soin de vous et de votre bébé. N'hésitez pas à me contacter si vous avez la moindre question. Je suis là pour vous accompagner. Prenez soin de vous ! 👨‍⚕️`;
+  }
+
+  // Default response
+  return `Je comprends votre message. Pourriez-vous m'en dire plus sur ce qui vous préoccupe ? Je suis là pour vous écouter et vous apporter les conseils médicaux adaptés à votre situation. Votre santé et celle de votre bébé sont ma priorité. 🤝`;
+};
 
 // Simulated AI responses based on medical knowledge
 const getAIResponse = (userMessage: string): string => {
@@ -74,7 +118,7 @@ const getAIResponse = (userMessage: string): string => {
 };
 
 const fetchChatMessages = async (patientId: string): Promise<Message[]> => {
-  const response = await fetch(`${API_BASE_URL}/messages?patientId=${patientId}&sender=ia`);
+  const response = await fetch(`${API_BASE_URL}/messages?patientId=${patientId}&_sort=timestamp&_order=asc`);
   if (!response.ok) throw new Error('Failed to fetch chat messages');
   return response.json();
 };
@@ -89,7 +133,15 @@ const sendChatMessage = async (message: Omit<Message, 'id'>): Promise<Message> =
   return response.json();
 };
 
-export const DoctorIAChat: React.FC = () => {
+interface DoctorIAChatProps {
+  context?: 'ia' | 'doctor';
+  doctorInfo?: { id: string; firstname: string; lastname: string };
+}
+
+export const DoctorIAChat: React.FC<DoctorIAChatProps> = ({
+  context = 'ia',
+  doctorInfo
+}) => {
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -134,20 +186,30 @@ export const DoctorIAChat: React.FC = () => {
     setInputMessage('');
     setIsTyping(true);
 
-    // Simulate AI thinking time
-    setTimeout(async () => {
-      const aiResponse = getAIResponse(inputMessage);
+    // Simulate response time (doctor responds faster than IA)
+    const responseDelay = context === 'doctor' ? 800 : 1500;
 
-      const aiMessage = {
-        content: aiResponse,
-        sender: 'ia' as const,
+    setTimeout(async () => {
+      let responseContent: string;
+
+      if (context === 'doctor') {
+        // Simulate doctor response
+        responseContent = getDoctorResponse(inputMessage, doctorInfo);
+      } else {
+        // IA response
+        responseContent = getAIResponse(inputMessage);
+      }
+
+      const responseMessage = {
+        content: responseContent,
+        sender: (context === 'doctor' ? 'doctor' : 'ia') as 'patient' | 'ia' | 'doctor',
         timestamp: new Date().toISOString(),
         patientId: currentPatientId,
       };
 
-      await sendMessageMutation.mutateAsync(aiMessage);
+      await sendMessageMutation.mutateAsync(responseMessage);
       setIsTyping(false);
-    }, 1500);
+    }, responseDelay);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -163,15 +225,31 @@ export const DoctorIAChat: React.FC = () => {
       <div className="bg-gradient-to-r from-primary via-accent to-secondary p-4 sm:p-6 text-primary-foreground">
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center">
-            <Bot className="h-5 w-5 sm:h-7 sm:w-7" />
+            {context === 'doctor' ? (
+              <User className="h-5 w-5 sm:h-7 sm:w-7" />
+            ) : (
+              <Bot className="h-5 w-5 sm:h-7 sm:w-7" />
+            )}
           </div>
           <div className="flex-1">
-            <h2 className="text-lg sm:text-xl font-bold">Docteur IA</h2>
-            <p className="text-primary-foreground/80 text-xs sm:text-sm">Votre assistant médical bienveillant 💙</p>
+            <h2 className="text-lg sm:text-xl font-bold">
+              {context === 'doctor' && doctorInfo
+                ? `Dr. ${doctorInfo.firstname} ${doctorInfo.lastname}`
+                : 'Docteur IA'
+              }
+            </h2>
+            <p className="text-primary-foreground/80 text-xs sm:text-sm">
+              {context === 'doctor'
+                ? 'Communication sécurisée avec votre médecin 👨‍⚕️'
+                : 'Votre assistant médical bienveillant 💙'
+              }
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-xs text-primary-foreground/80">En ligne</span>
+            <span className="text-xs text-primary-foreground/80">
+              {context === 'doctor' ? 'Disponible' : 'En ligne'}
+            </span>
           </div>
         </div>
       </div>
@@ -184,29 +262,56 @@ export const DoctorIAChat: React.FC = () => {
             {messages.length === 0 && !isLoading && (
               <div className="text-center py-12">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <Heart className="h-10 w-10 text-primary" />
+                  {context === 'doctor' ? (
+                    <User className="h-10 w-10 text-primary" />
+                  ) : (
+                    <Heart className="h-10 w-10 text-primary" />
+                  )}
                 </div>
                 <h3 className="text-2xl font-bold text-foreground mb-3">
-                  Bonjour ! Je suis là pour vous aider 🤗
+                  {context === 'doctor'
+                    ? `Bonjour ! Comment allez-vous ? 👋`
+                    : 'Bonjour ! Je suis là pour vous aider 🤗'
+                  }
                 </h3>
                 <p className="text-muted-foreground text-base leading-relaxed max-w-lg mx-auto">
-                  Posez-moi vos questions sur la glycémie, l'alimentation, l'activité physique,
-                  ou tout autre sujet concernant votre grossesse avec diabète gestationnel.
+                  {context === 'doctor'
+                    ? `Vous pouvez me contacter pour toutes vos questions médicales, vos résultats de glycémie, ou tout suivi concernant votre grossesse. Je suis là pour vous accompagner.`
+                    : `Posez-moi vos questions sur la glycémie, l'alimentation, l'activité physique, ou tout autre sujet concernant votre grossesse avec diabète gestationnel.`
+                  }
                 </p>
-                <div className="mt-6 grid grid-cols-2 gap-3 max-w-md mx-auto">
-                  <div className="bg-gradient-to-br from-primary/5 to-primary/10 p-3 rounded-xl border border-primary/20">
-                    <p className="text-sm font-medium text-primary">📊 Glycémie normale</p>
+                {context === 'ia' && (
+                  <div className="mt-6 grid grid-cols-2 gap-3 max-w-md mx-auto">
+                    <div className="bg-gradient-to-br from-primary/5 to-primary/10 p-3 rounded-xl border border-primary/20">
+                      <p className="text-sm font-medium text-primary">📊 Glycémie normale</p>
+                    </div>
+                    <div className="bg-gradient-to-br from-accent/5 to-accent/10 p-3 rounded-xl border border-accent/20">
+                      <p className="text-sm font-medium text-accent-foreground">🥗 Alimentation</p>
+                    </div>
+                    <div className="bg-gradient-to-br from-secondary/5 to-secondary/10 p-3 rounded-xl border border-secondary/20">
+                      <p className="text-sm font-medium text-secondary-foreground">🏃‍♀️ Activité physique</p>
+                    </div>
+                    <div className="bg-gradient-to-br from-primary/5 to-accent/5 p-3 rounded-xl border border-primary/20">
+                      <p className="text-sm font-medium text-primary">🤰 Signes grossesse</p>
+                    </div>
                   </div>
-                  <div className="bg-gradient-to-br from-accent/5 to-accent/10 p-3 rounded-xl border border-accent/20">
-                    <p className="text-sm font-medium text-accent-foreground">🥗 Alimentation</p>
+                )}
+                {context === 'doctor' && (
+                  <div className="mt-6 grid grid-cols-2 gap-3 max-w-md mx-auto">
+                    <div className="bg-gradient-to-br from-primary/5 to-primary/10 p-3 rounded-xl border border-primary/20">
+                      <p className="text-sm font-medium text-primary">📊 Partager glycémie</p>
+                    </div>
+                    <div className="bg-gradient-to-br from-accent/5 to-accent/10 p-3 rounded-xl border border-accent/20">
+                      <p className="text-sm font-medium text-accent-foreground">📅 Prochain RDV</p>
+                    </div>
+                    <div className="bg-gradient-to-br from-secondary/5 to-secondary/10 p-3 rounded-xl border border-secondary/20">
+                      <p className="text-sm font-medium text-secondary-foreground">⚠️ Signes inquiétants</p>
+                    </div>
+                    <div className="bg-gradient-to-br from-primary/5 to-accent/5 p-3 rounded-xl border border-primary/20">
+                      <p className="text-sm font-medium text-primary">💊 Traitements</p>
+                    </div>
                   </div>
-                  <div className="bg-gradient-to-br from-secondary/5 to-secondary/10 p-3 rounded-xl border border-secondary/20">
-                    <p className="text-sm font-medium text-secondary-foreground">🏃‍♀️ Activité physique</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-primary/5 to-accent/5 p-3 rounded-xl border border-primary/20">
-                    <p className="text-sm font-medium text-primary">🤰 Signes grossesse</p>
-                  </div>
-                </div>
+                )}
               </div>
             )}
 
@@ -216,10 +321,18 @@ export const DoctorIAChat: React.FC = () => {
                 key={message.id}
                 className={`flex gap-4 ${message.sender === 'patient' ? 'justify-end' : 'justify-start'}`}
               >
-                {message.sender === 'ia' && (
-                  <Avatar className="w-10 h-10 bg-gradient-to-br from-primary to-accent shadow-lg">
-                    <AvatarFallback className="bg-transparent text-primary-foreground font-bold text-sm">
-                      <Bot className="h-5 w-5" />
+                {(message.sender === 'ia' || message.sender === 'doctor') && (
+                  <Avatar className={`w-10 h-10 shadow-lg ${
+                    message.sender === 'doctor'
+                      ? 'bg-gradient-to-br from-blue-500 to-blue-600'
+                      : 'bg-gradient-to-br from-primary to-accent'
+                  }`}>
+                    <AvatarFallback className="bg-transparent text-white font-bold text-sm">
+                      {message.sender === 'doctor' ? (
+                        <User className="h-5 w-5" />
+                      ) : (
+                        <Bot className="h-5 w-5" />
+                      )}
                     </AvatarFallback>
                   </Avatar>
                 )}
@@ -229,6 +342,8 @@ export const DoctorIAChat: React.FC = () => {
                     className={`rounded-2xl px-4 sm:px-5 py-3 sm:py-4 shadow-md ${
                       message.sender === 'patient'
                         ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground ml-8 sm:ml-12'
+                        : message.sender === 'doctor'
+                        ? 'bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 text-blue-900 mr-8 sm:mr-12'
                         : 'bg-card border border-primary/20 text-card-foreground mr-8 sm:mr-12'
                     }`}
                   >
@@ -237,12 +352,21 @@ export const DoctorIAChat: React.FC = () => {
                     </p>
                   </div>
                   <p className={`text-xs mt-2 px-2 ${
-                    message.sender === 'patient' ? 'text-right text-primary' : 'text-left text-muted-foreground'
+                    message.sender === 'patient'
+                      ? 'text-right text-primary'
+                      : message.sender === 'doctor'
+                      ? 'text-left text-blue-600'
+                      : 'text-left text-muted-foreground'
                   }`}>
                     {new Date(message.timestamp).toLocaleTimeString('fr-FR', {
                       hour: '2-digit',
                       minute: '2-digit'
                     })}
+                    {message.sender === 'doctor' && (
+                      <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                        Médecin
+                      </span>
+                    )}
                   </p>
                 </div>
 
@@ -259,16 +383,34 @@ export const DoctorIAChat: React.FC = () => {
             {/* Typing indicator */}
             {isTyping && (
               <div className="flex gap-4 justify-start">
-                <Avatar className="w-10 h-10 bg-gradient-to-br from-primary to-accent shadow-lg">
-                  <AvatarFallback className="bg-transparent text-primary-foreground font-bold text-sm">
-                    <Bot className="h-5 w-5" />
+                <Avatar className={`w-10 h-10 shadow-lg ${
+                  context === 'doctor'
+                    ? 'bg-gradient-to-br from-blue-500 to-blue-600'
+                    : 'bg-gradient-to-br from-primary to-accent'
+                }`}>
+                  <AvatarFallback className="bg-transparent text-white font-bold text-sm">
+                    {context === 'doctor' ? (
+                      <User className="h-5 w-5" />
+                    ) : (
+                      <Bot className="h-5 w-5" />
+                    )}
                   </AvatarFallback>
                 </Avatar>
-                <div className="bg-card border border-primary/20 rounded-2xl px-5 py-4 shadow-md mr-12">
+                <div className={`rounded-2xl px-5 py-4 shadow-md mr-12 ${
+                  context === 'doctor'
+                    ? 'bg-blue-50 border border-blue-200'
+                    : 'bg-card border border-primary/20'
+                }`}>
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className={`w-2 h-2 rounded-full animate-bounce ${
+                      context === 'doctor' ? 'bg-blue-500' : 'bg-primary'
+                    }`}></div>
+                    <div className={`w-2 h-2 rounded-full animate-bounce ${
+                      context === 'doctor' ? 'bg-blue-500' : 'bg-primary'
+                    }`} style={{ animationDelay: '0.1s' }}></div>
+                    <div className={`w-2 h-2 rounded-full animate-bounce ${
+                      context === 'doctor' ? 'bg-blue-500' : 'bg-primary'
+                    }`} style={{ animationDelay: '0.2s' }}></div>
                   </div>
                 </div>
               </div>
@@ -301,10 +443,27 @@ export const DoctorIAChat: React.FC = () => {
               <Send className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
           </div>
-          <div className="mt-3 sm:mt-4 p-3 bg-gradient-to-r from-accent/5 to-secondary/5 rounded-xl border border-accent/20">
-            <p className="text-xs text-accent-foreground text-center leading-relaxed">
-              💙 <strong>Important :</strong> Cet assistant fournit des conseils généraux et bienveillants.
-              Il ne remplace pas les consultations médicales personnalisées avec votre équipe de santé.
+          <div className={`mt-3 sm:mt-4 p-3 rounded-xl border ${
+            context === 'doctor'
+              ? 'bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200'
+              : 'bg-gradient-to-r from-accent/5 to-secondary/5 border-accent/20'
+          }`}>
+            <p className={`text-xs text-center leading-relaxed ${
+              context === 'doctor'
+                ? 'text-blue-700'
+                : 'text-accent-foreground'
+            }`}>
+              {context === 'doctor' ? (
+                <>
+                  👨‍⚕️ <strong>Communication sécurisée :</strong> Cette conversation est confidentielle et fait partie de votre suivi médical.
+                  Vos messages sont chiffrés et accessibles uniquement par votre équipe médicale.
+                </>
+              ) : (
+                <>
+                  💙 <strong>Important :</strong> Cet assistant fournit des conseils généraux et bienveillants.
+                  Il ne remplace pas les consultations médicales personnalisées avec votre équipe de santé.
+                </>
+              )}
             </p>
           </div>
         </div>

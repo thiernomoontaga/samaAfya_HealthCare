@@ -51,7 +51,7 @@ const PatientLayout = () => {
         </div>
       </SidebarInset>
 
-      {/* Floating Doctor IA Button */}
+      {/* Floating Doctor IA Button - Always available for instant IA chat */}
       <DoctorIAFloatingButton />
     </SidebarProvider>
   );

@@ -1,78 +1,86 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { MessageSquare, Send, User, Clock, AlertTriangle, Heart, Sparkles, Shield, Phone, Video } from "lucide-react";
+import { MessageSquare, User, AlertTriangle, Heart, Sparkles, Shield, Phone, Video } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { currentPatient } from "@/data/mockData";
 import { useMessages } from "@/hooks/useMessages";
-import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { DoctorIAChat } from "@/components/patient/DoctorIAChat";
+import { PatientDoctorChat } from "@/components/patient/PatientDoctorChat";
 
 const MessagesPage = () => {
-  const { toast } = useToast();
   const { messages, isLoading, error, sendMessage, getConversations, getUnreadCount } = useMessages();
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
-  const [newMessage, setNewMessage] = useState("");
-  const [linkedDoctor, setLinkedDoctor] = useState<{ id: string; firstname: string; lastname: string } | null>(null);
-
-  const handleSendMessage = async () => {
-    if (!newMessage.trim()) return;
-
-    try {
-      await sendMessage(newMessage.trim());
-      setNewMessage("");
-
-      toast({
-        title: "Message envoyé",
-        description: "Votre message a été envoyé avec succès.",
-      });
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Impossible d'envoyer le message. Veuillez réessayer.",
-        variant: "destructive",
-      });
-    }
-  };
+  const [patientProfile, setPatientProfile] = useState<{
+    doctorId?: string;
+    doctorName?: string;
+    hasUnlockedFeatures?: boolean;
+  } | null>(null);
 
   useEffect(() => {
-    const fetchLinkedDoctor = async () => {
+    const fetchPatientProfile = async () => {
       const patientId = localStorage.getItem('currentPatientId');
       if (patientId) {
         try {
           const patientResponse = await fetch(`http://localhost:3000/patients/${patientId}`);
           if (!patientResponse.ok) return;
           const patient = await patientResponse.json();
-          if (patient.linkedDoctorId) {
-            const doctorResponse = await fetch(`http://localhost:3001/doctors/${patient.linkedDoctorId}`);
-            if (!doctorResponse.ok) return;
-            const doctor = await doctorResponse.json();
-            setLinkedDoctor(doctor);
+
+          // Utiliser les mêmes données que dans PatientHome.tsx
+          let finalProfile = patient;
+          if ((patient.hasUnlockedFeatures || patient.trackingCode) && !patient.doctorName && (patient.doctorId || patient.linkedDoctorId)) {
+            try {
+              const doctorId = patient.doctorId || patient.linkedDoctorId;
+              const doctorResponse = await fetch(`http://localhost:3001/doctors/${doctorId}`);
+              if (doctorResponse.ok) {
+                const doctor = await doctorResponse.json();
+                finalProfile = {
+                  ...patient,
+                  doctorName: `${doctor.firstName} ${doctor.lastName}`,
+                  doctorId: doctor.id,
+                };
+              }
+            } catch (error) {
+              console.error('Error fetching doctor info:', error);
+            }
+          }
+
+          setPatientProfile(finalProfile);
+
+          
+          const requestedConversation = localStorage.getItem('selectedConversation');
+          if (requestedConversation === 'Docteur IA') {
+            setSelectedConversation("Docteur IA");
+            localStorage.removeItem('selectedConversation'); // Clean up
+          } else if (finalProfile.doctorName) {
+            // Patiente associée : sélectionner automatiquement le médecin
+            setSelectedConversation(finalProfile.doctorName);
+          } else {
+            // Patiente non associée : sélectionner automatiquement Docteur IA
+            setSelectedConversation("Docteur IA");
           }
         } catch (error) {
-          console.error('Error fetching linked doctor:', error);
-          // Don't set linkedDoctor if error
+          console.error('Error fetching patient profile:', error);
+          // En cas d'erreur, sélectionner Docteur IA par défaut
+          setSelectedConversation("Docteur IA");
         }
       }
     };
 
-    fetchLinkedDoctor();
+    fetchPatientProfile();
   }, []);
 
-  const conversations = { ...getConversations };
-  if (linkedDoctor) {
-    const doctorName = `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}`;
-    if (!conversations[doctorName]) {
-      conversations[doctorName] = [];
-    }
+  // Conversations disponibles : Docteur IA + médecin associé (si présent)
+  const conversations = {};
+  conversations["Docteur IA"] = getConversations["Docteur IA"] || [];
+
+  if (patientProfile?.doctorName) {
+    conversations[patientProfile.doctorName] = getConversations[patientProfile.doctorName] || [];
   }
 
   const selectedMessages = selectedConversation ? conversations[selectedConversation] || [] : [];
@@ -93,10 +101,13 @@ const MessagesPage = () => {
         <div className="flex items-center justify-between">
           <div className="space-y-3">
             <h2 className="text-4xl font-bold text-foreground">
-              Mes messages sécurisés
+              Mes communications médicales
             </h2>
             <p className="text-muted-foreground text-xl">
-              Communication confidentielle avec votre équipe médicale - {getUnreadCount} message{getUnreadCount !== 1 ? 's' : ''} non lu{getUnreadCount !== 1 ? 's' : ''}
+              {patientProfile?.doctorName
+                ? `Communication avec ${patientProfile.doctorName} et Docteur IA - ${getUnreadCount} message${getUnreadCount !== 1 ? 's' : ''} non lu${getUnreadCount !== 1 ? 's' : ''}`
+                : `Assistant IA disponible 24/7 pour vos questions médicales - ${getUnreadCount} message${getUnreadCount !== 1 ? 's' : ''} non lu${getUnreadCount !== 1 ? 's' : ''}`
+              }
             </p>
             <div className="flex items-center gap-6 mt-6">
               <div className="flex items-center gap-3">
@@ -129,9 +140,11 @@ const MessagesPage = () => {
                   <MessageSquare className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">Conversations</CardTitle>
+                  <CardTitle className="text-2xl">
+                    Conversations
+                  </CardTitle>
                   <CardDescription className="text-base">
-                    {getUnreadCount > 0 ? `${getUnreadCount} message${getUnreadCount > 1 ? 's' : ''} non lu${getUnreadCount > 1 ? 's' : ''}` : 'Toutes vos conversations'}
+                    {getUnreadCount > 0 ? `${getUnreadCount} message${getUnreadCount > 1 ? 's' : ''} non lu${getUnreadCount > 1 ? 's' : ''}` : 'Toutes vos conversations médicales'}
                   </CardDescription>
                 </div>
               </div>
@@ -169,11 +182,11 @@ const MessagesPage = () => {
                                 <Avatar className="h-12 w-12 border-2 border-background">
                                   <AvatarImage src="" />
                                   <AvatarFallback className={`text-white font-semibold ${
-                                    contact === "Dr. Konaté" || (linkedDoctor && contact === `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}`)
+                                    contact === patientProfile?.doctorName
                                       ? "bg-primary"
                                       : "bg-secondary"
                                   }`}>
-                                    {contact === "Dr. Konaté" ? "DK" : contact === "Docteur IA" ? "🤖" : linkedDoctor && contact === `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}` ? `${linkedDoctor.firstname?.[0] || 'D'}${linkedDoctor.lastname?.[0] || 'D'}` : currentPatient.firstName?.[0] || 'P'}
+                                    {contact === "Docteur IA" ? "🤖" : contact === patientProfile?.doctorName ? `${patientProfile.doctorName?.split(' ')[1]?.[0] || 'D'}${patientProfile.doctorName?.split(' ')[2]?.[0] || patientProfile.doctorName?.split(' ')[1]?.[1] || 'D'}` : currentPatient.firstName?.[0] || 'P'}
                                   </AvatarFallback>
                                 </Avatar>
                                 {unreadCount > 0 && (
@@ -200,7 +213,7 @@ const MessagesPage = () => {
                                       IA disponible
                                     </Badge>
                                   )}
-                                  {(contact === "Dr. Konaté" || (linkedDoctor && contact === `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}`)) && (
+                                  {contact === patientProfile?.doctorName && (
                                     <Badge variant="secondary" className="bg-primary/20 text-primary text-xs">
                                       Médecin
                                     </Badge>
@@ -231,150 +244,41 @@ const MessagesPage = () => {
                   </CardTitle>
                   <CardDescription className="text-base">
                     {selectedConversation === "Docteur IA" && "Assistant IA disponible 24/7 pour vos questions médicales"}
-                    {(selectedConversation === "Dr. Konaté" || (linkedDoctor && selectedConversation === `Dr. ${linkedDoctor.firstname} ${linkedDoctor.lastname}`)) && "Communication sécurisée avec votre médecin"}
+                    {selectedConversation === patientProfile?.doctorName && "Communication sécurisée avec votre médecin"}
                     {!selectedConversation && "Choisissez une conversation pour commencer"}
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="flex flex-col">
-              {/* Messages */}
-              <ScrollArea className="flex-1 pr-4 max-h-[400px]">
-                <div className="space-y-6">
-                  {selectedMessages.length === 0 ? (
-                    <div className="text-center py-12">
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center mx-auto mb-4">
-                        <MessageSquare className="h-8 w-8 text-gray-400" />
-                      </div>
-                      <h3 className="text-lg font-medium text-gray-600 mb-2">
-                        Aucun message encore
-                      </h3>
-                      <p className="text-gray-500 text-sm">
-                        {selectedConversation === "Docteur IA"
-                          ? "Commencez une conversation avec l'IA bienveillante"
-                          : "Envoyez un message à votre équipe médicale"
-                        }
+              {/* Chat Content - Différent selon le type de conversation */}
+              <div className="space-y-4">
+                {selectedConversation === "Docteur IA" ? (
+                  <DoctorIAChat
+                    context="ia"
+                    doctorInfo={undefined}
+                  />
+                ) : patientProfile?.doctorName && selectedConversation === patientProfile.doctorName ? (
+                  <PatientDoctorChat
+                    patientId={localStorage.getItem('currentPatientId') || ''}
+                    doctorId={patientProfile.doctorId || ''}
+                    doctorName={patientProfile.doctorName}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-64">
+                    <div className="text-center">
+                      <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">
+                        Sélectionnez une conversation pour commencer
                       </p>
                     </div>
-                  ) : (
-                    selectedMessages.map((message, index) => {
-                      const isDoctor = message.senderType === "doctor";
-                      const isIA = selectedConversation === "Docteur IA";
-                      const showDate = index === 0 ||
-                        format(new Date(message.timestamp), "yyyy-MM-dd") !==
-                        format(new Date(selectedMessages[index - 1].timestamp), "yyyy-MM-dd");
-
-                      return (
-                        <div key={message.id}>
-                          {showDate && (
-                            <div className="flex items-center gap-4 my-6">
-                              <Separator className="flex-1" />
-                              <div className="bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 rounded-full border border-purple-200">
-                                <span className="text-sm font-medium text-purple-700">
-                                  {format(new Date(message.timestamp), "EEEE d MMMM", { locale: fr })}
-                                </span>
-                              </div>
-                              <Separator className="flex-1" />
-                            </div>
-                          )}
-
-                          <div className={`flex gap-4 ${isDoctor || isIA ? "justify-start" : "justify-end"}`}>
-                            {(isDoctor || isIA) && (
-                              <Avatar className="h-10 w-10 border-2 border-background">
-                                <AvatarImage src="" />
-                                <AvatarFallback className={`text-white font-semibold ${
-                                  isIA ? "bg-accent" : "bg-primary"
-                                }`}>
-                                  {isIA ? "🤖" : "DK"}
-                                </AvatarFallback>
-                              </Avatar>
-                            )}
-
-                            <div className={`max-w-[75%] ${isDoctor || isIA ? "order-2" : "order-1"}`}>
-                              <div className={`rounded-xl px-4 py-3 ${
-                                isDoctor || isIA
-                                  ? "bg-muted text-foreground"
-                                  : "bg-primary text-primary-foreground"
-                              }`}>
-                                <p className="text-sm leading-relaxed">{message.content}</p>
-                              </div>
-                              <div className="flex items-center gap-2 mt-2 px-1">
-                                <Clock className="h-3 w-3 text-muted-foreground" />
-                                <span className="text-xs text-muted-foreground">
-                                  {format(new Date(message.timestamp), "HH:mm", { locale: fr })}
-                                </span>
-                                {(isDoctor || isIA) && (
-                                  <Badge variant="outline" className="text-xs">
-                                    {isIA ? "IA" : "Médecin"}
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-
-                            {!(isDoctor || isIA) && (
-                              <Avatar className="h-10 w-10 order-3 border-2 border-background">
-                                <AvatarImage src="" />
-                                <AvatarFallback className="bg-secondary text-secondary-foreground font-semibold">
-                                  {currentPatient.firstName[0]}
-                                </AvatarFallback>
-                              </Avatar>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              </ScrollArea>
-
-              {/* Message Input */}
-              {selectedConversation && (
-                <>
-                  <Separator className="my-4" />
-                  <div className="space-y-4">
-                    <div className="flex gap-3">
-                      <div className="flex-1">
-                        <Textarea
-                          placeholder={
-                            selectedConversation === "Docteur IA"
-                              ? "Posez votre question à l'IA..."
-                              : "Écrivez votre message..."
-                          }
-                          value={newMessage}
-                          onChange={(e) => setNewMessage(e.target.value)}
-                          className="min-h-[80px] resize-none"
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" && !e.shiftKey) {
-                              e.preventDefault();
-                              handleSendMessage();
-                            }
-                          }}
-                        />
-                        <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
-                          <span>
-                            {selectedConversation === "Docteur IA"
-                              ? "IA disponible 24/7"
-                              : "Communication sécurisée"
-                            }
-                          </span>
-                          <span>Entrée pour envoyer</span>
-                        </div>
-                      </div>
-                      <Button
-                        onClick={handleSendMessage}
-                        disabled={!newMessage.trim()}
-                        className="px-6"
-                      >
-                        <Send className="h-4 w-4" />
-                      </Button>
-                    </div>
                   </div>
-                </>
-              )}
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
-      </div>
+    </div>
   );
 };
 

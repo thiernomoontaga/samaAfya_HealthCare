@@ -479,10 +479,229 @@
       "sender": "ia",
       "timestamp": "2025-11-12T22:34:42.690Z",
       "patientId": "793e"
+    },
+    {
+      "id": "381e",
+      "content": "Bonjour",
+      "sender": "patient",
+      "timestamp": "2025-11-13T18:31:12.280Z",
+      "patientId": "86fc"
+    },
+    {
+      "id": "ec12",
+      "content": "Bonjour ! Comment allez-vous aujourd'hui ? Je suis Dr. Moussa, votre médecin référent. Je suis là pour répondre à vos questions et vous accompagner dans votre suivi médical. N'hésitez pas à partager vos préoccupations. 💙",
+      "sender": "doctor",
+      "timestamp": "2025-11-13T18:31:13.109Z",
+      "patientId": "86fc"
+    },
+    {
+      "id": "67a6",
+      "content": "Bonjout",
+      "sender": "patient",
+      "timestamp": "2025-11-13T18:45:11.069Z",
+      "patientId": "86fc"
+    },
+    {
+      "id": "427c",
+      "content": "Je comprends votre question. Pour des conseils personnalisés sur votre diabète gestationnel, il est important de consulter votre équipe médicale. Je peux vous donner des informations générales sur la gestion du diabète pendant la grossesse, l'alimentation équilibrée, ou l'activité physique adaptée. Quelle est votre préoccupation principale ? 🤔",
+      "sender": "ia",
+      "timestamp": "2025-11-13T18:45:12.586Z",
+      "patientId": "86fc"
+    },
+    {
+      "id": "d2e1",
+      "content": "vhbjnk",
+      "sender": "patient",
+      "timestamp": "2025-11-13T19:10:36.245Z",
+      "patientId": "86fc"
+    },
+    {
+      "id": "8bdb",
+      "content": "Je comprends votre question. Pour des conseils personnalisés sur votre diabète gestationnel, il est important de consulter votre équipe médicale. Je peux vous donner des informations générales sur la gestion du diabète pendant la grossesse, l'alimentation équilibrée, ou l'activité physique adaptée. Quelle est votre préoccupation principale ? 🤔",
+      "sender": "ia",
+      "timestamp": "2025-11-13T19:10:37.774Z",
+      "patientId": "86fc"
+    },
+    {
+      "id": "51a9",
+      "content": "vhbjknml",
+      "sender": "patient",
+      "timestamp": "2025-11-13T20:06:58.198Z",
+      "patientId": "86fc"
+    },
+    {
+      "id": "bb8a",
+      "content": "Je comprends votre question. Pour des conseils personnalisés sur votre diabète gestationnel, il est important de consulter votre équipe médicale. Je peux vous donner des informations générales sur la gestion du diabète pendant la grossesse, l'alimentation équilibrée, ou l'activité physique adaptée. Quelle est votre préoccupation principale ? 🤔",
+      "sender": "ia",
+      "timestamp": "2025-11-13T20:06:59.717Z",
+      "patientId": "86fc"
+    },
+    {
+      "id": "ad2e",
+      "content": "Bonsoir Docteur IA ",
+      "sender": "patient",
+      "timestamp": "2025-11-13T20:51:10.268Z",
+      "patientId": "86fc"
+    },
+    {
+      "id": "67fa",
+      "content": "Je comprends votre question. Pour des conseils personnalisés sur votre diabète gestationnel, il est important de consulter votre équipe médicale. Je peux vous donner des informations générales sur la gestion du diabète pendant la grossesse, l'alimentation équilibrée, ou l'activité physique adaptée. Quelle est votre préoccupation principale ? 🤔",
+      "sender": "ia",
+      "timestamp": "2025-11-13T20:51:11.792Z",
+      "patientId": "86fc"
     }
   ],
   "documents": [],
   "trackingCodes": [],
+  "patientDoctorMessages": [
+    {
+      "id": "msg-001",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "Bonjour Docteur, j'ai des questions sur mes glycémies.",
+      "timestamp": "2025-11-13T18:30:00.000Z",
+      "read": false,
+      "readAt": null
+    },
+    {
+      "id": "msg-002",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "D001",
+      "senderType": "doctor",
+      "content": "Bonjour ! Je suis à votre disposition pour répondre à vos questions. Comment puis-je vous aider concernant vos glycémies ?",
+      "timestamp": "2025-11-13T18:31:00.000Z",
+      "read": true,
+      "readAt": "2025-11-13T18:50:09.340Z"
+    },
+    {
+      "id": "8688",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "Bonjour",
+      "timestamp": "2025-11-13T19:07:43.801Z",
+      "read": false
+    },
+    {
+      "id": "1a93",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "Test message from patient",
+      "timestamp": "2025-11-13T20:00:00.000Z",
+      "read": true,
+      "readAt": "2025-11-13T20:05:00.000Z"
+    },
+    {
+      "id": "7454",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "Another test message from patient",
+      "timestamp": "2025-11-13T20:10:00.000Z",
+      "read": true,
+      "readAt": "2025-11-13T20:15:00.000Z"
+    },
+    {
+      "id": "c361",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "Bonjout",
+      "timestamp": "2025-11-13T20:06:26.854Z",
+      "read": false
+    },
+    {
+      "id": "4208",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "hukjl",
+      "timestamp": "2025-11-13T20:06:38.804Z",
+      "read": false
+    },
+    {
+      "id": "dfea",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "vhbjknlm;,'",
+      "timestamp": "2025-11-13T20:06:44.793Z",
+      "read": false
+    },
+    {
+      "id": "be85",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "D001",
+      "senderType": "doctor",
+      "content": "nm.,",
+      "timestamp": "2025-11-13T20:09:40.407Z",
+      "read": true,
+      "readAt": "2025-11-13T20:09:44.425Z"
+    },
+    {
+      "id": "e619",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "fjnkm,",
+      "timestamp": "2025-11-13T20:21:31.321Z",
+      "read": false
+    },
+    {
+      "id": "e03d",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "Bonjour",
+      "timestamp": "2025-11-13T20:33:11.187Z",
+      "read": false
+    },
+    {
+      "id": "dbe7",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "D001",
+      "senderType": "doctor",
+      "content": "Bonjour ma patiente , yangui si jamm ??",
+      "timestamp": "2025-11-13T20:34:20.657Z",
+      "read": true,
+      "readAt": "2025-11-13T20:34:44.226Z"
+    },
+    {
+      "id": "8412",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "86fc",
+      "senderType": "patient",
+      "content": "barki yalla mangui si jamm",
+      "timestamp": "2025-11-13T20:42:09.459Z",
+      "read": false
+    },
+    {
+      "id": "4d88",
+      "patientId": "86fc",
+      "doctorId": "D001",
+      "senderId": "D001",
+      "senderType": "doctor",
+      "content": "kone cool ni",
+      "timestamp": "2025-11-13T20:42:32.108Z",
+      "read": true,
+      "readAt": "2025-11-13T20:42:39.589Z"
+    }
+  ],
   "doctors": [
     {
       "id": "D001",

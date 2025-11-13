@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,16 +7,48 @@ import { Bot, MessageCircle, X, Sparkles } from "lucide-react";
 
 export const DoctorIAFloatingButton: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [hasLinkedDoctor, setHasLinkedDoctor] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Hide button on Doctor IA chat page
-  if (location.pathname === '/patient/doctor-ia') {
+  // Check if patient has linked doctor
+  useEffect(() => {
+    const checkLinkedDoctor = async () => {
+      const patientId = localStorage.getItem('currentPatientId');
+      if (patientId) {
+        try {
+          const response = await fetch(`http://localhost:3000/patients/${patientId}`);
+          const patient = await response.json();
+          setHasLinkedDoctor(patient.linkedDoctorId && patient.linkedDoctorId.trim() !== '');
+        } catch (error) {
+          console.error('Error checking linked doctor:', error);
+        }
+      }
+    };
+
+    checkLinkedDoctor();
+  }, []);
+
+  // Hide button on Doctor IA chat page (only for patients without linked doctor)
+  if (location.pathname === '/patient/doctor-ia' && !hasLinkedDoctor) {
+    return null;
+  }
+
+  // Hide button on Messages page when Docteur IA is selected (for patients with linked doctor)
+  if (location.pathname === '/patient/messages' && hasLinkedDoctor) {
     return null;
   }
 
   const handleChatClick = () => {
-    navigate('/patient/doctor-ia');
+    if (hasLinkedDoctor) {
+      // Patient with linked doctor: go to Messages and select Docteur IA
+      navigate('/patient/messages');
+      // Set Docteur IA as selected conversation (will be handled by MessagesPage)
+      localStorage.setItem('selectedConversation', 'Docteur IA');
+    } else {
+      // Patient without linked doctor: go to dedicated Docteur IA page
+      navigate('/patient/doctor-ia');
+    }
     setIsExpanded(false);
   };
 

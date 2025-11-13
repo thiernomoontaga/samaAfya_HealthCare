@@ -40,8 +40,9 @@ const Login = () => {
         return;
       }
 
-      // Store current patient ID
+      // Store current patient ID and unlocked features status
       localStorage.setItem('currentPatientId', patient.id);
+      localStorage.setItem('hasUnlockedFeatures', patient.hasUnlockedFeatures || false);
 
       // Check if monitoring mode is set
       if (!patient.hasMonitoringMode) {

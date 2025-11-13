@@ -9,6 +9,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Users, Search, Filter, Eye, AlertTriangle, CheckCircle, Clock, User, Stethoscope, Heart, Activity, TrendingUp, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Patient, GlycemieReading } from "@/types/patient";
 
 const API_BASE_URL = 'http://localhost:3001';
 
@@ -43,19 +44,19 @@ const DoctorPatients: React.FC = () => {
     queryFn: fetchGlycemiaReadings,
   });
 
-  const getPatientStatus = (patient: any) => {
-    const patientAlerts = readings.filter((r: any) => r.patientId === patient.id && r.status === 'high').length;
+  const getPatientStatus = (patient: Patient) => {
+    const patientAlerts = readings.filter((r: GlycemieReading) => r.patientId === patient.id && r.status === 'high').length;
     if (patientAlerts >= 2) return { status: "urgent", label: "Contacter", color: "bg-red-500 text-white", priority: 3 };
     if (patientAlerts > 0) return { status: "warning", label: "À surveiller", color: "bg-amber-500 text-white", priority: 2 };
     return { status: "ok", label: "OK", color: "bg-green-500 text-white", priority: 1 };
   };
 
-  const getPatientStats = (patient: any) => {
-    const patientReadings = readings.filter((r: any) => r.patientId === patient.id);
+  const getPatientStats = (patient: Patient) => {
+    const patientReadings = readings.filter((r: GlycemieReading) => r.patientId === patient.id);
     const totalExpected = 7 * 4; // 7 days * 4 readings per day
     const compliance = patientReadings.length / totalExpected * 100;
 
-    const lastReading = patientReadings.sort((a: any, b: any) =>
+    const lastReading = patientReadings.sort((a: GlycemieReading, b: GlycemieReading) =>
       new Date(b.date + 'T' + b.time).getTime() - new Date(a.date + 'T' + a.time).getTime()
     )[0];
 
@@ -66,7 +67,7 @@ const DoctorPatients: React.FC = () => {
     };
   };
 
-  const filteredPatients = patients.filter((patient: any) => {
+  const filteredPatients = patients.filter((patient: Patient) => {
     const matchesSearch = patient.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          patient.lastName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || getPatientStatus(patient).status === statusFilter;
@@ -75,7 +76,7 @@ const DoctorPatients: React.FC = () => {
     return matchesSearch && matchesStatus && matchesDiabetes;
   });
 
-  const sortedPatients = filteredPatients.sort((a: any, b: any) => {
+  const sortedPatients = filteredPatients.sort((a: Patient, b: Patient) => {
     return getPatientStatus(b).priority - getPatientStatus(a).priority;
   });
 
@@ -112,7 +113,7 @@ const DoctorPatients: React.FC = () => {
                 <p className="text-muted-foreground text-xl">
                   Suivez et gérez efficacement vos {patients.length} patientes diabétiques gestationnelles
                 </p>
-                <div className="flex items-center gap-6 mt-6">
+                  <div className="flex items-center gap-6 mt-6">
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 rounded-full bg-primary"></div>
                     <span className="text-foreground font-medium">{patients.length} patientes actives</span>
@@ -120,7 +121,7 @@ const DoctorPatients: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 rounded-full bg-accent"></div>
                     <span className="text-foreground font-medium">
-                      {Math.round(patients.reduce((sum: number, p: any) => {
+                      {Math.round(patients.reduce((sum: number, p: Patient) => {
                         const { compliance } = getPatientStats(p);
                         return sum + compliance;
                       }, 0) / patients.length) || 0}% compliance moyenne
@@ -129,7 +130,7 @@ const DoctorPatients: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 rounded-full bg-amber-500"></div>
                     <span className="text-foreground font-medium">
-                      {patients.filter((p: any) => getPatientStatus(p).status !== 'ok').length} nécessitent attention
+                      {patients.filter((p: Patient) => getPatientStatus(p).status !== 'ok').length} nécessitent attention
                     </span>
                   </div>
                 </div>
@@ -165,7 +166,7 @@ const DoctorPatients: React.FC = () => {
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-2">Alertes urgentes</p>
                     <p className="text-4xl font-bold text-red-600">
-                      {patients.filter((p: any) => getPatientStatus(p).status === 'urgent').length}
+                      {patients.filter((p: Patient) => getPatientStatus(p).status === 'urgent').length}
                     </p>
                     <p className="text-xs text-muted-foreground mt-2">Contact immédiat requis</p>
                   </div>
@@ -182,7 +183,7 @@ const DoctorPatients: React.FC = () => {
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-2">À surveiller</p>
                     <p className="text-4xl font-bold text-amber-600">
-                      {patients.filter((p: any) => getPatientStatus(p).status === 'warning').length}
+                      {patients.filter((p: Patient) => getPatientStatus(p).status === 'warning').length}
                     </p>
                     <p className="text-xs text-muted-foreground mt-2">Suivi rapproché</p>
                   </div>
@@ -199,7 +200,7 @@ const DoctorPatients: React.FC = () => {
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-2">En bonne santé</p>
                     <p className="text-4xl font-bold text-green-600">
-                      {patients.filter((p: any) => getPatientStatus(p).status === 'ok').length}
+                      {patients.filter((p: Patient) => getPatientStatus(p).status === 'ok').length}
                     </p>
                     <p className="text-xs text-muted-foreground mt-2">Contrôle optimal</p>
                   </div>
@@ -314,7 +315,7 @@ const DoctorPatients: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {paginatedPatients.map((patient: any) => {
+                      {paginatedPatients.map((patient: Patient) => {
                       const { status, label, color } = getPatientStatus(patient);
                       const { compliance, lastReading } = getPatientStats(patient);
 

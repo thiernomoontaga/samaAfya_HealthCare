@@ -7,7 +7,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Heart, Plus, Coffee, Utensils, Moon, Activity, TrendingUp, CheckCircle, User } from "lucide-react";
+import { AlertTriangle, Heart, Plus, Coffee, Utensils, Moon, Activity, TrendingUp, CheckCircle, User, RefreshCw } from "lucide-react";
 import EnterTrackingCode from "@/components/patient/EnterTrackingCode";
 import { currentPatient } from "@/data/mockData";
 import { useState, useEffect } from "react";
@@ -23,24 +23,124 @@ const PatientHome = () => {
     doctorName?: string;
     doctorId?: string;
     trackingCode?: string;
+    hasUnlockedFeatures?: boolean;
+    associatedAt?: string;
+    associationMethod?: 'registration' | 'manual';
   } | null>(null);
+
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [showAssociationNotification, setShowAssociationNotification] = useState(false);
 
   // Get patient monitoring mode
   useEffect(() => {
-    const currentPatientId = localStorage.getItem('currentPatientId') || 'P001';
     const fetchPatientProfile = async () => {
+      // Try to get patient ID from localStorage
+      let currentPatientId = localStorage.getItem('currentPatientId');
+
+      // If no ID in localStorage, try to find the most recently registered patient
+      // This handles the case where a patient just registered but hasn't logged in yet
+      if (!currentPatientId) {
+        try {
+          console.log('No patient ID in localStorage, fetching all patients to find recent registration...');
+          const allPatientsResponse = await fetch('http://localhost:3000/patients');
+          if (allPatientsResponse.ok) {
+            const allPatients = await allPatientsResponse.json();
+            // Sort by ID (assuming IDs are incremental) and take the last one
+            const sortedPatients = allPatients.sort((a: { id: string }, b: { id: string }) => parseInt(b.id) - parseInt(a.id));
+            if (sortedPatients.length > 0) {
+              currentPatientId = sortedPatients[0].id;
+              console.log('Using most recent patient ID:', currentPatientId);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching patients list:', error);
+        }
+      }
+
+      // Default fallback
+      currentPatientId = currentPatientId || 'P001';
+
+      console.log('Fetching patient profile for ID:', currentPatientId);
+
       try {
         const response = await fetch(`http://localhost:3000/patients/${currentPatientId}`);
         if (response.ok) {
           const profile = await response.json();
-          setPatientProfile(profile);
+          console.log('Patient profile fetched successfully:', profile);
+          console.log('Patient profile keys:', Object.keys(profile));
+          console.log('Doctor-related fields:', {
+            doctorId: profile.doctorId,
+            doctorName: profile.doctorName,
+            linkedDoctorId: profile.linkedDoctorId,
+            trackingCode: profile.trackingCode,
+            hasUnlockedFeatures: profile.hasUnlockedFeatures
+          });
+
+          // If patient has unlocked features but no doctor name, try to fetch doctor info
+          let finalProfile = profile;
+          if ((profile.hasUnlockedFeatures || profile.trackingCode) && !profile.doctorName && (profile.doctorId || profile.linkedDoctorId)) {
+            try {
+              const doctorId = profile.doctorId || profile.linkedDoctorId;
+              console.log('Fetching missing doctor info for ID:', doctorId);
+              const doctorResponse = await fetch(`http://localhost:3001/doctors/${doctorId}`);
+              if (doctorResponse.ok) {
+                const doctor = await doctorResponse.json();
+                finalProfile = {
+                  ...profile,
+                  doctorName: `${doctor.firstName} ${doctor.lastName}`,
+                  doctorId: doctor.id,
+                };
+                console.log('Doctor info retrieved and added to profile:', finalProfile.doctorName);
+              }
+            } catch (error) {
+              console.error('Error fetching doctor info:', error);
+            }
+          }
+
+          setPatientProfile(finalProfile);
+
+          // Store the ID in localStorage for future use
+          localStorage.setItem('currentPatientId', currentPatientId);
+
+          // Show association notification temporarily for manual associations (only once)
+          if (finalProfile?.associationMethod === 'manual') {
+            const notificationKey = `association_notification_${currentPatientId}`;
+            const hasShownNotification = localStorage.getItem(notificationKey);
+
+            if (!hasShownNotification) {
+              setShowAssociationNotification(true);
+              localStorage.setItem(notificationKey, 'shown');
+
+              // Hide notification after 10 seconds
+              setTimeout(() => {
+                setShowAssociationNotification(false);
+              }, 10000);
+            }
+          }
+        } else {
+          console.error('Failed to fetch patient profile:', response.status, response.statusText);
+          // Try with fallback ID
+          if (currentPatientId !== 'P001') {
+            console.log('Trying with fallback ID P001...');
+            const fallbackResponse = await fetch('http://localhost:3000/patients/P001');
+            if (fallbackResponse.ok) {
+              const fallbackProfile = await fallbackResponse.json();
+              console.log('Fallback profile fetched:', fallbackProfile);
+              setPatientProfile(fallbackProfile);
+            }
+          }
         }
       } catch (error) {
         console.error('Error fetching patient profile:', error);
       }
     };
+
     fetchPatientProfile();
-  }, []);
+  }, [refreshKey]);
+
+  const refreshPatientData = () => {
+    setRefreshKey(prev => prev + 1);
+  };
 
   // Calculate stats for dashboard
   const todayReadings = readings.filter(r => r.timestamp.startsWith(new Date().toISOString().split('T')[0]));
@@ -118,6 +218,36 @@ const PatientHome = () => {
           </div>
         </div>
       </div>
+
+      {/* Doctor Association Success Notification - Only for manual associations, shown temporarily */}
+      {showAssociationNotification && patientProfile?.doctorName && patientProfile?.trackingCode && patientProfile?.associationMethod === 'manual' && (
+        <Card className="shadow-sm border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-green-800 mb-1">
+                  ✅ Association réussie avec votre médecin
+                </h3>
+                <p className="text-green-700 text-sm">
+                  Vous êtes maintenant associée au <strong>Dr. {patientProfile.doctorName}</strong>.
+                  Toutes les fonctionnalités avancées (Messages et Documents) sont désormais disponibles.
+                </p>
+                <div className="flex items-center gap-4 mt-3">
+                  <Badge className="bg-green-100 text-green-700 border-green-200">
+                    Code de suivi: {patientProfile.trackingCode}
+                  </Badge>
+                  <Badge className="bg-blue-100 text-blue-700 border-blue-200">
+                    Fonctionnalités débloquées
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Monitoring Mode Info */}
       {patientProfile?.monitoringMode && (
@@ -198,20 +328,65 @@ const PatientHome = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-muted-foreground mb-2">Médecin associé</p>
-                <p className="text-lg font-bold text-secondary-foreground mb-1">
-                  {patientProfile?.doctorName || 'Non associé'}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {patientProfile?.doctorName ? 'Suivi actif' : 'Associez-vous à un médecin'}
-                </p>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm font-medium text-muted-foreground">Médecin associé</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={refreshPatientData}
+                    className="h-6 w-6 p-0 hover:bg-secondary/20"
+                    title="Rafraîchir les données"
+                  >
+                    <RefreshCw className="h-3 w-3" />
+                  </Button>
+                </div>
+
+
+                {patientProfile?.doctorName ? (
+                  <div className="space-y-3">
+                    {/* Doctor name with confirmation */}
+                    <div className="flex items-center gap-2">
+                      <p className="text-lg font-bold text-secondary-foreground">
+                        Dr. {patientProfile.doctorName}
+                      </p>
+                      <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                    </div>
+
+                    {/* Status badges */}
+                    <div className="flex flex-wrap gap-2">
+                      <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
+                        ✅ Association confirmée
+                      </Badge>
+                      {patientProfile?.trackingCode && (
+                        <Badge className="bg-blue-100 text-blue-800 border-blue-200 text-xs">
+                          Code: {patientProfile.trackingCode}
+                        </Badge>
+                      )}
+                    </div>
+
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-lg font-bold text-secondary-foreground mb-1">
+                        Non associé
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Associez-vous à un médecin
+                      </p>
+                    </div>
+
+                  </div>
+                )}
               </div>
               <div className="p-4 rounded-2xl bg-secondary/30">
                 <User className="h-8 w-8 text-secondary-foreground" />
               </div>
             </div>
+
+            {/* Enter tracking code component - only show if not associated */}
             {!patientProfile?.doctorName && (
-              <div className="mt-4">
+              <div className="mt-4 pt-4 border-t border-secondary/20">
                 <EnterTrackingCode />
               </div>
             )}

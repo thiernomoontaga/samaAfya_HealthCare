@@ -62,7 +62,8 @@
       },
       "doctorId": "D001",
       "trackingCode": "MED001-AMA",
-      "hasMonitoringMode": true
+      "hasMonitoringMode": true,
+      "hasUnlockedFeatures": true
     },
     {
       "id": "P002",
@@ -86,7 +87,8 @@
       },
       "doctorId": "D002",
       "trackingCode": "MED002-FAT",
-      "hasMonitoringMode": true
+      "hasMonitoringMode": true,
+      "hasUnlockedFeatures": true
     },
     {
       "id": "P003",
@@ -110,7 +112,8 @@
       },
       "doctorId": "D001",
       "trackingCode": "MED001-MAR",
-      "hasMonitoringMode": true
+      "hasMonitoringMode": true,
+      "hasUnlockedFeatures": true
     },
     {
       "id": "P004",
@@ -134,7 +137,8 @@
       },
       "doctorId": "D002",
       "trackingCode": "MED002-AIS",
-      "hasMonitoringMode": true
+      "hasMonitoringMode": true,
+      "hasUnlockedFeatures": true
     },
     {
       "id": "P005",
@@ -158,7 +162,8 @@
       },
       "doctorId": "D003",
       "trackingCode": "MED003-KHA",
-      "hasMonitoringMode": true
+      "hasMonitoringMode": true,
+      "hasUnlockedFeatures": true
     }
   ],
   "alerts": [
@@ -494,6 +499,116 @@
       "doctorId": "D001",
       "createdAt": "2025-11-12T22:38:06.100Z",
       "sentTo": "fatoufall@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "e2914839-aa77-46e0-b5af-a97ac9d3aca6",
+      "code": "AFYA-9RGML",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T10:18:16.334Z",
+      "sentTo": "moontagasegnane@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "5a275944-f6e5-4b19-a7ee-cdd47c3dd782",
+      "code": "AFYA-HRUQI",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T10:30:26.847Z",
+      "sentTo": "thiernosegnane316@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "2212601d-0af4-477b-b5c4-ad8a61d2b0be",
+      "code": "AFYA-T16OI",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T10:37:11.959Z",
+      "sentTo": "moontagasegnane@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "ad75f6fd-94a9-4399-9846-0487926b2bdd",
+      "code": "AFYA-NB4LU",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T11:03:06.849Z",
+      "sentTo": "oumydiallo@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "55d740db-56e2-439b-98c3-e81b7eedbed7",
+      "code": "AFYA-K2DZP",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T11:23:49.609Z",
+      "sentTo": "salyndiaye@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "d46bbf5b-63c3-4179-b1a0-aeb6bd55b336",
+      "code": "AFYA-FG8XE",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T11:48:50.510Z",
+      "sentTo": "annadiop@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "4235d9b2-baef-4a28-8b39-53ce782c0c58",
+      "code": "AFYA-54JHX",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T12:02:13.351Z",
+      "sentTo": "khadyfaye@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "96fae6f0-27d2-4cda-a12f-25f66d4720ef",
+      "code": "AFYA-0E4AH",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T12:10:32.122Z",
+      "sentTo": "falloufall@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "da526a6a-9b43-4b48-b5cc-193551c8051b",
+      "code": "AFYA-TR3WV",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T12:17:11.243Z",
+      "sentTo": "kinendiaye@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "3b1d3230-90b4-4b43-b97d-1c3fdc08642e",
+      "code": "AFYA-GH02O",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T13:36:41.121Z",
+      "sentTo": "thiernosegnane316@gmail.com",
+      "sentBy": "email",
+      "isActive": true
+    },
+    {
+      "id": "a80d56ed-d22e-4e7e-ae77-fcf8e14d7dec",
+      "code": "AFYA-PY9M2",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T13:42:16.120Z",
+      "sentTo": "fatoundiaye@gmail.com",
+      "sentBy": "email",
+      "isActive": false,
+      "usedBy": "793e",
+      "usedAt": "2025-11-13T13:46:58.369Z"
+    },
+    {
+      "id": "20f0828a-1f66-492a-9cfd-b0ab6689de52",
+      "code": "AFYA-X9JE2",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T15:39:30.001Z",
+      "sentTo": "fatoundiayyye@gmail.com",
       "sentBy": "email",
       "isActive": true
     }

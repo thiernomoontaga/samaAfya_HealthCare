@@ -25,6 +25,7 @@ import {
   Phone
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { Patient, GlycemieReading } from "@/types/patient";
 
 const API_BASE_URL = 'http://localhost:3001';
 
@@ -99,14 +100,14 @@ const PatientDetails: React.FC = () => {
 
   // Calculate statistics
   const totalReadings = readings.length;
-  const highReadings = readings.filter((r: any) => r.status === 'high').length;
-  const warningReadings = readings.filter((r: any) => r.status === 'warning').length;
-  const normalReadings = readings.filter((r: any) => r.status === 'normal').length;
+  const highReadings = readings.filter((r: GlycemieReading) => r.status === 'high').length;
+  const warningReadings = readings.filter((r: GlycemieReading) => r.status === 'warning').length;
+  const normalReadings = readings.filter((r: GlycemieReading) => r.status === 'normal').length;
 
   const compliance = Math.round((totalReadings / (7 * 4)) * 100); // Expected: 7 days * 4 readings
 
   // Prepare chart data
-  const dailyData = readings.reduce((acc: any, reading: any) => {
+  const dailyData = readings.reduce((acc: Record<string, { date: string; readings: GlycemieReading[] }>, reading: GlycemieReading) => {
     const date = reading.date;
     if (!acc[date]) {
       acc[date] = { date, readings: [] };
@@ -115,10 +116,10 @@ const PatientDetails: React.FC = () => {
     return acc;
   }, {});
 
-  const chartData = Object.values(dailyData).map((day: any) => ({
+  const chartData = Object.values(dailyData).map((day: { date: string; readings: GlycemieReading[] }) => ({
     date: new Date(day.date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' }),
     moyenne: day.readings.length > 0
-      ? Math.round((day.readings.reduce((sum: number, r: any) => sum + r.value, 0) / day.readings.length) * 100) / 100
+      ? Math.round((day.readings.reduce((sum: number, r: GlycemieReading) => sum + r.value, 0) / day.readings.length) * 100) / 100
       : 0,
     mesures: day.readings.length
   }));
@@ -517,10 +518,10 @@ const PatientDetails: React.FC = () => {
                     <CardContent className="p-6">
                       <div className="space-y-4 max-h-96 overflow-y-auto">
                         {readings
-                          .sort((a: any, b: any) =>
+                          .sort((a: GlycemieReading, b: GlycemieReading) =>
                             new Date(b.date + 'T' + b.time).getTime() - new Date(a.date + 'T' + a.time).getTime()
                           )
-                          .map((reading: any) => (
+                          .map((reading: GlycemieReading) => (
                             <div key={reading.id} className="flex items-center justify-between p-4 bg-muted/20 rounded-xl hover:bg-muted/30 transition-colors">
                               <div className="flex items-center gap-4">
                                 <div className={`w-4 h-4 rounded-full ${

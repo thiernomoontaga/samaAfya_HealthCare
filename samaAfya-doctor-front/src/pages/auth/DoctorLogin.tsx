@@ -7,6 +7,30 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Stethoscope, Mail, Lock, Eye, EyeOff, ArrowLeft, Shield, Heart, CheckCircle, Users, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 
+// Function to send MFA email via MailDev
+const sendMFAEmail = async (email: string, mfaCode: string) => {
+  try {
+    const response = await fetch('http://localhost:3002/send-mfa-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, mfaCode }),
+    });
+
+    if (response.ok) {
+      console.log('✅ Email MFA envoyé via MailDev');
+      return true;
+    } else {
+      console.warn('⚠️ Échec envoi email MFA');
+      return false;
+    }
+  } catch (error) {
+    console.warn('⚠️ Erreur envoi email MFA:', error);
+    return false;
+  }
+};
+
 const DoctorLogin: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -62,7 +86,9 @@ const DoctorLogin: React.FC = () => {
         lastname: doctor.lastName,
       }));
 
-      // Simulate email sending (in production, this would be sent via email service)
+      // Send MFA email via MailDev
+      await sendMFAEmail(doctor.email, mfaCode.toString());
+
       console.log(`🔐 MFA Code for ${doctor.email}: ${mfaCode}`);
       console.log(`📧 [EMAIL SIMULATION] Code MFA envoyé à ${doctor.email}: ${mfaCode}`);
       console.log(`⚠️  [TEST MODE] Utilisez ce code pour vous connecter: ${mfaCode}`);
