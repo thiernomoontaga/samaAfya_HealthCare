@@ -125,6 +125,43 @@ export const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ childr
     try {
       const API_BASE_URL = 'http://localhost:3000';
 
+      // If patient has a valid medical code, get doctor information
+      let doctorInfo = null;
+      let hasUnlockedFeatures = false;
+
+      console.log('Registration data check:', {
+        medicalCode: state.data.medicalCode,
+        hasValidCode: state.data.hasValidCode,
+        linkedDoctorId: state.data.linkedDoctorId
+      });
+
+      if (state.data.medicalCode && state.data.hasValidCode && state.data.linkedDoctorId) {
+        try {
+          console.log('🔍 Fetching doctor info for registration with tracking code...');
+          console.log('Doctor ID to fetch:', state.data.linkedDoctorId);
+          const doctorResponse = await fetch(`http://localhost:3001/doctors/${state.data.linkedDoctorId}`);
+          console.log('Doctor fetch response status:', doctorResponse.status);
+
+          if (doctorResponse.ok) {
+            const doctor = await doctorResponse.json();
+            console.log('Doctor data retrieved:', doctor);
+            doctorInfo = {
+              doctorId: doctor.id,
+              doctorName: `${doctor.firstName} ${doctor.lastName}`,
+            };
+            hasUnlockedFeatures = true;
+            console.log('✅ Doctor info successfully prepared for registration:', doctorInfo);
+          } else {
+            console.error('❌ Failed to fetch doctor, response:', await doctorResponse.text());
+          }
+        } catch (error) {
+          console.error('❌ Error fetching doctor info during registration:', error);
+          // Continue with registration even if doctor fetch fails
+        }
+      } else {
+        console.log('ℹ️ No valid medical code for automatic association');
+      }
+
       // Prepare patient data for API
       const patientData = {
         firstName: state.data.firstName,
@@ -140,7 +177,19 @@ export const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ childr
         acceptDataHosting: state.data.acceptDataHosting,
         allowResearchSharing: state.data.allowResearchSharing,
         acceptNewsletter: state.data.acceptNewsletter,
+        // Add doctor association if available
+        ...(doctorInfo && {
+          doctorId: doctorInfo.doctorId,
+          doctorName: doctorInfo.doctorName,
+          hasUnlockedFeatures: hasUnlockedFeatures,
+          associatedAt: new Date().toISOString(),
+          associationMethod: 'registration', // Mark as registration-time association
+        }),
       };
+
+      console.log('📤 Final patient data being sent to API:', patientData);
+      console.log('Doctor info included:', doctorInfo ? 'YES' : 'NO');
+      console.log('Features unlocked:', hasUnlockedFeatures ? 'YES' : 'NO');
 
       // Register patient via API
       const response = await fetch(`${API_BASE_URL}/patients`, {
@@ -154,12 +203,20 @@ export const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ childr
       }
 
       const newPatient = await response.json();
-      console.log('Patient registered:', newPatient);
+      console.log('Patient registered successfully:', newPatient);
+
+      // Store the new patient ID in localStorage for immediate access
+      localStorage.setItem('currentPatientId', newPatient.id);
+
+      // If features were unlocked during registration, store that too
+      if (hasUnlockedFeatures) {
+        localStorage.setItem('hasUnlockedFeatures', 'true');
+      }
 
       // Reset the form after successful registration
       dispatch({ type: 'RESET' });
 
-      // Redirect to login page
+      // Redirect to login page (but patient ID is now stored)
       window.location.href = '/auth/login';
     } catch (error) {
       console.error('Registration failed:', error);

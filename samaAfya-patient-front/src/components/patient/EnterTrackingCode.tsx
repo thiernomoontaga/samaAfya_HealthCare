@@ -7,7 +7,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Link2, CheckCircle, AlertCircle, User } from "lucide-react";
 import { toast } from "sonner";
 
-const API_BASE_URL = 'http://localhost:3000';
+const PATIENT_API_BASE_URL = 'http://localhost:3000';
+const DOCTOR_API_BASE_URL = 'http://localhost:3001';
 
 const EnterTrackingCode = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,13 +17,28 @@ const EnterTrackingCode = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const formatTrackingCode = (value: string) => {
-    // Remove any existing formatting and convert to uppercase
-    const cleanValue = value.replace(/[^A-Z0-9]/g, '').toUpperCase();
+    // Convert to uppercase and remove spaces
+    const upperValue = value.toUpperCase().replace(/\s/g, '');
+
+    // If already in correct format, return as is
+    if (/^AFYA-[A-Z0-9]{5}$/.test(upperValue)) {
+      return upperValue;
+    }
+
+    // Remove all non-alphanumeric except existing AFYA-
+    const cleanValue = upperValue.replace(/[^A-Z0-9-]/g, '');
 
     // Add "AFYA-" prefix if not present
-    if (cleanValue.startsWith('AFYA')) {
-      return cleanValue;
+    if (cleanValue.startsWith('AFYA-')) {
+      // Ensure exactly 5 characters after AFYA-
+      const afterPrefix = cleanValue.substring(5, 10);
+      return 'AFYA-' + afterPrefix;
+    } else if (cleanValue.startsWith('AFYA')) {
+      // Handle case without dash
+      const afterAfya = cleanValue.substring(4, 9);
+      return 'AFYA-' + afterAfya;
     } else if (cleanValue.length > 0) {
+      // Add prefix to first 5 characters
       return 'AFYA-' + cleanValue.substring(0, 5);
     }
     return cleanValue;
@@ -43,84 +59,133 @@ const EnterTrackingCode = () => {
 
     // Validate format
     if (!/^AFYA-[A-Z0-9]{5}$/.test(trackingCode)) {
-      toast.error("Format de code invalide. Le code doit être au format AFYA-XXXXX");
+      toast.error("Format de code invalide. Le code doit être au format AFYA-XXXXX (5 caractères après AFYA-)");
       return;
     }
 
     setIsLoading(true);
 
     try {
+      console.log('Starting association process for code:', trackingCode);
+
       // Get current patient ID
       const currentPatientId = localStorage.getItem('currentPatientId');
       if (!currentPatientId) {
+        console.error('No currentPatientId in localStorage');
         toast.error("Session expirée. Veuillez vous reconnecter.");
         return;
       }
 
+      console.log('Current patient ID:', currentPatientId);
+
       // Check if tracking code exists and is active
-      const trackingResponse = await fetch(`${API_BASE_URL}/trackingCodes?code=${trackingCode}&isActive=true`);
+      console.log('Checking tracking code:', `${DOCTOR_API_BASE_URL}/trackingCodes?code=${trackingCode}&isActive=true`);
+      const trackingResponse = await fetch(`${DOCTOR_API_BASE_URL}/trackingCodes?code=${trackingCode}&isActive=true`);
+      console.log('Tracking response status:', trackingResponse.status);
+
+      if (!trackingResponse.ok) {
+        console.error('Tracking response not ok:', trackingResponse.status, trackingResponse.statusText);
+        throw new Error(`Erreur serveur tracking codes: ${trackingResponse.status}`);
+      }
+
       const trackingCodes = await trackingResponse.json();
+      console.log('Found tracking codes:', trackingCodes);
 
       if (trackingCodes.length === 0) {
+        console.error('No active tracking codes found for:', trackingCode);
         toast.error("Code de suivi invalide ou expiré");
         return;
       }
 
       const trackingCodeData = trackingCodes[0];
+      console.log('Using tracking code data:', trackingCodeData);
 
       // Get doctor information
-      const doctorResponse = await fetch(`${API_BASE_URL}/doctors/${trackingCodeData.doctorId}`);
+      console.log('Fetching doctor info:', `${DOCTOR_API_BASE_URL}/doctors/${trackingCodeData.doctorId}`);
+      const doctorResponse = await fetch(`${DOCTOR_API_BASE_URL}/doctors/${trackingCodeData.doctorId}`);
+      console.log('Doctor response status:', doctorResponse.status);
+
       if (!doctorResponse.ok) {
+        console.error('Doctor response not ok:', doctorResponse.status, doctorResponse.statusText);
         toast.error("Médecin introuvable");
         return;
       }
 
       const doctor = await doctorResponse.json();
+      console.log('Doctor data:', doctor);
 
-      // Update patient with doctor association
-      const updateResponse = await fetch(`${API_BASE_URL}/patients/${currentPatientId}`, {
+      // Update patient with doctor association and unlock features
+      console.log('Updating patient:', `${PATIENT_API_BASE_URL}/patients/${currentPatientId}`);
+      const updateData = {
+        doctorId: doctor.id,
+        trackingCode: trackingCode,
+        doctorName: `${doctor.firstName} ${doctor.lastName}`,
+        associatedAt: new Date().toISOString(),
+        hasUnlockedFeatures: true, // Unlock Messages and Documents features
+        associationMethod: 'manual', // Mark as manual association (not during registration)
+      };
+      console.log('Update data:', updateData);
+
+      const updateResponse = await fetch(`${PATIENT_API_BASE_URL}/patients/${currentPatientId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          doctorId: doctor.id,
-          trackingCode: trackingCode,
-          doctorName: `${doctor.firstName} ${doctor.lastName}`,
-          associatedAt: new Date().toISOString(),
-        }),
+        body: JSON.stringify(updateData),
       });
 
+      console.log('Patient update response status:', updateResponse.status);
+
       if (!updateResponse.ok) {
-        throw new Error('Failed to update patient');
+        const errorText = await updateResponse.text();
+        console.error('Patient update failed:', updateResponse.status, errorText);
+        throw new Error(`Échec mise à jour patient: ${updateResponse.status}`);
       }
 
       // Mark tracking code as used (optional - could be kept for reference)
-      await fetch(`${API_BASE_URL}/trackingCodes/${trackingCodeData.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          isActive: false, // Mark as used
-          usedBy: currentPatientId,
-          usedAt: new Date().toISOString(),
-        }),
-      });
+      console.log('Marking tracking code as used');
+      try {
+        await fetch(`${DOCTOR_API_BASE_URL}/trackingCodes/${trackingCodeData.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            isActive: false, // Mark as used
+            usedBy: currentPatientId,
+            usedAt: new Date().toISOString(),
+          }),
+        });
+      } catch (codeUpdateError) {
+        console.warn('Failed to mark tracking code as used:', codeUpdateError);
+        // Don't fail the whole process for this
+      }
+
+      // Update localStorage with unlocked features
+      localStorage.setItem('hasUnlockedFeatures', 'true');
+      console.log('Association process completed successfully');
 
       setIsSuccess(true);
-      toast.success(`Association réussie avec le Dr ${doctor.firstName} ${doctor.lastName}`);
+      toast.success(`Association réussie avec le Dr ${doctor.firstName} ${doctor.lastName} - Fonctionnalités débloquées !`);
 
       // Close dialog after success
       setTimeout(() => {
         setIsOpen(false);
         setTrackingCode('');
         setIsSuccess(false);
+        // Refresh the page to show unlocked features
+        window.location.reload();
       }, 2000);
 
     } catch (error) {
       console.error('Error associating with doctor:', error);
-      toast.error("Erreur lors de l'association. Veuillez réessayer.");
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        patientId: localStorage.getItem('currentPatientId'),
+        trackingCode
+      });
+      toast.error(`Erreur lors de l'association: ${error.message || 'Veuillez réessayer.'}`);
     } finally {
       setIsLoading(false);
     }

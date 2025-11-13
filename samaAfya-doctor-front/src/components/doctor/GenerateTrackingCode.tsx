@@ -16,10 +16,9 @@ const API_BASE_URL = 'http://localhost:3001';
 const generateUniqueCode = (): string => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let code = 'AFYA-';
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 5; i++) {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  code += chars.charAt(Math.floor(Math.random() * 26)); // last is letter
   return code;
 };
 
@@ -64,6 +63,25 @@ const GenerateTrackingCode = ({ doctorId, onCodeGenerated }: GenerateTrackingCod
       });
 
       if (!response.ok) throw new Error('Failed to save tracking code');
+
+      // Send email if method is email
+      if (sendMethod === 'email') {
+        try {
+          await fetch('http://localhost:3002/send-tracking-code', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: contact,
+              trackingCode: code,
+              patientName: patientName,
+            }),
+          });
+        } catch (emailError) {
+          console.warn('Email sending failed, but code was saved:', emailError);
+        }
+      }
 
       toast({
         title: "Code généré avec succès",

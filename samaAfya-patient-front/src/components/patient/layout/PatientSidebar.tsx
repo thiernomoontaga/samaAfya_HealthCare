@@ -29,9 +29,14 @@ const PatientSidebar: React.FC = () => {
   const [patient, setPatient] = useState<{ trackingCode?: string; linkedDoctorId?: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const hasDoctorLink = patient?.linkedDoctorId && patient.linkedDoctorId.trim() !== '';
+  // Check if features are unlocked (either from localStorage or patient data)
+  const hasUnlockedFeatures = localStorage.getItem('hasUnlockedFeatures') === 'true' ||
+                              (patient?.linkedDoctorId && patient.linkedDoctorId.trim() !== '');
 
-  const menuItems = [
+  // Check if patient has a linked doctor
+  const hasLinkedDoctor = patient?.linkedDoctorId && patient.linkedDoctorId.trim() !== '';
+
+  const baseMenuItems = [
     {
       title: 'Tableau de bord',
       url: '/patient/home',
@@ -45,22 +50,16 @@ const PatientSidebar: React.FC = () => {
       disabled: false,
     },
     {
-      title: 'Docteur IA',
-      url: '/patient/doctor-ia',
-      icon: Bot,
-      disabled: false,
-    },
-    {
       title: 'Messages',
       url: '/patient/messages',
       icon: MessageSquare,
-      disabled: !hasDoctorLink,
+      disabled: !hasUnlockedFeatures,
     },
     {
       title: 'Documents',
       url: '/patient/documents',
       icon: FileText,
-      disabled: !hasDoctorLink,
+      disabled: !hasUnlockedFeatures,
     },
     {
       title: 'Profil',
@@ -75,6 +74,20 @@ const PatientSidebar: React.FC = () => {
       disabled: false,
     },
   ];
+
+  // Ajouter Docteur IA seulement si la patiente n'a pas de médecin associé
+  const menuItems = hasLinkedDoctor
+    ? baseMenuItems
+    : [
+        ...baseMenuItems.slice(0, 2), // Tableau de bord + Statistiques
+        {
+          title: 'Docteur IA',
+          url: '/patient/doctor-ia',
+          icon: Bot,
+          disabled: false,
+        },
+        ...baseMenuItems.slice(2) // Le reste
+      ];
 
   useEffect(() => {
     const fetchPatient = async () => {

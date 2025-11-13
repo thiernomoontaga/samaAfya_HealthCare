@@ -21,6 +21,7 @@ import DoctorLayout from "./components/doctor/DoctorLayout";
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
 import DoctorPatients from "./pages/doctor/DoctorPatients";
 import PatientDetails from "./pages/doctor/PatientDetails";
+import DoctorMessages from "./pages/doctor/DoctorMessages";
 import DoctorSettings from "./pages/doctor/DoctorSettings";
 import TrackingCodesPage from "./pages/doctor/TrackingCodesPage";
 import DoctorIAChatPage from "./pages/patient/DoctorIAChatPage";
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="dashboard" element={<DoctorDashboard />} />
             <Route path="patients" element={<DoctorPatients />} />
             <Route path="patient/:id" element={<PatientDetails />} />
+            <Route path="messages" element={<DoctorMessages />} />
             <Route path="tracking-codes" element={<TrackingCodesPage />} />
             <Route path="settings" element={<DoctorSettings />} />
           </Route>
