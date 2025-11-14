@@ -611,6 +611,26 @@
       "sentTo": "fatoundiayyye@gmail.com",
       "sentBy": "email",
       "isActive": true
+    },
+    {
+      "id": "b4427244-a96d-46b5-ac38-889efb99fd33",
+      "code": "AFYA-VX8ZW",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T22:33:15.003Z",
+      "sentTo": "khadyfall@gmail.com",
+      "sentBy": "email",
+      "isActive": false,
+      "usedBy": "0f96",
+      "usedAt": "2025-11-13T22:33:32.530Z"
+    },
+    {
+      "id": "dd33370b-8ae2-4b16-b15a-ce348fac94b2",
+      "code": "AFYA-QOPL2",
+      "doctorId": "D001",
+      "createdAt": "2025-11-13T22:37:14.085Z",
+      "sentTo": "abdoulayendiaye@gmail.com",
+      "sentBy": "email",
+      "isActive": true
     }
   ]
 }

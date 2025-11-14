@@ -89,14 +89,14 @@ const PatientDetails: React.FC = () => {
 
   // Calculate statistics
   const totalReadings = readings.length;
-  const highReadings = readings.filter((r: any) => r.status === 'high').length;
-  const warningReadings = readings.filter((r: any) => r.status === 'warning').length;
-  const normalReadings = readings.filter((r: any) => r.status === 'normal').length;
+  const highReadings = readings.filter((r: { status: string }) => r.status === 'high').length;
+  const warningReadings = readings.filter((r: { status: string }) => r.status === 'warning').length;
+  const normalReadings = readings.filter((r: { status: string }) => r.status === 'normal').length;
 
   const compliance = Math.round((totalReadings / (7 * 4)) * 100); // Expected: 7 days * 4 readings
 
   // Prepare chart data
-  const dailyData = readings.reduce((acc: any, reading: any) => {
+  const dailyData = readings.reduce((acc: Record<string, { date: string; readings: { value: number }[] }>, reading: { date: string; value: number }) => {
     const date = reading.date;
     if (!acc[date]) {
       acc[date] = { date, readings: [] };
@@ -105,10 +105,10 @@ const PatientDetails: React.FC = () => {
     return acc;
   }, {});
 
-  const chartData = Object.values(dailyData).map((day: any) => ({
+  const chartData = Object.values(dailyData).map((day: { date: string; readings: { value: number }[] }) => ({
     date: new Date(day.date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' }),
     moyenne: day.readings.length > 0
-      ? Math.round((day.readings.reduce((sum: number, r: any) => sum + r.value, 0) / day.readings.length) * 100) / 100
+      ? Math.round((day.readings.reduce((sum: number, r: { value: number }) => sum + r.value, 0) / day.readings.length) * 100) / 100
       : 0,
     mesures: day.readings.length
   }));
@@ -337,10 +337,10 @@ const PatientDetails: React.FC = () => {
                   <CardContent>
                     <div className="space-y-3 max-h-96 overflow-y-auto">
                       {readings
-                        .sort((a: any, b: any) =>
+                        .sort((a: { date: string; time: string }, b: { date: string; time: string }) =>
                           new Date(b.date + 'T' + b.time).getTime() - new Date(a.date + 'T' + a.time).getTime()
                         )
-                        .map((reading: any) => (
+                        .map((reading: { id: string; status: string; moment: string; value: number; date: string; time: string }) => (
                           <div key={reading.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                             <div className="flex items-center gap-4">
                               <div className={`w-3 h-3 rounded-full ${

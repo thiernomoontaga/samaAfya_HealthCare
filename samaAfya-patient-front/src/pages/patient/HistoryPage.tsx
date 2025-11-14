@@ -17,7 +17,7 @@ import {
   Heart,
   Sparkles
 } from "lucide-react";
-import { mockWeekReadings } from "@/data/mockData";
+import { useGlycemiaData } from "@/hooks/useGlycemiaData";
 import { useToast } from "@/hooks/use-toast";
 import { format, isSameDay, eachDayOfInterval } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -79,119 +79,68 @@ const HistoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [mealFilter, setMealFilter] = useState<string>("all");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  // Transform mock data into comprehensive history - generate data for the last 90 days
+  // Get real data from the hook
+  const { readings, isLoading, error } = useGlycemiaData();
+
+  // Transform real readings into daily data structure
   const historyData: DailyData[] = useMemo(() => {
     try {
-      setIsLoading(true);
-      setError(null);
-
-      // Generate data for the last 90 days for comprehensive history
-      const today = new Date();
-      const ninetyDaysAgo = new Date();
-      ninetyDaysAgo.setDate(today.getDate() - 90);
-
-      const allDays = eachDayOfInterval({ start: ninetyDaysAgo, end: today });
-
-      const result = allDays.map(date => {
-        const dateStr = format(date, "yyyy-MM-dd");
-        const existingData = mockWeekReadings.find(day => day.date === dateStr);
-
-        if (existingData) {
-          const readings = existingData.readings;
-          const values = readings.map(r => r.value);
-          const average = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
-          const min = Math.min(...values);
-          const max = Math.max(...values);
-
-          // Determine daily status based on readings
-          const hasHigh = readings.some(r => r.status === "high");
-          const hasWarning = readings.some(r => r.status === "warning");
-          const hasHypo = readings.some(r => r.status === "hypo");
-
-          let status: "good" | "warning" | "critical" = "good";
-          if (hasHigh || hasHypo) status = "critical";
-          else if (hasWarning) status = "warning";
-
-          return {
-            date: dateStr,
-            readings,
-            completed: existingData.completed,
-            average: Math.round(average * 100) / 100,
-            min,
-            max,
-            status
-          };
-        } else {
-          // Generate comprehensive mock data for days without readings
-          const mockReadings: GlycemiaReading[] = [];
-          const completed = Math.random() > 0.4; // 60% completion rate for more realistic data
-
-          if (completed) {
-            // Generate 4-6 readings for completed days (more comprehensive)
-            const numReadings = Math.floor(Math.random() * 3) + 4;
-            const moments = ["jeun", "apres_petit_dej", "avant_dejeuner", "apres_dejeuner", "avant_diner", "apres_diner"];
-
-            for (let i = 0; i < numReadings && i < moments.length; i++) {
-              const baseValue = 5.0 + Math.random() * 3; // Base value between 5.0-8.0
-              // Add some variation based on time of day
-              let value = baseValue;
-              if (moments[i].includes("jeun")) value -= 0.5; // Lower fasting values
-              else if (moments[i].includes("apres")) value += 0.8; // Higher post-meal values
-
-              let status: "hypo" | "normal" | "warning" | "high" = "normal";
-
-              if (value < 4.8) status = "hypo";
-              else if (value > 7.8) status = "high";
-              else if (value > 6.8) status = "warning";
-
-              mockReadings.push({
-                id: `mock-${dateStr}-${i}`,
-                moment: moments[i] as "jeun" | "apres_petit_dej" | "avant_dejeuner" | "apres_dejeuner" | "avant_diner" | "apres_diner",
-                value: Math.round(value * 10) / 10,
-                status,
-                date: dateStr,
-                time: `${7 + i * 2}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`
-              });
-            }
-          }
-
-          const values = mockReadings.map(r => r.value);
-          const average = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
-          const min = values.length > 0 ? Math.min(...values) : 0;
-          const max = values.length > 0 ? Math.max(...values) : 0;
-
-          const hasHigh = mockReadings.some(r => r.status === "high");
-          const hasWarning = mockReadings.some(r => r.status === "warning");
-          const hasHypo = mockReadings.some(r => r.status === "hypo");
-
-          let status: "good" | "warning" | "critical" = "good";
-          if (hasHigh || hasHypo) status = "critical";
-          else if (hasWarning) status = "warning";
-
-          return {
-            date: dateStr,
-            readings: mockReadings,
-            completed,
-            average: Math.round(average * 100) / 100,
-            min,
-            max,
-            status
-          };
+      // Group readings by date
+      const readingsByDate = readings.reduce((acc, reading) => {
+        const date = reading.timestamp.split('T')[0]; // Extract date part
+        if (!acc[date]) {
+          acc[date] = [];
         }
-      }).reverse(); // Most recent first
+        acc[date].push(reading);
+        return acc;
+      }, {} as Record<string, typeof readings>);
+
+      // Convert to DailyData format
+      const result = Object.entries(readingsByDate).map(([dateStr, dayReadings]) => {
+        const values = dayReadings.map(r => r.value);
+        const average = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+        const min = values.length > 0 ? Math.min(...values) : 0;
+        const max = values.length > 0 ? Math.max(...values) : 0;
+
+        // Convert readings to the expected format
+        const formattedReadings: GlycemiaReading[] = dayReadings.map(reading => ({
+          id: reading.id,
+          moment: reading.mealContext === "fasting" ? "jeun" :
+                  reading.mealContext === "after_meal" ? "apres_dejeuner" : "avant_dejeuner",
+          value: reading.value,
+          status: reading.status === "critical" ? "high" :
+                  reading.status === "warning" ? "warning" : "normal",
+          date: dateStr,
+          time: reading.timestamp.split('T')[1]?.split('.')[0] || "00:00:00"
+        }));
+
+        // Determine daily status
+        const hasHigh = formattedReadings.some(r => r.status === "high");
+        const hasWarning = formattedReadings.some(r => r.status === "warning");
+        const hasHypo = formattedReadings.some(r => r.status === "hypo");
+
+        let status: "good" | "warning" | "critical" = "good";
+        if (hasHigh || hasHypo) status = "critical";
+        else if (hasWarning) status = "warning";
+
+        return {
+          date: dateStr,
+          readings: formattedReadings,
+          completed: formattedReadings.length >= 4, // Consider completed if 4+ readings
+          average: Math.round(average * 100) / 100,
+          min: Math.round(min * 100) / 100,
+          max: Math.round(max * 100) / 100,
+          status
+        };
+      }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Most recent first
 
       return result;
     } catch (err) {
-      console.error("Error loading comprehensive history data:", err);
-      setError("Erreur lors du chargement des données d'historique");
+      console.error("Error processing glycemia history data:", err);
       return [];
-    } finally {
-      setIsLoading(false);
     }
-  }, []);
+  }, [readings]);
 
   // Filter data based on search and filters
   const filteredData = useMemo(() => {
@@ -258,7 +207,7 @@ const HistoryPage = () => {
     return (
       <Alert variant="destructive">
         <AlertTriangle className="h-4 w-4" />
-        <AlertDescription>{error}</AlertDescription>
+        <AlertDescription>{String(error)}</AlertDescription>
       </Alert>
     );
   }

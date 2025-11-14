@@ -1,20 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
-import { mockDocuments } from "@/data/mockData";
 import { Document } from "@/types/patient";
 
 // API functions
 const API_BASE_URL = 'http://localhost:3000';
 
-const fetchDocuments = async (patientId: string = 'P001'): Promise<Document[]> => {
+const fetchDocuments = async (patientId: string = ''): Promise<Document[]> => {
   const response = await fetch(`${API_BASE_URL}/documents?patientId=${patientId}`);
   if (!response.ok) throw new Error('Failed to fetch documents');
   return response.json();
 };
 
 export const useDocuments = () => {
+  // Get current patient ID
+  const getCurrentPatientId = () => localStorage.getItem('currentPatientId') || '';
+
   const { data: documents = [], isLoading, error } = useQuery({
-    queryKey: ['documents'],
-    queryFn: () => fetchDocuments(),
+    queryKey: ['documents', getCurrentPatientId()],
+    queryFn: () => fetchDocuments(getCurrentPatientId()),
+    enabled: !!getCurrentPatientId(), // Only fetch if patient is logged in
   });
 
   const downloadDocument = async (document: Document) => {
@@ -62,6 +65,6 @@ export const useDocuments = () => {
     downloadDocument,
     getDocumentsByType,
     searchDocuments,
-    getStats: getStats()
+    getStats,
   };
 };

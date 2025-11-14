@@ -13,6 +13,7 @@ import { currentPatient } from "@/data/mockData";
 
 const PatientDashboard = () => {
   const { readings, weeklyData, isLoading, error, getStats } = useGlycemiaData();
+  const stats = getStats;
 
   if (error) {
     return (
@@ -25,7 +26,7 @@ const PatientDashboard = () => {
 
   // Calculate patient-specific stats
   const todayReadings = readings.filter(r => r.timestamp.startsWith(new Date().toISOString().split('T')[0]));
-  const weeklyAverage = weeklyData.length > 0 ? weeklyData.reduce((sum, day) => sum + day.average, 0) / weeklyData.length : 0;
+  const weeklyAverage = stats.weeklyAverage; // Use stats from hook instead of local calculation
   const complianceRate = Math.round((readings.length / (7 * 4)) * 100); // Assuming 4 readings per day for 7 days
 
   return (
@@ -294,7 +295,7 @@ const PatientDashboard = () => {
           {isLoading ? (
             <Skeleton className="h-96 rounded-2xl" />
           ) : (
-            <DailyGlycemiaCard readings={readings} />
+            <DailyGlycemiaCard readings={todayReadings} />
           )}
         </CardContent>
       </Card>

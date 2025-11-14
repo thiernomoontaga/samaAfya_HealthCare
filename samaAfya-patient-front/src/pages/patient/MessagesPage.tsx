@@ -46,7 +46,7 @@ const MessagesPage = () => {
                 };
               }
             } catch (error) {
-              console.error('Error fetching doctor info:', error);
+              // Error fetching doctor info - silently handled
             }
           }
 
@@ -65,7 +65,7 @@ const MessagesPage = () => {
             setSelectedConversation("Docteur IA");
           }
         } catch (error) {
-          console.error('Error fetching patient profile:', error);
+          // Error fetching patient profile - silently handled
           // En cas d'erreur, sélectionner Docteur IA par défaut
           setSelectedConversation("Docteur IA");
         }
@@ -105,8 +105,8 @@ const MessagesPage = () => {
             </h2>
             <p className="text-muted-foreground text-xl">
               {patientProfile?.doctorName
-                ? `Communication avec ${patientProfile.doctorName} et Docteur IA - ${getUnreadCount} message${getUnreadCount !== 1 ? 's' : ''} non lu${getUnreadCount !== 1 ? 's' : ''}`
-                : `Assistant IA disponible 24/7 pour vos questions médicales - ${getUnreadCount} message${getUnreadCount !== 1 ? 's' : ''} non lu${getUnreadCount !== 1 ? 's' : ''}`
+                ? `Communication avec ${patientProfile.doctorName} et Docteur IA - ${getUnreadCount()} message${getUnreadCount() !== 1 ? 's' : ''} non lu${getUnreadCount() !== 1 ? 's' : ''}`
+                : `Assistant IA disponible 24/7 pour vos questions médicales - ${getUnreadCount()} message${getUnreadCount() !== 1 ? 's' : ''} non lu${getUnreadCount() !== 1 ? 's' : ''}`
               }
             </p>
             <div className="flex items-center gap-6 mt-6">
@@ -144,7 +144,7 @@ const MessagesPage = () => {
                     Conversations
                   </CardTitle>
                   <CardDescription className="text-base">
-                    {getUnreadCount > 0 ? `${getUnreadCount} message${getUnreadCount > 1 ? 's' : ''} non lu${getUnreadCount > 1 ? 's' : ''}` : 'Toutes vos conversations médicales'}
+                    {getUnreadCount() > 0 ? `${getUnreadCount()} message${getUnreadCount() > 1 ? 's' : ''} non lu${getUnreadCount() > 1 ? 's' : ''}` : 'Toutes vos conversations médicales'}
                   </CardDescription>
                 </div>
               </div>
