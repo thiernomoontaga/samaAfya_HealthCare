@@ -14,8 +14,7 @@ const WeeklyDashboard = () => {
   const [selectedDataType, setSelectedDataType] = useState("glycemia");
 
   // Get real data from the hook
-  const { readings, weeklyData, isLoading, getStats } = useGlycemiaData();
-  const stats = getStats;
+  const { readings, weeklyData, isLoading, stats } = useGlycemiaData();
 
   // Calculate trend from real data
   const trend = weeklyData.length > 1 ?

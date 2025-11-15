@@ -676,6 +676,79 @@
       "acceptDataHosting": true,
       "allowResearchSharing": true,
       "acceptNewsletter": true
+    },
+    {
+      "id": "7aeb",
+      "firstName": "Moontaga",
+      "lastName": "segnane",
+      "email": "moontagasegnane@gmail.com",
+      "password": "12345678",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 10,
+      "trackingCode": "",
+      "linkedDoctorId": "",
+      "hasMonitoringMode": false,
+      "dateOfBirth": "2025-11-29",
+      "acceptDataHosting": true,
+      "allowResearchSharing": false,
+      "acceptNewsletter": true
+    },
+    {
+      "id": "8dd1",
+      "firstName": "abdoulaye",
+      "lastName": "diop",
+      "email": "abdoulayediop@gmail.com",
+      "password": "12345678",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 23,
+      "trackingCode": "",
+      "linkedDoctorId": "",
+      "hasMonitoringMode": true,
+      "dateOfBirth": "2026-04-18",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true,
+      "monitoringMode": "classique",
+      "country": "Sénégal",
+      "postMealTiming": "1h"
+    },
+    {
+      "id": "b733",
+      "firstName": "thierno",
+      "lastName": "segnane",
+      "email": "abdoulayeediop@gmail.com",
+      "password": "12345678",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 13,
+      "trackingCode": "",
+      "linkedDoctorId": "",
+      "hasMonitoringMode": true,
+      "dateOfBirth": "2025-12-19",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true,
+      "monitoringMode": "strict8",
+      "country": "Niger",
+      "postMealTiming": "2h"
+    },
+    {
+      "id": "1938",
+      "firstName": "Moontaga",
+      "lastName": "segnane",
+      "email": "abdoulayeediopp@gmail.com",
+      "password": "12345678",
+      "diabetesType": "gestationnel",
+      "gestationalWeek": 11,
+      "trackingCode": "",
+      "linkedDoctorId": "",
+      "hasMonitoringMode": true,
+      "dateOfBirth": "2025-11-22",
+      "acceptDataHosting": true,
+      "allowResearchSharing": true,
+      "acceptNewsletter": true,
+      "monitoringMode": "strict8",
+      "country": "Sénégal",
+      "postMealTiming": "1h"
     }
   ],
   "glycemiaReadings": [
@@ -849,6 +922,105 @@
       "date": "2025-11-14",
       "time": "03:11:18",
       "patientId": "7c1f"
+    },
+    {
+      "id": "5b34",
+      "moment": "jeun",
+      "value": 0.7,
+      "status": "normal",
+      "date": "2025-11-14",
+      "time": "07:25:18",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "702b",
+      "moment": "jeun",
+      "value": 0.7,
+      "status": "normal",
+      "date": "2025-11-14",
+      "time": "10:51:25",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "cad0",
+      "moment": "jeun",
+      "value": 0.2,
+      "status": "normal",
+      "date": "2025-11-15",
+      "time": "02:25:25",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "4f7f",
+      "moment": "jeun",
+      "value": 0.8,
+      "status": "normal",
+      "date": "2025-11-15",
+      "time": "02:25:55",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "5a7a",
+      "moment": "jeun",
+      "value": 1,
+      "status": "normal",
+      "date": "2025-11-15",
+      "time": "02:26:22",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "05e2",
+      "moment": "jeun",
+      "value": 0.7,
+      "status": "normal",
+      "date": "2025-11-15",
+      "time": "02:28:34",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "ec52",
+      "moment": "jeun",
+      "value": 0.6,
+      "status": "normal",
+      "date": "2025-11-15",
+      "time": "02:49:00",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "06c4",
+      "moment": "jeun",
+      "value": 0.8,
+      "status": "normal",
+      "date": "2025-11-15",
+      "time": "03:02:40",
+      "patientId": "8dd1"
+    },
+    {
+      "id": "d8f1",
+      "moment": "jeun",
+      "value": 0.8,
+      "status": "normal",
+      "date": "2025-11-15",
+      "time": "03:03:23",
+      "patientId": "8dd1"
+    },
+    {
+      "id": "4289",
+      "moment": "jeun",
+      "value": 0.2,
+      "status": "normal",
+      "date": "2025-11-15",
+      "time": "03:45:55",
+      "patientId": "b733"
+    },
+    {
+      "id": "3848",
+      "moment": "jeun",
+      "value": 0.5,
+      "status": "normal",
+      "date": "2025-11-15",
+      "time": "04:27:15",
+      "patientId": "1938"
     }
   ],
   "dailyReadings": [],

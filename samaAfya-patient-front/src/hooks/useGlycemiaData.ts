@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { mockWeekReadings, currentPatient } from "@/data/mockData";
 import { GlycemieReading, DailyReadings } from "@/types/patient";
@@ -82,7 +82,7 @@ export const useGlycemiaData = () => {
     return {
       id: reading.id,
       value: reading.value,
-      timestamp: reading.timestamp || `${reading.date}T${reading.time}:00`,
+      timestamp: reading.timestamp || `${reading.date}T${reading.time}`,
       mealContext,
       status: reading.status === "normal" ? "normal" :
               reading.status === "warning" ? "warning" : "critical"
@@ -130,21 +130,36 @@ export const useGlycemiaData = () => {
     },
   });
 
-  const getStats = () => {
+  // Calculate stats dynamically with useMemo
+  const stats = useMemo(() => {
     const todayReadings = transformedReadings.length;
-    const weeklyAverage = transformedWeeklyData.length > 0
-      ? transformedWeeklyData.reduce((sum, day) => sum + day.average, 0) / transformedWeeklyData.length
-      : 0;
+
+    // Calculate weekly average: use weekly data if available, otherwise calculate from all readings
+    let weeklyAverage = 0;
+    if (transformedWeeklyData.length > 0) {
+      // Patient has historical weekly data - use average of daily averages
+      weeklyAverage = transformedWeeklyData.reduce((sum, day) => sum + day.average, 0) / transformedWeeklyData.length;
+      console.log('useGlycemiaData - Using weekly data for average:', weeklyAverage);
+    } else if (transformedReadings.length > 0) {
+      // New patient with readings but no weekly data - calculate from all readings
+      weeklyAverage = transformedReadings.reduce((sum, reading) => sum + reading.value, 0) / transformedReadings.length;
+      console.log('useGlycemiaData - Using readings for average:', weeklyAverage, 'from', transformedReadings.length, 'readings');
+    }
+    // If no readings at all, weeklyAverage stays 0
+
     const daysInTarget = dailyReadings.filter((day: DailyReadings) => day.completed).length;
     const alertsCount = transformedReadings.filter(reading => reading.status === 'critical').length;
 
-    return {
+    const finalStats = {
       todayReadings,
       weeklyAverage: Math.round(weeklyAverage * 100) / 100,
       daysInTarget,
       alertsCount
     };
-  };
+
+    console.log('useGlycemiaData - Final stats:', finalStats);
+    return finalStats;
+  }, [transformedReadings, transformedWeeklyData, dailyReadings]);
 
   return {
     readings: transformedReadings,
@@ -152,6 +167,6 @@ export const useGlycemiaData = () => {
     isLoading: readingsLoading || weeklyLoading,
     error: readingsError || weeklyError,
     addReading: addReadingMutation.mutateAsync,
-    getStats: getStats()
+    stats
   };
 };
