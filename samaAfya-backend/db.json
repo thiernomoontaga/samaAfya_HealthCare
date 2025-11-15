@@ -619,6 +619,76 @@
       "sender": "ia",
       "timestamp": "2025-11-13T22:31:13.570Z",
       "patientId": "0f96"
+    },
+    {
+      "id": "4114",
+      "content": "Bonjour",
+      "sender": "patient",
+      "timestamp": "2025-11-14T10:33:28.940Z",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "4e85",
+      "content": "Bonjour ! Je suis l'Assistant IA de SamaAfya, votre compagnon bienveillant pendant cette grossesse avec diabète gestationnel. 💙\n\nJe suis là pour répondre à toutes vos questions sur :\n• La glycémie et son contrôle\n• L'alimentation adaptée\n• L'activité physique recommandée\n• Les symptômes de grossesse\n• Les traitements et médicaments\n• Le suivi médical\n• Le bien-être émotionnel\n\nN'hésitez pas à me poser vos questions - je suis disponible 24/7 pour vous accompagner ! Comment puis-je vous aider aujourd'hui ? 🤗",
+      "sender": "ia",
+      "timestamp": "2025-11-14T10:33:30.492Z",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "928c",
+      "content": "je veux faire du sport ?",
+      "sender": "patient",
+      "timestamp": "2025-11-14T11:01:28.193Z",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "e305",
+      "content": "L'activité physique est un allié précieux pour gérer le diabète gestationnel :\n\n🎯 **Objectifs quotidiens :**\n• 30 minutes d'activité modérée\n• 10 000 pas par jour minimum\n• 3-4 séances par semaine\n\n🏊‍♀️ **Activités recommandées :**\n• Marche rapide (extérieur ou tapis)\n• Natation (excellente pour les articulations)\n• Vélo stationnaire\n• Exercices de renforcement musculaire doux\n• Étirements et relaxation\n\n📊 **Impact sur la glycémie :**\n• Diminue l'insulinorésistance\n• Améliore l'utilisation du glucose\n• Réduit les pics glycémiques postprandiaux\n• Aide au contrôle du poids\n\n⚕️ **Quand consulter :**\n• Si vous n'avez pas fait de sport récemment\n• Si vous avez des complications\n• Pour un programme personnalisé\n\nN'oubliez pas : l'activité physique doit être adaptée à votre trimestre de grossesse et à votre condition physique. Votre médecin ou sage-femme saura vous conseiller ! 💙",
+      "sender": "ia",
+      "timestamp": "2025-11-14T11:01:29.722Z",
+      "patientId": "7c1f"
+    },
+    {
+      "id": "39b4",
+      "content": "Mais Bonjour bro",
+      "sender": "patient",
+      "timestamp": "2025-11-15T03:06:03.011Z",
+      "patientId": "8dd1"
+    },
+    {
+      "id": "e062",
+      "content": "Bonjour ! Je suis l'Assistant IA de SamaAfya, votre compagnon bienveillant pendant cette grossesse avec diabète gestationnel. 💙\n\nJe suis là pour répondre à toutes vos questions sur :\n• La glycémie et son contrôle\n• L'alimentation adaptée\n• L'activité physique recommandée\n• Les symptômes de grossesse\n• Les traitements et médicaments\n• Le suivi médical\n• Le bien-être émotionnel\n\nN'hésitez pas à me poser vos questions - je suis disponible 24/7 pour vous accompagner ! Comment puis-je vous aider aujourd'hui ? 🤗",
+      "sender": "ia",
+      "timestamp": "2025-11-15T03:06:04.547Z",
+      "patientId": "8dd1"
+    },
+    {
+      "id": "dc2b",
+      "content": "Par moi du bien etre emotionnel ",
+      "sender": "patient",
+      "timestamp": "2025-11-15T03:06:46.631Z",
+      "patientId": "8dd1"
+    },
+    {
+      "id": "dc8f",
+      "content": "Je comprends que vous avez une question importante concernant votre grossesse avec diabète gestationnel. 🤔\n\nPour vous apporter la réponse la plus adaptée, pourriez-vous reformuler votre question ou me donner plus de détails ? Par exemple :\n\n• Concernant la glycémie ?\n• L'alimentation ?\n• L'activité physique ?\n• Les symptômes ?\n• Le traitement ?\n• Le suivi médical ?\n\nJe suis là pour vous aider avec des conseils généraux basés sur les recommandations médicales actuelles. N'oubliez pas que pour des conseils personnalisés, votre équipe médicale est la mieux placée ! 👨‍⚕️\n\nQuelle est votre préoccupation principale ? 💙",
+      "sender": "ia",
+      "timestamp": "2025-11-15T03:06:48.152Z",
+      "patientId": "8dd1"
+    },
+    {
+      "id": "48b2",
+      "content": "quel alimentation vous me conseillez en tant que femme enceinte",
+      "sender": "patient",
+      "timestamp": "2025-11-15T03:07:24.996Z",
+      "patientId": "8dd1"
+    },
+    {
+      "id": "8c70",
+      "content": "Une alimentation adaptée est essentielle pour gérer le diabète gestationnel :\n\n🥗 **Bases d'une alimentation saine :**\n• Légumes à chaque repas (50% de l'assiette)\n• Protéines maigres (poisson, poulet, œufs, légumineuses)\n• Glucides complexes (céréales complètes, légumineuses)\n• Graisses saines (huile d'olive, avocat, noix)\n• Produits laitiers natures\n\n⚖️ **Équilibre glycémique :**\n• Répartissez les glucides sur la journée\n• Privilégiez l'index glycémique bas\n• Mangez des fibres à chaque repas\n• Limitez les sucres rapides\n\n🍎 **Fruits autorisés :**\n• Pommes, poires, baies\n• Agrumes (avec modération)\n• Fruits rouges\n• En petites quantités\n\nVotre diététicien peut vous aider à établir un plan alimentaire personnalisé selon vos besoins caloriques et vos préférences alimentaires. 🤝",
+      "sender": "ia",
+      "timestamp": "2025-11-15T03:07:26.517Z",
+      "patientId": "8dd1"
     }
   ],
   "documents": [],

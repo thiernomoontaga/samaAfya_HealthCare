@@ -1,19 +1,41 @@
-import { DashboardOverview } from "@/components/patient/dashboard/DashboardOverview";
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { DailyGlycemiaCard } from "@/components/patient/dashboard/DailyGlycemiaCard";
 import { WeeklyTrendsCard } from "@/components/patient/dashboard/WeeklyTrendsCard";
+import { KPICard } from "@/components/patient/dashboard/KPICard";
+import { DashboardHero } from "@/components/patient/dashboard/DashboardHero";
+import { GlycemiaChart } from "@/components/patient/dashboard/GlycemiaChart";
 import { useGlycemiaData } from "@/hooks/useGlycemiaData";
+import { usePatientData } from "@/hooks/usePatientData";
+import { useGlycemiaStats } from "@/hooks/useGlycemiaStats";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { AlertTriangle, Plus, Heart, TrendingUp, Activity, Calendar, MessageSquare, FileText, ArrowRight, CheckCircle } from "lucide-react";
-import { currentPatient } from "@/data/mockData";
 
 const PatientDashboard = () => {
-  const { readings, weeklyData, isLoading, error, getStats } = useGlycemiaData();
-  const stats = getStats;
+  const navigate = useNavigate();
+
+  console.log('🔥 PatientDashboard COMPONENT MOUNTED/RENDERED');
+
+  const { readings, weeklyData, isLoading, error, stats: glycemiaStats } = useGlycemiaData();
+  const { patient, stats: patientStats, isLoading: patientLoading } = usePatientData();
+
+  // Calculate patient-specific stats
+  const todayReadings = useMemo(() =>
+    readings.filter(r => r.timestamp.startsWith(new Date().toISOString().split('T')[0])),
+    [readings]
+  );
+
+  const complianceRate = useMemo(() =>
+    patientStats?.complianceRate || Math.round((readings.length / (7 * 4)) * 100),
+    [patientStats?.complianceRate, readings.length]
+  );
+
+  // Use the new hook for consistent stats calculation
+  const stats = useGlycemiaStats(weeklyData, todayReadings.length);
 
   if (error) {
     return (
@@ -24,107 +46,62 @@ const PatientDashboard = () => {
     );
   }
 
-  // Calculate patient-specific stats
-  const todayReadings = readings.filter(r => r.timestamp.startsWith(new Date().toISOString().split('T')[0]));
-  const weeklyAverage = stats.weeklyAverage; // Use stats from hook instead of local calculation
-  const complianceRate = Math.round((readings.length / (7 * 4)) * 100); // Assuming 4 readings per day for 7 days
+  if (isLoading || patientLoading) {
+    return (
+      <div className="space-y-8">
+        <Skeleton className="h-48 rounded-2xl" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-32 rounded-xl" />
+          ))}
+        </div>
+        <Skeleton className="h-96 rounded-2xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
-      {/* Hero / Welcome Section */}
-      <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-8 border border-primary/10">
-        <div className="flex items-center justify-between">
-          <div className="space-y-3">
-            <h2 className="text-4xl font-bold text-foreground">
-              Bonjour {currentPatient.firstName}
-            </h2>
-            <p className="text-muted-foreground text-xl">
-              Votre suivi maternel personnalisé - {todayReadings.length} mesure{todayReadings.length !== 1 ? 's' : ''} aujourd'hui
-            </p>
-            <div className="flex items-center gap-6 mt-6">
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-primary"></div>
-                <span className="text-foreground font-medium">{complianceRate}% observance</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-accent"></div>
-                <span className="text-foreground font-medium">{weeklyAverage.toFixed(2)} g/L moyenne hebdo</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-secondary"></div>
-                <span className="text-foreground font-medium">{currentPatient.gestationalAge} semaines d'aménorrhée</span>
-              </div>
-            </div>
-          </div>
-          <div className="hidden lg:block">
-            <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center">
-              <Heart className="h-16 w-16 text-primary" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <DashboardHero
+        title="Bonjour"
+        subtitle={`Votre suivi maternel personnalisé - ${todayReadings.length} mesure${todayReadings.length !== 1 ? 's' : ''} aujourd'hui`}
+        patientName={patient?.firstName}
+        stats={[
+          { label: `${complianceRate}% observance`, value: "" },
+          { label: `${patientStats?.gestationalAge || 0} semaines d'aménorrhée`, value: "" },
+        ]}
+      />
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground mb-2">Mesures aujourd'hui</p>
-                <p className="text-4xl font-bold text-primary">{todayReadings.length}</p>
-                <p className="text-xs text-muted-foreground mt-2">sur 4 recommandées</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-primary/20">
-                <Activity className="h-8 w-8 text-primary" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <KPICard
+          title="Mesures aujourd'hui"
+          value={todayReadings.length}
+          subtitle="sur 4 recommandées"
+          icon={Activity}
+          iconColor="text-primary"
+          bgColor="bg-primary/20"
+        />
 
-        <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-accent/20 bg-gradient-to-br from-accent/10 to-accent/20">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground mb-2">Moyenne hebdomadaire</p>
-                <p className="text-4xl font-bold text-accent-foreground">{weeklyAverage.toFixed(2)}</p>
-                <p className="text-xs text-muted-foreground mt-2">g/L cette semaine</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-accent/30">
-                <TrendingUp className="h-8 w-8 text-accent-foreground" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Observance"
+          value={`${complianceRate}%`}
+          subtitle="des mesures recommandées"
+          icon={CheckCircle}
+          iconColor="text-secondary-foreground"
+          bgColor="bg-secondary/30"
+          className="hover:border-secondary/20 bg-gradient-to-br from-secondary/10 to-secondary/20"
+        />
 
-        <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-secondary/20 bg-gradient-to-br from-secondary/10 to-secondary/20">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground mb-2">Observance</p>
-                <p className="text-4xl font-bold text-secondary-foreground">{complianceRate}%</p>
-                <p className="text-xs text-muted-foreground mt-2">des mesures recommandées</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-secondary/30">
-                <CheckCircle className="h-8 w-8 text-secondary-foreground" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-sm hover:shadow-md transition-all duration-200 border-border/50 hover:border-green-200/50 bg-gradient-to-br from-green-50 to-green-100">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground mb-2">Prochain RDV</p>
-                <p className="text-4xl font-bold text-green-600">3</p>
-                <p className="text-xs text-muted-foreground mt-2">jours restants</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-green-200">
-                <Calendar className="h-8 w-8 text-green-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <KPICard
+          title="Prochain RDV"
+          value={patientStats?.nextAppointmentDays || 3}
+          subtitle="jours restants"
+          icon={Calendar}
+          iconColor="text-green-600"
+          bgColor="bg-green-200"
+          className="hover:border-green-200/50 bg-gradient-to-br from-green-50 to-green-100"
+        />
       </div>
 
       {/* Quick Actions Section */}
@@ -144,7 +121,7 @@ const PatientDashboard = () => {
           </CardHeader>
           <CardContent>
             <Button
-              onClick={() => window.location.href = '/patient/glycemia'}
+              onClick={() => navigate('/patient/glycemia')}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl h-12"
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -169,7 +146,7 @@ const PatientDashboard = () => {
           <CardContent>
             <Button
               variant="outline"
-              onClick={() => window.location.href = '/patient/doctor-ia'}
+              onClick={() => navigate('/patient/doctor-ia')}
               className="w-full border-accent/20 hover:bg-accent/5 rounded-xl h-12"
             >
               <MessageSquare className="h-4 w-4 mr-2" />
@@ -194,7 +171,7 @@ const PatientDashboard = () => {
           <CardContent>
             <Button
               variant="outline"
-              onClick={() => window.location.href = '/patient/documents'}
+              onClick={() => navigate('/patient/documents')}
               className="w-full border-secondary/20 hover:bg-secondary/5 rounded-xl h-12"
             >
               <FileText className="h-4 w-4 mr-2" />
@@ -204,70 +181,17 @@ const PatientDashboard = () => {
         </Card>
       </div>
 
-      {/* Main Chart Section */}
-      <Card className="shadow-sm border-border/50">
-        <CardHeader className="pb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-primary/10">
-                <TrendingUp className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <CardTitle className="text-2xl">Évolution de vos glycémies</CardTitle>
-                <CardDescription className="text-base">Moyenne quotidienne cette semaine (en g/L)</CardDescription>
-              </div>
-            </div>
-            <Button variant="outline" className="rounded-xl">
-              <ArrowRight className="h-4 w-4 mr-2" />
-              Voir le détail
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <Skeleton className="h-96 rounded-2xl" />
-          ) : (
-            <ResponsiveContainer width="100%" height={400}>
-              <LineChart data={weeklyData.map((day, index) => ({
-                day: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'][index % 7],
-                moyenne: day.average
-              }))} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis
-                  dataKey="day"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 14, fill: '#666', fontWeight: 500 }}
-                />
-                <YAxis
-                  domain={[0.5, 1.5]}
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 14, fill: '#666', fontWeight: 500 }}
-                />
-                <Tooltip
-                  formatter={(value) => [`${value} g/L`, 'Moyenne']}
-                  contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #e0e0e0',
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                    fontSize: '14px'
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="moyenne"
-                  stroke="#e11d48"
-                  strokeWidth={4}
-                  dot={{ fill: '#e11d48', strokeWidth: 3, r: 8 }}
-                  activeDot={{ r: 10, stroke: '#e11d48', strokeWidth: 3, fill: 'white' }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          )}
-        </CardContent>
-      </Card>
+      <GlycemiaChart
+        data={weeklyData.map((day, index) => ({
+          dayName: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'][index % 7],
+          average: day.average
+        }))}
+        title="Évolution de vos glycémies"
+        description="Moyenne quotidienne cette semaine (en g/L)"
+        showButton={true}
+        buttonText="Voir le détail"
+        onButtonClick={() => navigate('/patient/weekly')}
+      />
 
       {/* Today's Measurements Section */}
       <Card className="shadow-sm border-border/50">
@@ -283,7 +207,7 @@ const PatientDashboard = () => {
               </div>
             </div>
             <Button
-              onClick={() => window.location.href = '/patient/glycemia'}
+              onClick={() => navigate('/patient/glycemia')}
               className="rounded-xl bg-accent hover:bg-accent/90"
             >
               <Plus className="h-4 w-4 mr-2" />

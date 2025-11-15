@@ -27,7 +27,7 @@ export const DashboardOverview = ({
     },
     {
       title: "Moyenne hebdomadaire",
-      value: `${stats.weeklyAverage} mmol/L`,
+      value: `${stats.weeklyAverage?.toFixed(1) || '0.0'} mmol/L`,
       icon: Target,
       color: "from-purple-400 to-purple-600",
       bgColor: "from-purple-50 to-purple-100",
